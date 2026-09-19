@@ -1,0 +1,306 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Design tokens: Tea Factory Digital
+   Deep forest green for authority, a warm tea-leaf green for the product,
+   cream for the page, charcoal for text and a restrained gold for accents.
+   Nothing here is a default Tailwind hue.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-forest-950: #04150e;
+  --color-forest-900: #0a2317;
+  --color-forest-800: #0f3122;
+  --color-forest-700: #16412d;
+  --color-forest-600: #1d5339;
+  --color-forest-500: #266947;
+  --color-forest-400: #398a5f;
+
+  --color-leaf-700: #3f7a35;
+  --color-leaf-600: #4f9040;
+  --color-leaf-500: #63a551;
+  --color-leaf-400: #83bd6d;
+  --color-leaf-300: #a8d494;
+  --color-leaf-100: #dcefd0;
+
+  --color-cream-50: #fcfaf5;
+  --color-cream-100: #f7f3e9;
+  --color-cream-200: #efe8d7;
+  --color-cream-300: #e2d8c0;
+
+  --color-char-900: #151814;
+  --color-char-800: #1f231d;
+  --color-char-700: #33382f;
+  --color-char-500: #5d6458;
+  --color-char-400: #838a7c;
+  --color-char-300: #aeb3a8;
+
+  --color-gold-600: #a97b21;
+  --color-gold-500: #c69b3f;
+  --color-gold-400: #dcb666;
+  --color-gold-200: #f0dcae;
+
+  /* -------------------------------------------------------------------------
+     The product's own palette: `@tfd/brand`, the Galaboda tenant.
+
+     These are NOT site colours. They exist so the phone and console mockups
+     render in the exact tokens the shipped app and console use, rather than in
+     a marketing approximation of them. Copied from
+     packages/brand/src/colors.ts (base) and the `default` client's override
+     (config/clients/default: primary #2E8B57, secondary #8FC13F).
+  ------------------------------------------------------------------------- */
+  --color-app-primary: #2e8b57;
+  --color-app-primary-contrast: #ffffff;
+  --color-app-primary-muted: #dceee2;
+  --color-app-secondary: #8fc13f;
+
+  --color-app-background: #f2f5f4;
+  --color-app-surface: #ffffff;
+  --color-app-surface-variant: #e9eeec;
+
+  --color-app-text: #0b1f1c;
+  --color-app-text-secondary: #5a6b67;
+
+  --color-app-border: #d8e0dd;
+  --color-app-divider: #e4eae8;
+
+  --color-app-success: #2e7d32;
+  --color-app-warning: #ed6c02;
+  --color-app-error: #d32f2f;
+  --color-app-info: #0288d1;
+  --color-app-success-muted: #dcf0dd;
+  --color-app-warning-muted: #fcebd5;
+  --color-app-error-muted: #fadbdb;
+  --color-app-info-muted: #d6ecf8;
+
+  --color-app-table-header: #edf2f0;
+  --color-app-row-alt: #fafcfb;
+
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.75rem;
+
+  --shadow-lift: 0 1px 2px rgb(4 21 14 / 0.04), 0 12px 32px -12px rgb(4 21 14 / 0.14);
+  --shadow-panel: 0 2px 4px rgb(4 21 14 / 0.05), 0 32px 64px -24px rgb(4 21 14 / 0.28);
+  --shadow-device: 0 40px 80px -32px rgb(4 21 14 / 0.45), 0 8px 24px -8px rgb(4 21 14 / 0.25);
+
+  --animate-marquee: marquee 44s linear infinite;
+  --animate-drift: drift 9s ease-in-out infinite;
+  --animate-pulse-ring: pulse-ring 2.8s ease-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.85); opacity: 0.55; }
+  70% { transform: scale(1.5); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   Script-specific typography.
+
+   Sinhala and Tamil glyphs carry more vertical detail than Latin, so they need
+   a little more line height and a slightly smaller display scale to sit on the
+   same grid. The locale is set as `lang` on <html>, so this needs no JS.
+--------------------------------------------------------------------------- */
+:root {
+  --lh-display: 1.05;
+  --lh-body: 1.65;
+  --display-scale: 1;
+}
+
+:root:lang(si),
+:root:lang(ta) {
+  --lh-display: 1.28;
+  --lh-body: 1.85;
+  --display-scale: 0.9;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-cream-200);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-cream-50);
+    color: var(--color-char-800);
+    font-family: var(--font-sans);
+    line-height: var(--lh-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    line-height: var(--lh-display);
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+  }
+
+  :lang(si) h1, :lang(si) h2, :lang(si) h3, :lang(si) h4,
+  :lang(ta) h1, :lang(ta) h2, :lang(ta) h3, :lang(ta) h4 {
+    letter-spacing: 0;
+  }
+
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background-color: var(--color-leaf-300);
+    color: var(--color-forest-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-leaf-600);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* The one place a page-width container is defined. */
+  .shell {
+    width: 100%;
+    margin-inline: auto;
+    max-width: 80rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .shell { padding-inline: 2rem; }
+  }
+
+  @media (min-width: 1280px) {
+    .shell { padding-inline: 2.5rem; }
+  }
+
+  /* Display sizes, scaled down for Sinhala and Tamil via --display-scale. */
+  .t-display {
+    font-size: calc(clamp(2.45rem, 1.3rem + 5.1vw, 4.9rem) * var(--display-scale));
+  }
+
+  .t-h2 {
+    font-size: calc(clamp(1.95rem, 1.2rem + 2.9vw, 3.15rem) * var(--display-scale));
+  }
+
+  .t-h3 {
+    font-size: calc(clamp(1.35rem, 1.1rem + 1.1vw, 1.85rem) * var(--display-scale));
+  }
+
+  .t-eyebrow {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+
+  /* Sinhala and Tamil have no uppercase; spacing them out only hurts. */
+  :lang(si) .t-eyebrow,
+  :lang(ta) .t-eyebrow {
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-size: 0.8rem;
+  }
+
+  /* Sinhala and Tamil words are longer than their English equivalents; the
+     navbar is the one place where that difference decides whether the row
+     fits. */
+  :lang(si) .nav-link,
+  :lang(ta) .nav-link {
+    font-size: 0.8rem;
+    padding-inline: 0.6rem;
+  }
+
+  /*
+   * Product screenshots.
+   *
+   * Both mockups are written at the size the real product runs at (384px for
+   * the phone screen, 1280px for the console on an office laptop) and scaled
+   * down to whatever space they are given. That keeps every proportion,
+   * type size and spacing token identical to the shipped UI instead of being
+   * re-eyeballed per placement.
+   */
+  .device-shot {
+    container-type: inline-size;
+    overflow: hidden;
+  }
+
+  .device-shot > .device-shot-inner {
+    transform-origin: top left;
+    transform: scale(calc(100cqw / var(--shot-w)));
+  }
+
+  /* A hairline grid used behind dark sections. */
+  .grid-veil {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+    background-size: 68px 68px;
+  }
+
+  .grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  }
+
+  /*
+   * Real photography.
+   *
+   * The file is optional. The root layout checks for it at build time and sets
+   * `data-photo="on"` on <html> only when it is there, so a missing photograph
+   * costs nothing: no request, no 404, and the vector plantation scene renders
+   * underneath exactly as before. Drop a file at /public/images/plantation.jpg
+   * and every backdrop on the site picks it up. See public/images/README.md.
+   *
+   * `background-position` is set per section rather than here, because which
+   * part of a wide photograph should survive the crop depends on what the
+   * section puts in front of it.
+   */
+  .photo-slot {
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  [data-photo='on'] .photo-slot {
+    background-image: url('/images/plantation.jpg');
+  }
+}
+
+/* The marquee pauses on hover so a reader can actually read a card. */
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
