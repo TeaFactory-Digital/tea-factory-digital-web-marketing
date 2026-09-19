@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { locales, defaultLocale } from '@/i18n/config';
 
 /**
- * Sends a locale-less path to the best locale we can infer.
+ * Picks the best locale we can infer for a locale-less path.
  *
  * Accept-Language decides, defaulting to English: the reader of this site is
  * usually factory management evaluating software, and an English page is the
@@ -28,17 +28,36 @@ function resolveLocale(request: NextRequest): string {
   return defaultLocale;
 }
 
+/**
+ * English is the default locale and has no prefix, so the site's front door is
+ * `/`, not `/en`.
+ *
+ * That leaves three cases. `/en/...` is a second address for a page that already
+ * has a clean one, so it is sent there permanently rather than served twice.
+ * `/si/...` and `/ta/...` are already correct. Anything else is locale-less: a
+ * browser asking for Sinhala or Tamil is redirected to that prefix, and everyone
+ * else is served the `/en` segment through a rewrite, which the address bar
+ * never shows.
+ */
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  const hasLocale = locales.some(
-    (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
-  );
-  if (hasLocale) return NextResponse.next();
-
   const url = request.nextUrl.clone();
-  url.pathname = `/${resolveLocale(request)}${pathname === '/' ? '' : pathname}`;
-  return NextResponse.redirect(url);
+
+  if (pathname === `/${defaultLocale}` || pathname.startsWith(`/${defaultLocale}/`)) {
+    url.pathname = pathname.slice(defaultLocale.length + 1) || '/';
+    return NextResponse.redirect(url, 308);
+  }
+
+  const alreadyPrefixed = locales.some(
+    (locale) =>
+      locale !== defaultLocale &&
+      (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)),
+  );
+  if (alreadyPrefixed) return NextResponse.next();
+
+  const locale = resolveLocale(request);
+  url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
+  return locale === defaultLocale ? NextResponse.rewrite(url) : NextResponse.redirect(url);
 }
 
 export const config = {

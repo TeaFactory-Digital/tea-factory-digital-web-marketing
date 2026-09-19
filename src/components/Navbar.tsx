@@ -20,9 +20,12 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
   const [menuOpen, setMenuOpen] = React.useState(false);
   const [langOpen, setLangOpen] = React.useState(false);
 
+  // The default locale has no prefix, so the home page is `/` and the others
+  // are `/si`, `/ta`. Both normalise to '' here, which is what DARK_HERO_PATHS
+  // and the language switcher below are written against.
   const pathWithoutLocale = React.useMemo(() => {
-    const stripped = pathname.replace(new RegExp(`^/(${locales.join('|')})`), '');
-    return stripped || '';
+    const stripped = pathname.replace(new RegExp(`^/(${locales.join('|')})(?=/|$)`), '');
+    return stripped === '/' ? '' : stripped;
   }, [pathname]);
 
   const overDarkHero = DARK_HERO_PATHS.includes(pathWithoutLocale);
@@ -130,7 +133,7 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
                       {locales.map((l) => (
                         <Link
                           key={l}
-                          href={`/${l}${pathWithoutLocale}`}
+                          href={href(l, pathWithoutLocale || '/')}
                           hrefLang={l}
                           className={cn(
                             'flex items-center justify-between rounded-xl px-3 py-2.5 text-sm transition-colors',
@@ -246,7 +249,7 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
                   {locales.map((l) => (
                     <Link
                       key={l}
-                      href={`/${l}${pathWithoutLocale}`}
+                      href={href(l, pathWithoutLocale || '/')}
                       hrefLang={l}
                       className={cn(
                         'flex-1 rounded-full border px-3 py-2.5 text-center text-sm font-semibold transition-colors',

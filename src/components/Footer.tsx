@@ -106,7 +106,7 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
             {locales.map((l) => (
               <Link
                 key={l}
-                href={`/${l}`}
+                href={href(l, '/')}
                 hrefLang={l}
                 className={
                   l === locale

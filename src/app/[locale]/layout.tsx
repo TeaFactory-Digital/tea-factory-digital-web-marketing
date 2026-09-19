@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Outfit, Noto_Sans_Sinhala, Noto_Sans_Tamil } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { getDictionary, isLocale, locales, type Locale } from '@/i18n';
+import { href } from '@/lib/routes';
 import { siteUrl } from '@/lib/site';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
@@ -76,8 +77,10 @@ export async function generateMetadata({
     description: t.meta.description,
     applicationName: t.meta.siteName,
     alternates: {
-      canonical: `/${locale}`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+      // English is the default and unprefixed, so its canonical is `/`, not
+      // `/en`; the middleware redirects `/en` here rather than serving both.
+      canonical: href(locale, '/'),
+      languages: Object.fromEntries(locales.map((l) => [l, href(l, '/')])),
     },
     openGraph: {
       title: t.meta.title,
