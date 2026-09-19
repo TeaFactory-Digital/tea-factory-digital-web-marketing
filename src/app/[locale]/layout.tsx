@@ -40,12 +40,12 @@ const notoTamil = Noto_Sans_Tamil({
 
 /**
  * Photography is optional. Checked once here, on the server, at build time:
- * when the file is absent the `data-photo` flag is never set, the CSS rule
- * that references it never matches, and the browser makes no request for a
- * file that is not there. Drop it in and every backdrop picks it up.
+ * when either file is absent the `data-photo` flag is never set, the CSS rules
+ * that reference them never match, and the browser makes no request for a file
+ * that is not there. Drop them in and every backdrop picks them up.
  */
-const hasPlantationPhoto = existsSync(
-  path.join(process.cwd(), 'public', 'images', 'plantation.jpg'),
+const hasPlantationPhoto = ['plantation.jpg', 'tea-estate.jpg'].every((file) =>
+  existsSync(path.join(process.cwd(), 'public', 'images', file)),
 );
 
 export function generateStaticParams() {

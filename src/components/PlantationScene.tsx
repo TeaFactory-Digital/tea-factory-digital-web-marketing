@@ -137,6 +137,7 @@ export function PhotoBackdrop({
   overlay = 'from-forest-950/45 via-forest-950/32 to-forest-950/72',
   scrim = 'from-forest-950/88 via-forest-950/42 to-transparent',
   className,
+  photoClassName,
   photoPosition = '50% 50%',
   photoBlur = 0,
   photoOpacity = 1,
@@ -147,6 +148,12 @@ export function PhotoBackdrop({
   /** Horizontal wash: keeps the text side readable without flattening the rest. */
   scrim?: string;
   className?: string;
+  /**
+   * A class that overrides which file this section shows, defined next to
+   * `.photo-slot` in globals.css. Left off, the section uses the default
+   * photograph.
+   */
+  photoClassName?: string;
   /**
    * Which part of the photograph survives the crop. A tall hero shows only a
    * narrow slice of a wide plantation shot, so each section frames its own:
@@ -164,7 +171,7 @@ export function PhotoBackdrop({
     <div className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)}>
       <PlantationScene variant={variant} className="absolute inset-0 scale-105" />
       <div
-        className="photo-slot absolute inset-0"
+        className={cn('photo-slot absolute inset-0', photoClassName)}
         style={{
           backgroundPosition: photoPosition,
           opacity: photoOpacity,

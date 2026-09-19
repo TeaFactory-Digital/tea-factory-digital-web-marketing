@@ -15,11 +15,14 @@ const EASE = [0.22, 0.61, 0.36, 1] as const;
 export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
   return (
     <section className="relative isolate overflow-hidden bg-forest-950 pb-20 pt-32 md:pb-28 md:pt-36 lg:pb-32 lg:pt-40">
-      {/* Framed on the leaf rows to the left of the plucker: she would otherwise
-          sit directly behind the device mockup. Softening keeps the backdrop as
-          atmosphere rather than a second subject competing with the headline. */}
+      {/* The estate shot, not the default photograph: this is the tallest slot
+          on the site, so it needs the high-resolution file. Desktop sees nearly
+          the whole frame; the crop biases left so the phone mockup sits over
+          hillside rather than the ridgeline. Softening keeps the backdrop as
+          atmosphere rather than a subject competing with the headline. */}
       <PhotoBackdrop
         variant="dusk"
+        photoClassName="photo-slot--estate"
         overlay="from-forest-950/45 via-forest-950/32 to-forest-950/72"
         scrim="from-forest-950/88 via-forest-950/42 to-transparent"
         photoPosition="26% 62%"

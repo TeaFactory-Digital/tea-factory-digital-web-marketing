@@ -295,6 +295,16 @@
   [data-photo='on'] .photo-slot {
     background-image: url('/images/plantation.jpg');
   }
+
+  /*
+   * The home hero carries its own photograph. It is the tallest slot on the
+   * site and the first thing loaded, so it gets the high-resolution estate
+   * shot; the white-label banner keeps the default. Add a file and a class
+   * here to give any other section its own.
+   */
+  [data-photo='on'] .photo-slot--estate {
+    background-image: url('/images/tea-estate.jpg');
+  }
 }
 
 /* The marquee pauses on hover so a reader can actually read a card. */
