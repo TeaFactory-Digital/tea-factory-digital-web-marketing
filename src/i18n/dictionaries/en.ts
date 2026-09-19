@@ -42,7 +42,7 @@ export const en = {
 
   hero: {
     eyebrow: 'Built for modern tea factories',
-    title: "Put Every Green Leaf Account in Your Supplier's Hand.",
+    title: "Put Green Leaf Account in Your Supplier's Hand.",
     subtitle:
       'Connect your suppliers and office with one branded digital experience, without replacing the factory system you already use.',
     ctaPrimary: 'Request a Demo',
