@@ -16,18 +16,16 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
   return (
     <section className="relative isolate overflow-hidden bg-forest-950 pb-20 pt-32 md:pb-28 md:pt-36 lg:pb-32 lg:pt-40">
       {/* The estate shot, not the default photograph: this is the tallest slot
-          on the site, so it needs the high-resolution file. Desktop sees nearly
-          the whole frame; the crop biases left so the phone mockup sits over
-          hillside rather than the ridgeline. Softening keeps the backdrop as
-          atmosphere rather than a subject competing with the headline. */}
+          on the site, so it needs the high-resolution file. No blur, and so no
+          scale either: the 4903px source is downscaled to fit at every
+          viewport, and blurring a backdrop that never upscales only throws that
+          resolution away. The gradients below carry the contrast instead. */}
       <PhotoBackdrop
         variant="dusk"
         photoClassName="photo-slot--estate"
         overlay="from-forest-950/45 via-forest-950/32 to-forest-950/72"
         scrim="from-forest-950/88 via-forest-950/42 to-transparent"
         photoPosition="26% 62%"
-        photoBlur={2}
-        photoOpacity={0.9}
       />
 
       <div className="shell relative grid items-center gap-14 lg:grid-cols-[1.06fr_0.94fr] lg:gap-10">
