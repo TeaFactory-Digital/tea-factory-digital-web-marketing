@@ -151,7 +151,7 @@ and take `{ locale, t }`.
 - Complete the legal pages. Both carry a visible placeholder note: company
   registration details, the data-protection contact and any factory-specific
   terms are still blank. The app stores will ask for the privacy URL.
-- Replace the placeholder email and phone in the footer contact block.
+- Replace the placeholder email in the footer contact block.
 - Point the demo form at a real destination.
 - Optionally drop in photography. See `public/images/README.md`.
 

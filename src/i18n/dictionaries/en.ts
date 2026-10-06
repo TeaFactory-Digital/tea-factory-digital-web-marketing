@@ -525,7 +525,7 @@ export const en = {
     contact: {
       title: 'Contact',
       email: 'hello@teafactorydigital.lk',
-      phone: '+94 11 000 0000',
+      phone: '+94 77 995 1056',
       country: 'Sri Lanka',
     },
     copyright: '© 2026 Tea Factory Digital',

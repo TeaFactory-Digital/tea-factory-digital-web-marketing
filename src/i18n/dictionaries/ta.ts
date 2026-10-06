@@ -518,7 +518,7 @@ export const ta: Dictionary = {
     contact: {
       title: 'தொடர்பு',
       email: 'hello@teafactorydigital.lk',
-      phone: '+94 11 000 0000',
+      phone: '+94 77 995 1056',
       country: 'இலங்கை',
     },
     copyright: '© 2026 Tea Factory Digital',
