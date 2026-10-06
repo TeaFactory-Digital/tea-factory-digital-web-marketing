@@ -12,7 +12,6 @@ export const si: Dictionary = {
   common: {
     requestDemo: 'ආදර්ශනයක් ඉල්ලන්න',
     requestDemoShort: 'ආදර්ශනය ඉල්ලන්න',
-    signIn: 'පිවිසෙන්න',
     explorePlatform: 'වේදිකාව ගවේෂණය කරන්න',
     learnMore: 'තව දැනගන්න',
     sampleData: 'නියැදි දත්ත',

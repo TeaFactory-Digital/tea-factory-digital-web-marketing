@@ -18,7 +18,6 @@ export const en = {
     requestDemo: 'Request a Demo',
     /** The navbar has the least room of anywhere on the site. */
     requestDemoShort: 'Request a Demo',
-    signIn: 'Sign In',
     explorePlatform: 'Explore the Platform',
     learnMore: 'Learn more',
     sampleData: 'Sample data',

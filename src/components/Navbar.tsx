@@ -152,18 +152,6 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
               </AnimatePresence>
             </div>
 
-            <Link
-              href={href(locale, '/console')}
-              className={cn(
-                'hidden h-10 items-center rounded-full px-3 text-[0.85rem] font-medium transition-colors 2xl:inline-flex',
-                transparent
-                  ? 'text-cream-100/75 hover:text-cream-50'
-                  : 'text-char-600 hover:text-forest-900',
-              )}
-            >
-              {t.common.signIn}
-            </Link>
-
             <ButtonLink
               href={href(locale, '/demo')}
               size="sm"

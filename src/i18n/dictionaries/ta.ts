@@ -12,7 +12,6 @@ export const ta: Dictionary = {
   common: {
     requestDemo: 'செயல்விளக்கம் கோரவும்',
     requestDemoShort: 'டெமோ கோரவும்',
-    signIn: 'உள்நுழைக',
     explorePlatform: 'தளத்தை ஆராயுங்கள்',
     learnMore: 'மேலும் அறிக',
     sampleData: 'மாதிரித் தரவு',
