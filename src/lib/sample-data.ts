@@ -71,20 +71,48 @@ export const CONSOLE_INSTALLED_PERCENT = Math.round(
   (CONSOLE_ADOPTION.suppliersWithApp / CONSOLE_ADOPTION.totalSuppliers) * 100,
 ); // 72
 
+/**
+ * Pending items per queue, with the age of the oldest in hours. Response targets
+ * are the console's `QUEUE_SLA_HOURS` (advances 24, change requests and
+ * inquiries 48, the rest 72), so only the advances can be past target here, and
+ * their oldest item is older than a day.
+ */
 export const CONSOLE_QUEUES = [
-  { key: 'changeRequests', pending: 4, oldest: '6h', breaching: 0 },
-  { key: 'advanceRequests', pending: 7, oldest: '2h', breaching: 2 },
-  { key: 'loanRequests', pending: 3, oldest: '1d', breaching: 0 },
-  { key: 'manureRequests', pending: 2, oldest: '4h', breaching: 0 },
-  { key: 'teaPacketRequests', pending: 5, oldest: '3h', breaching: 0 },
-  { key: 'inquiries', pending: 3, oldest: '1d 3h', breaching: 0 },
+  { key: 'changeRequests', pending: 4, oldestHours: 6, breaching: 0 },
+  { key: 'advanceRequests', pending: 7, oldestHours: 31, breaching: 2 },
+  { key: 'loanRequests', pending: 3, oldestHours: 24, breaching: 0 },
+  { key: 'manureRequests', pending: 2, oldestHours: 4, breaching: 0 },
+  { key: 'teaPacketRequests', pending: 5, oldestHours: 3, breaching: 0 },
+  { key: 'inquiries', pending: 3, oldestHours: 27, breaching: 0 },
 ] as const;
+
+/**
+ * The dashboard's order: queues past target first, then the longest-waiting
+ * (`DashboardScreen.tsx` sorts by `breachingSla`, then `oldestPendingAt`).
+ */
+export const CONSOLE_QUEUES_SORTED = [...CONSOLE_QUEUES].sort(
+  (a, b) => b.breaching - a.breaching || b.oldestHours - a.oldestHours,
+);
+
+/** The console's `formatAge`: "< 1 h", whole hours under two days, then days. */
+export function formatAge(hours: number): string {
+  if (hours < 1) return '< 1 h';
+  if (hours < 48) return `${Math.floor(hours)} h`;
+  return `${Math.floor(hours / 24)} d`;
+}
 
 export const CONSOLE_CONTENT = {
   bannersLive: 2,
   articlesWithGaps: 3,
   bannersExpired: 1,
+  staticPagesUnwritten: 1,
 } as const;
+
+/**
+ * Twelve months of the adoption trend end in the dashboard's current month,
+ * August 2026, and the X axis prints the two-digit month (`monthKey.slice(5)`).
+ */
+export const ADOPTION_MONTHS = ['09', '10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08'];
 
 /** The three supporting tiles under the adoption headline. */
 export const ANALYTICS_TILES = [
@@ -101,7 +129,45 @@ export function money(value: number): string {
   });
 }
 
+/** Kilos the way the app prints them (`formatKg`): grouped, always one decimal. */
+export function kilos(value: number): string {
+  return value.toLocaleString('en-US', {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  });
+}
+
 /** Whole numbers: kilos, counts, device totals. */
 export function count(value: number): string {
   return value.toLocaleString('en-US');
 }
+
+/* ───────────────────────── one supplier inquiry, both sides ───────────────────────── */
+
+/**
+ * The conversation the app and console mockups both show, from each side.
+ *
+ * K. Wijesinghe asks why 12 July shows no supply (day 12 is a `null` in
+ * `DAILY_SUPPLY`), the office answers with its built-in "Checking" sentence,
+ * and the next morning the supplier asks for an update with a quick-reply chip.
+ * A supplier message re-opens an inquiry (`requests.controller.ts`), so it is
+ * waiting again: 27 h since it was raised, the oldest inquiry on the dashboard.
+ *
+ * Message text is copy (it is in the supplier's language), so the bodies are
+ * keys into the dictionaries; times and dates are data.
+ */
+export const INQUIRY_THREAD = {
+  supplierCode: '5708',
+  officeName: 'N. Silva',
+  ageHours: 27,
+  /** The console's `formatDateTime`: en-GB, Colombo time, whatever the UI language. */
+  receivedAt: '03 Aug 2026, 08:12',
+  /** The console's `formatDate` day separators. */
+  consoleDays: ['03 Aug 2026', '04 Aug 2026'],
+  messages: [
+    { author: 'supplier', day: 0, time: '08:12', body: 'question' },
+    { author: 'office', day: 0, time: '09:05', body: 'checking' },
+    { author: 'supplier', day: 0, time: '09:07', body: 'thanks' },
+    { author: 'supplier', day: 1, time: '10:41', body: 'update' },
+  ],
+} as const;

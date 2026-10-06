@@ -314,3 +314,59 @@
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+/*
+ * The supplier app's TeaBreeze, behind the bill summary (`mockups/TeaBreeze.tsx`).
+ * Durations and amplitudes are the app's own. Mists start part-way through
+ * their crossing (negative delays) so a still frame still shows them.
+ */
+@keyframes breeze-breathe {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+@keyframes breeze-drift-5 {
+  from { transform: translateX(-5px); }
+  to { transform: translateX(5px); }
+}
+
+@keyframes breeze-drift-9 {
+  from { transform: translateX(-9px); }
+  to { transform: translateX(9px); }
+}
+
+@keyframes breeze-drift-3 {
+  from { transform: translateX(-3px); }
+  to { transform: translateX(3px); }
+}
+
+/* Across the card: from one mist-width off the left to the right edge (W / 0.7W). */
+@keyframes breeze-mist {
+  from { transform: translateX(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  to { transform: translateX(142.86%); opacity: 0; }
+}
+
+@keyframes breeze-sway {
+  from { transform: rotate(calc(var(--rest) + var(--amp))); }
+  to { transform: rotate(calc(var(--rest) - var(--amp))); }
+}
+
+.breeze-sun { animation: breeze-breathe 5s ease-in-out infinite alternate; }
+.breeze-drift-far { animation: breeze-drift-5 8s ease-in-out infinite alternate; }
+.breeze-drift-mid { animation: breeze-drift-9 6s ease-in-out -1.2s infinite alternate; }
+.breeze-drift-near { animation: breeze-drift-3 4.5s ease-in-out -0.6s infinite alternate; }
+.breeze-mist-far { animation: breeze-mist 26s linear -11s infinite; }
+.breeze-mist-near { animation: breeze-mist 21s linear -4s infinite; }
+.breeze-sway,
+.breeze-leaf {
+  transform: rotate(var(--rest));
+  animation-name: breeze-sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .breeze * { animation: none !important; }
+}

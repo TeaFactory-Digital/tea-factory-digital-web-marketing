@@ -5,7 +5,7 @@ import { Section, SectionHeading } from '@/components/ui/section';
 import { Badge } from '@/components/ui/card';
 import { MaskReveal, Parallax, Reveal } from '@/components/ui/motion';
 import { ConsoleDashboard } from '@/components/mockups/ConsoleDashboard';
-import { CONSOLE_QUEUES } from '@/lib/sample-data';
+import { CONSOLE_QUEUES_SORTED, formatAge } from '@/lib/sample-data';
 import { sections } from '@/lib/routes';
 
 /** The console at full width, on the darkest surface on the site. */
@@ -47,7 +47,7 @@ export function ConsoleSection({ t }: { t: Dictionary }) {
         <Reveal delay={0.1} className="mt-10">
           <p className="t-eyebrow mb-4 text-cream-100/35">{t.console.queuesTitle}</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {CONSOLE_QUEUES.map((queue) => (
+            {CONSOLE_QUEUES_SORTED.map((queue) => (
               <div
                 key={queue.key}
                 className="group rounded-3xl border border-cream-50/10 bg-cream-50/[0.04] p-6 transition-colors duration-300 hover:border-leaf-500/35 hover:bg-cream-50/[0.07]"
@@ -59,7 +59,7 @@ export function ConsoleSection({ t }: { t: Dictionary }) {
                   {queue.pending}
                 </p>
                 <p className="mt-2 text-sm text-cream-100/45">
-                  {t.console.oldestWaiting.replace('{age}', queue.oldest)}
+                  {t.console.oldestWaiting.replace('{age}', formatAge(queue.oldestHours))}
                 </p>
               </div>
             ))}

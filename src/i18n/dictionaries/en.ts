@@ -100,6 +100,7 @@ export const en = {
         savings: 'Savings',
         credit: 'Credit Facilities',
         requests: 'Requests',
+        conversations: 'Conversations',
         news: 'News',
         notifications: 'Notifications',
       },
@@ -113,6 +114,8 @@ export const en = {
         creditQueue: 'Credit Queue',
         teaPacketQueue: 'Tea Packet Queue',
         inquiries: 'Inquiries',
+        records: 'Supplier Records',
+        reports: 'Reports',
         cms: 'Content Management',
         configuration: 'Configuration',
         users: 'Users & Roles',
@@ -157,7 +160,6 @@ export const en = {
     supplierName: 'K. Wijesinghe',
     billNo: 'GL-26-07-5708',
     phoneLabel: 'Phone',
-    monthOverline: 'JULY 2026',
     monthLabel: 'July 2026',
     billNoLabel: 'Bill No.',
     dateLabel: 'Date',
@@ -195,24 +197,55 @@ export const en = {
     kg: 'kg',
     perKg: '/kg',
     currency: 'Rs.',
+    /** The app header's title and the four tabs (`home.title`, `tab.home`, `income.title`, `news.title`, `settings.title`). */
+    appTitle: 'Green Leaf Account',
+    tabs: { home: 'Account', income: 'Income history', news: 'News', settings: 'Settings' },
   },
 
+
+  /**
+   * The supplier app's conversation screen (`InquiryThreadScreen.tsx`). Labels
+   * and quick replies are the app's own (`inquiry.*` in the mobile string
+   * table); the subject, the question and the date are sample content in the
+   * supplier's language.
+   */
+  thread: {
+    subject: 'No supply shown for 12 July',
+    started: 'Started {date}',
+    startedDate: '3 August 2026',
+    today: 'Today',
+    yesterday: 'Yesterday',
+    factory: 'Factory',
+    statusPending: 'Waiting for reply',
+    awaitingReply: 'Awaiting reply',
+    placeholder: 'Write a message…',
+    messages: {
+      question: 'I delivered leaf on 12 July, but my account shows no supply for that day.',
+    },
+    suggest: {
+      thanks: 'Thank you.',
+      update: 'Is there any update?',
+      callMe: 'Please call me.',
+      visit: 'I will come to the office.',
+      understood: 'Understood, okay.',
+    },
+  },
 
   features: {
     eyebrow: 'Features',
     heading: 'Everything suppliers need. Everything the office needs to respond.',
     subtitle:
-      'Four groups of capability. The first two live on the supplier’s phone; the last two are how the office keeps up with them.',
+      'Five groups of capability. The first two live on the supplier’s phone; the rest are how the office keeps up with them.',
     money: {
       title: 'Supplier Money',
       description: 'The monthly account, and the history behind it.',
       items: {
         account: { title: 'Green Leaf Account', desc: 'The month’s rate, kilos, gross, deductions and balance in the order the printed slip states them.' },
         calendar: { title: 'Daily Supply Calendar', desc: 'Day 1 to 31 with the kilos recorded against each, plus a bar chart of the month.' },
-        income: { title: 'Income History', desc: 'Past months as a graph, a list or a chart, with any month’s full account one tap away.' },
+        income: { title: 'Income History', desc: 'Past months as a graph, a list or a chart, any month’s full account one tap away, and the year as a PDF summary.' },
         deductions: { title: 'Deduction Breakdown', desc: 'Where the money went: transport, tea, savings, loan, advance, manure and the rest, itemised.' },
         savings: { title: 'Savings Ledger', desc: 'This month, the previous balance and the running total, with a trend over time.' },
-        payment: { title: 'Payment Method', desc: 'Cheque, bank transfer or cash, with the current bank details visible at any time.' },
+        billPdf: { title: 'Bill PDF', desc: 'Save the month’s slip as a PDF laid out in Sinhala, Tamil or English, ready to share or print.' },
       },
     },
     credit: {
@@ -224,7 +257,7 @@ export const en = {
         manure: { title: 'Manure', desc: 'A fertiliser request with a recovery period, priced by the factory after the request.' },
         teaPackets: { title: 'Tea Packets', desc: 'Packets of made tea from the factory store, collected at the factory or sent on the transport vehicle.' },
         limits: { title: 'Configurable Credit Limits', desc: 'Basis, multiplier, months to average, history required and cap, set per facility, per factory, without a release.' },
-        history: { title: 'Facility History', desc: 'Every request the supplier has made, with the amount asked for, the term and the decision.' },
+        history: { title: 'Facility History', desc: 'Every request with the amount asked for, the term and the decision. One still pending can be withdrawn until the office decides it.' },
       },
     },
     requests: {
@@ -233,9 +266,9 @@ export const en = {
       items: {
         bank: { title: 'Bank Detail Changes', desc: 'Submitted for approval. The app keeps showing the current details until the office signs off.' },
         payment: { title: 'Payment Method Changes', desc: 'Cheque, transfer or cash, changed the same way: as a request, never applied silently.' },
-        inquiries: { title: 'Supplier Inquiries', desc: 'A subject and a message that reaches the office, with the reply visible in the app.' },
-        attachments: { title: 'Attachments', desc: 'A photo or document alongside an inquiry, so the office sees what the supplier sees.' },
-        status: { title: 'Request Status', desc: 'Pending, approved or rejected, on the supplier’s screen without anyone being called.' },
+        conversations: { title: 'Conversations', desc: 'An inquiry is a chat: the supplier and the office write back and forth, each side with ready-made replies, and the office can close it with a reason.' },
+        compare: { title: 'Side-by-Side Approval', desc: 'Before approving a change, the office sees the current and the requested details field by field.' },
+        status: { title: 'Request Status', desc: 'Pending, approved, rejected or cancelled, on the supplier’s screen without anyone being called.' },
         queues: { title: 'Approval Queues', desc: 'Every pending item in the app appears as a queue in the office, with the age of the oldest one.' },
       },
     },
@@ -243,12 +276,24 @@ export const en = {
       title: 'Communication',
       description: 'What the factory says, and how it reaches the phone.',
       items: {
-        news: { title: 'News', desc: 'Articles with a cover image and an excerpt, published by the office and read in the app.' },
-        banners: { title: 'Promotional Banners', desc: 'A full-width announcement with a live window and one button, shown on the way into the app.' },
-        push: { title: 'Push Notifications', desc: 'Account ready, request decided, inquiry replied and news. Each category is opted into by the supplier.' },
+        news: { title: 'News', desc: 'Articles with a cover image, written ahead and published at a set time if needed, then read in the app.' },
+        banners: { title: 'Promotional Banners', desc: 'A full-width image with a title and one button that opens a chosen app screen or article, shown inside a set window on the way into the app.' },
+        push: { title: 'Push Notifications', desc: 'Account ready, request decided, inquiry replied and news, each opted into by the supplier. The office can write one too, and sees how many phones it will reach first.' },
         history: { title: 'Notification History', desc: 'The factory’s record of what it sent, readable even when push is switched off entirely.' },
-        faq: { title: 'FAQ', desc: 'Questions the office answers once, in the app, instead of answering at the counter.' },
-        content: { title: 'Static Content', desc: 'Terms, support pages and help text, edited by the office in each language.' },
+        faq: { title: 'FAQ', desc: 'Questions the office answers once, as ordered points in each language, instead of answering at the counter.' },
+        content: { title: 'Factory Pages', desc: 'Terms, privacy, the factory’s own page and the savings and credit terms, edited by the office in each language and linked from the screens they explain.' },
+      },
+    },
+    records: {
+      title: 'Office Records & Reports',
+      description: 'What the counter looks up, and what the factory reports on.',
+      items: {
+        supplier: { title: 'Supplier Record', desc: 'One page per supplier: app, bank account, savings rate and collection point at a glance, with tabs for payout and credit, requests, income, notifications and activity.' },
+        requests: { title: 'Request History', desc: 'Everything a supplier has asked for, advances, loans, manure and tea packets, in every status, with the approved totals.' },
+        passbook: { title: 'Savings Passbook', desc: 'Every savings entry for a supplier, with the running balance, read-only.' },
+        notify: { title: 'Notification Check', desc: 'For each notification category, whether a push reaches this supplier, and if it does not, why.' },
+        reports: { title: 'Reports', desc: 'Month by month: how much is asked for in the app rather than at the office, the credit and tea packets given, and the savings the factory holds.' },
+        search: { title: 'Search Anywhere', desc: 'Ctrl K jumps to any supplier by code or name, or to any page of the console.' },
       },
     },
   },
@@ -361,6 +406,7 @@ export const en = {
      */
     pageTitle: 'Dashboard',
     pageSubtitle: 'The day at a glance',
+    search: 'Search',
     queuesTitle: 'Queues',
     oldestWaiting: 'Oldest {age}',
     pastTarget: '{count} past target',
@@ -373,21 +419,18 @@ export const en = {
       inquiries: 'Inquiries',
     },
     appAdoption: 'App adoption',
-    appAdoptionHint: 'How much of the supplier base is actually using it',
     appInstalled: '{withApp} of {total} suppliers signed in',
     appWithout: '{count} have never installed it',
     appDevices: '{count} devices registered for notifications',
     appRequestShare: 'Requests raised in the app this month: {value}',
     contentHealth: 'Content',
-    contentHealthHint: 'What the app is showing that nobody has been told about',
     bannersLive: 'banners live right now',
     contentArticlesWithGaps: '{count} published articles fall back to English',
     contentBannersExpired: '{count} published banners have finished their window',
+    contentPagesUnwritten: '{count} fixed pages have never been written',
     alerts: 'Needs attention',
-    alertOne: '4 change requests have been waiting longer than 3 days.',
-    alertTwo: 'The auction result for July 2026 has not been entered yet.',
+    noAlerts: 'Nothing needs attention',
     adoptionTrend: 'App adoption, last 12 months',
-    adoptionTrendHint: 'Share of requests raised in the app rather than at the counter.',
     nav: {
       sectionOverview: 'Overview',
       sectionQueues: 'Queues',
@@ -410,7 +453,43 @@ export const en = {
       configuration: 'Configuration',
       users: 'Users & roles',
     },
+    /** The topbar prints the raw role id, untranslated, in every language. */
     user: { name: 'R. Gunawardena', role: 'manager' },
+    /** The inquiry screen (`modules/inquiries/*`), in the console's own words. */
+    inquiry: {
+      title: 'Inquiries',
+      from: 'From {name} · {code}',
+      statusOpen: 'Open',
+      conversation: 'Conversation',
+      receivedLabel: 'Received',
+      channelLabel: 'Sent through',
+      channelApp: 'Supplier (app)',
+      waitingLabel: 'Waiting for',
+      pushSent: 'Supplier notified',
+      awaitingReply: 'Waiting for a reply',
+      replyLabel: 'Your answer',
+      replyPlaceholder: 'e.g. We checked the 12th and found a second weighing of 96 kg that had not been entered. It is on your account now.',
+      noteSuggestions: 'Common notes:',
+      suggestReceived: 'Received',
+      suggestCheckingLabel: 'Checking',
+      suggestChecking: 'We are checking this and will reply to you soon.',
+      suggestVisit: 'Visit the office',
+      suggestCall: 'Call the office',
+      suggestSorted: 'Sorted',
+      close: 'Close unanswered',
+      replyCount: '{count} of at least {min} characters',
+      sendReply: 'Send reply',
+      supplier: 'Supplier',
+      supplierLink: 'Open supplier record',
+      history: 'Their earlier messages',
+      assignTitle: 'Handling',
+      nobody: 'Nobody yet',
+      take: 'Assign to me',
+      notesTitle: 'Office notes',
+      notesHint: 'Only the office sees these',
+      notesEmpty: 'No notes yet',
+      notesPlaceholder: 'For example: called the supplier, will call back on Monday',
+    },
   },
 
 
@@ -439,8 +518,8 @@ export const en = {
       one: { title: 'Supplier ID + Password', desc: 'Sign-in by the supplier code the factory already issues. No email account required. The first password must be changed on first sign-in.' },
       two: { title: 'Biometric Unlock', desc: 'Face or fingerprint unlock once credentials are saved, with credentials held in the device keychain.' },
       three: { title: 'PIN & Auto-Lock', desc: 'An app PIN and a configurable lock on inactivity or when the app moves to the background.' },
-      four: { title: 'Role-Based Access', desc: 'Clerk, manager, editor, factory admin and platform admin, with each capability granted per role.' },
-      five: { title: 'Audit Logs', desc: 'Who decided what, and when, recorded for every approval, edit and publish in the console.' },
+      four: { title: 'Role-Based Access', desc: 'Clerk, manager, editor, factory admin and platform admin, with each capability granted per role. Each role sees only the screens, tabs and actions it may use.' },
+      five: { title: 'Audit Logs', desc: 'Who decided what, and when, recorded for every approval, edit and publish in the console. Each entry reads as plain lines of what changed.' },
       six: { title: 'Controlled Feature Access', desc: 'A facility a factory does not run is refused by the server, not merely hidden in the interface.' },
     },
     disclaimer:
@@ -548,11 +627,15 @@ export const en = {
       },
       requests: {
         title: 'Ask without walking',
-        body: 'Advances, loans, manure and tea packets are each a short form with the ceiling shown before anything is typed, and the per-account repayment quoted as the amount changes. A request carries its status from the moment it is sent, so nobody calls the office to ask whether it arrived.',
+        body: 'Advances, loans, manure and tea packets are each a short form with the ceiling shown before anything is typed, and the per-account repayment quoted as the amount changes. A request carries its status from the moment it is sent, so nobody calls the office to ask whether it arrived. A request sent by mistake can be withdrawn until the office decides it.',
+      },
+      conversation: {
+        title: 'A conversation, not a phone call',
+        body: 'An inquiry is a chat with the office. The supplier writes in their own language, the office answers in the same thread, and quick replies such as “Is there any update?” are one tap. A badge says whether it is waiting, answered or closed, and the supplier can be notified the moment the office replies.',
       },
       settings: {
         title: 'Their details, their security',
-        body: 'Language, theme, font size, avatar and notification categories are the supplier’s. Bank details and payment method are the factory’s to approve. The app shows the current details with a pending badge until the office decides. Sign-in is by supplier ID, with biometric unlock, a PIN and auto-lock available.',
+        body: 'Language, theme, font size, avatar and notification categories are the supplier’s. Bank details and payment method are the factory’s to approve. The app shows the current details with a pending badge until the office decides. Sign-in is by supplier ID, with biometric unlock, a PIN and auto-lock available. A supplier who leaves can delete their app account from Settings; the factory keeps the records it is required to keep.',
       },
     },
     highlights: {
@@ -571,19 +654,27 @@ export const en = {
     sections: {
       queues: {
         title: 'Four queues, one promise',
-        body: 'Credit, tea packets, change requests and inquiries. Each queue shows the number pending, the age of the oldest item and how many have passed the response target, because three requests sitting four days is worse than twenty from this morning.',
+        body: 'Credit, tea packets, change requests and inquiries. Each queue shows the number pending, the age of the oldest item and how many have passed the response target, because three requests sitting four days is worse than twenty from this morning. The dashboard puts the overdue ones first, outlined in red, and folds empty queues into one line.',
       },
       content: {
         title: 'What the factory says',
         body: 'News articles, promotional banners and the static pages the app renders, each edited per language. The dashboard names the quiet failures: an article falling back to English, a banner whose window has closed, a page nobody has written yet.',
       },
+      conversations: {
+        title: 'Answer in the thread, not on the phone',
+        body: 'Each inquiry opens as the conversation the supplier sees, with how long it has waited. The office’s everyday answers are ready-made sentences that fill the reply box and stay editable, a clerk takes an inquiry with “Assign to me”, and office notes stay private. The screen says whether the supplier was notified, so nobody assumes a message went out.',
+      },
       configuration: {
         title: 'A new factory is configuration, not a release',
         body: 'Identity, branding, languages, collection points, bank list, savings rates, tea-packet policy, push categories, the feature flags and the credit rules. The ceiling a supplier reads in the app is calculated from the same rule the queue checks against: one calculation, not two that agree until the first policy change.',
       },
+      records: {
+        title: 'The counter’s questions, answered on one page',
+        body: 'The supplier record puts the app, the bank account, the savings rate and the collection point at the top, with every request, the savings passbook, the income the supplier sees and a check of why a phone did or did not ring underneath. Reports show the shift to the app, the credit and tea packets given and the savings held, month by month, and the data status page says how current the figures are.',
+      },
       governance: {
         title: 'Who may decide, and what they decided',
-        body: 'Five roles on a capability matrix, with approvals above a threshold reserved for a manager. The audit log records every approval, edit and publish. The console authorises nothing on its own: a hidden button is a courtesy, and the server enforces the same matrix per endpoint.',
+        body: 'Five roles on a capability matrix, with approvals above a threshold reserved for a manager. The audit log records every approval, edit and publish. The console authorises nothing on its own: a hidden button is a courtesy, and the server enforces the same matrix per endpoint. A console password is issued once and replaced by its owner at first sign-in, and a user who is removed loses access at once and is deleted after three days, with their name kept on every record they signed.',
       },
     },
     highlights: {
@@ -646,7 +737,7 @@ export const en = {
 
   legal: {
     lastUpdated: 'Last updated',
-    lastUpdatedValue: '19 September 2026',
+    lastUpdatedValue: '6 October 2026',
     placeholderNote:
       'This document is a template prepared for the Tea Factory Digital platform. Company registration details, the data-protection contact and any factory-specific terms must be completed before publication.',
     privacy: {
@@ -680,7 +771,7 @@ export const en = {
         },
         rights: {
           title: 'Your rights',
-          body: 'You may ask for a copy of your data, ask for it to be corrected, or ask about how it is used. Because your factory controls your supplier account, requests about account data are directed to the factory office; we will assist the factory in answering them.',
+          body: 'You may ask for a copy of your data, ask for it to be corrected, or ask about how it is used. Because your factory controls your supplier account, requests about account data are directed to the factory office; we will assist the factory in answering them. Suppliers can also ask for their app account to be deleted from Settings in the app; the factory keeps the records it is required to keep.',
         },
         children: {
           title: 'Children',

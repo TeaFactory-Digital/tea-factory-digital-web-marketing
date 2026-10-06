@@ -25,6 +25,7 @@ export function AppConsoleSplit({ t }: { t: Dictionary }) {
     t.split.app.items.savings,
     t.split.app.items.credit,
     t.split.app.items.requests,
+    t.split.app.items.conversations,
     t.split.app.items.news,
     t.split.app.items.notifications,
   ];
@@ -35,6 +36,8 @@ export function AppConsoleSplit({ t }: { t: Dictionary }) {
     t.split.console.items.creditQueue,
     t.split.console.items.teaPacketQueue,
     t.split.console.items.inquiries,
+    t.split.console.items.records,
+    t.split.console.items.reports,
     t.split.console.items.cms,
     t.split.console.items.configuration,
     t.split.console.items.users,

@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation';
 import { getDictionary, isLocale, type Locale } from '@/i18n';
 import { PageHero, SplitBlock } from '@/components/sections/PageHero';
 import { ConsoleDashboard } from '@/components/mockups/ConsoleDashboard';
+import { ConsoleInquiry } from '@/components/mockups/ConsoleInquiry';
 import { ConsoleSection } from '@/components/sections/ConsoleSection';
 import { AnalyticsSection } from '@/components/sections/AnalyticsSection';
 import { IntegrationSection } from '@/components/sections/IntegrationSection';
 import { SecuritySection } from '@/components/sections/SecuritySection';
 import { FinalCTA } from '@/components/sections/FinalCTA';
 import { Card } from '@/components/ui/card';
-import { CONSOLE_QUEUES } from '@/lib/sample-data';
+import { CONSOLE_QUEUES_SORTED, formatAge } from '@/lib/sample-data';
 
 export async function generateMetadata({
   params,
@@ -50,7 +51,7 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
           <Card className="p-6 md:p-8">
             <p className="t-eyebrow mb-5 text-leaf-700">{t.console.queuesTitle}</p>
             <ul className="space-y-3">
-              {CONSOLE_QUEUES.map((queue) => (
+              {CONSOLE_QUEUES_SORTED.map((queue) => (
                 <li
                   key={queue.key}
                   className="flex items-center justify-between rounded-2xl bg-cream-100 px-5 py-4"
@@ -60,7 +61,7 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
                   </span>
                   <span className="flex items-baseline gap-3">
                     <span className="text-xs text-char-400">
-                      {t.console.oldestWaiting.replace('{age}', queue.oldest)}
+                      {t.console.oldestWaiting.replace('{age}', formatAge(queue.oldestHours))}
                     </span>
                     <span className="font-display text-xl font-semibold text-leaf-700 tabular-nums">
                       {queue.pending}
@@ -103,9 +104,17 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
 
       <SplitBlock
         index="03"
+        title={s.conversations.title}
+        body={s.conversations.body}
+        tone="white"
+        visual={<ConsoleInquiry t={t} />}
+      />
+
+      <SplitBlock
+        index="04"
+        flip
         title={s.configuration.title}
         body={s.configuration.body}
-        tone="white"
         visual={
           <Card className="p-6 md:p-8">
             <p className="t-eyebrow mb-5 text-leaf-700">{t.whiteLabel.eyebrow}</p>
@@ -132,7 +141,34 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
       />
 
       <SplitBlock
-        index="04"
+        index="05"
+        title={s.records.title}
+        body={s.records.body}
+        tone="white"
+        visual={
+          <Card className="p-6 md:p-8">
+            <p className="t-eyebrow mb-5 text-leaf-700">{t.features.records.title}</p>
+            <ul className="divide-y divide-cream-200">
+              {[
+                t.features.records.items.supplier,
+                t.features.records.items.passbook,
+                t.features.records.items.notify,
+                t.features.records.items.reports,
+              ].map((item) => (
+                <li key={item.title} className="py-4 first:pt-0 last:pb-0">
+                  <p className="font-display text-[0.98rem] font-semibold text-forest-900">
+                    {item.title}
+                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-char-500">{item.desc}</p>
+                </li>
+              ))}
+            </ul>
+          </Card>
+        }
+      />
+
+      <SplitBlock
+        index="06"
         title={s.governance.title}
         body={s.governance.body}
         flip

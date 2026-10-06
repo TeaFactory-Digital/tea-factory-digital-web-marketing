@@ -4,6 +4,7 @@ import { getDictionary, isLocale, type Locale } from '@/i18n';
 import { PageHero, SplitBlock } from '@/components/sections/PageHero';
 import { PhoneFrame } from '@/components/mockups/PhoneFrame';
 import { GreenLeafBill } from '@/components/mockups/GreenLeafBill';
+import { InquiryThread } from '@/components/mockups/InquiryThread';
 import { DailySupplyGrid, IncomeBars } from '@/components/mockups/charts';
 import { CreditFlow } from '@/components/sections/CreditFlow';
 import { LanguageSection } from '@/components/sections/LanguageSection';
@@ -102,9 +103,23 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
 
       <SplitBlock
         index="04"
+        title={s.conversation.title}
+        body={s.conversation.body}
+        flip
+        visual={
+          <div className="mx-auto w-full max-w-[17rem]">
+            <PhoneFrame>
+              <InquiryThread t={t} />
+            </PhoneFrame>
+          </div>
+        }
+      />
+
+      <SplitBlock
+        index="05"
+        tone="white"
         title={s.settings.title}
         body={s.settings.body}
-        flip
         visual={
           <Card className="p-6 md:p-8">
             <ul className="divide-y divide-cream-200">

@@ -48,7 +48,8 @@ src/
     robots.ts sitemap.ts
   components/
     ui/                  button, field, card, section, motion helpers
-    mockups/             PhoneFrame, GreenLeafBill, ConsoleDashboard, charts
+    mockups/             PhoneFrame, AppChrome, GreenLeafBill, InquiryThread, TeaBreeze,
+                         ConsoleChrome, ConsoleDashboard, ConsoleInquiry, charts
     sections/            one file per page section, named after the brief
     Navbar Footer Logo PlantationScene
   i18n/
@@ -92,13 +93,19 @@ than no mockup, because a factory recognises its own console.
 | On this site | Source of truth |
 | --- | --- |
 | `mockups/GreenLeafBill.tsx` | `tea-factory-digital-mobile-frontend` → `src/screens/home/HomeScreen.tsx` and `src/components/bill/*` |
-| `mockups/ConsoleDashboard.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/modules/dashboard/DashboardScreen.tsx`, `layout/Sidebar.tsx`, `layout/Topbar.tsx`, `layout/navigation.ts` |
+| `mockups/TeaBreeze.tsx` | mobile → `src/components/bill/TeaBreeze.tsx`, `TeaLandscape.tsx` |
+| `mockups/AppChrome.tsx`, `AppIcon.tsx` | mobile → `src/navigation/AppHeader.tsx`, `AppTabs.ios.tsx`, `src/components/icons/Icon.tsx`, `components/ui/Avatar.tsx` |
+| `mockups/InquiryThread.tsx` | mobile → `src/screens/inquiry/InquiryThreadScreen.tsx` |
+| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar}.tsx`, `components/ui/Card.tsx`, `public/brand/logo.svg` |
+| `mockups/ConsoleDashboard.tsx` | admin → `apps/admin/src/modules/dashboard/DashboardScreen.tsx` |
+| `mockups/ConsoleInquiry.tsx` | admin → `apps/admin/src/modules/inquiries/InquiryDetailScreen.tsx`, `ReplyDialog.tsx`, `InquiryOfficeCards.tsx` |
+| The `thread` block and `console.inquiry` | the mobile `inquiry.*` strings and the console's `inquiries.*` strings |
 | `--color-app-*` in `globals.css` | `packages/brand/src/colors.ts`, overridden by the `default` (Galaboda) client: primary `#2E8B57`, muted `#DCEEE2` |
 | The `bill` block in each dictionary | the mobile string table, `src/config/clients/default/strings.ts` |
 | The `console` block in each dictionary | the console's own locales, `apps/admin/src/i18n/locales/*.ts` |
 | The three white-label palettes | `src/config/clients/{default,clientA,clientB}`: Galaboda, Hill Country Tea, Highland Estate |
 
-**True-size rendering.** Both mockups are written at the size the real product
+**True-size rendering.** The mockups are written at the size the real product
 runs at (a 384px phone screen, a 1280px console) using the product's own
 spacing, radius and type values as plain pixels. `DeviceShot` scales the whole
 screen into whatever space it is given, so a console in a 700px column and the
@@ -113,7 +120,13 @@ inside it is not, and darkening it to suit the page would be the mismatch.
 **The figures are consistent.** The daily kilos sum to the month's total, the
 total times the total rate is the gross, the deductions subtract to the balance,
 and the coins carried forward are the fraction the slip rounds off. Keep it that
-way. A factory accountant reads a mockup like an account.
+way. A factory accountant reads a mockup like an account. The same goes for the
+console: the queue ages sit inside or past the console's real response targets,
+and the inquiry on the phone is the same conversation, 27 h old, that the
+console shows and the dashboard counts as its oldest.
+
+**Last matched to the products on 6 October 2026** (mobile `3a32348`, admin
+`aad534a`).
 
 ## Demo form
 
