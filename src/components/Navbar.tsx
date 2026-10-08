@@ -51,6 +51,23 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
     };
   }, [menuOpen]);
 
+  /**
+   * A tap in the mobile sheet. The sheet closes on a page change, but a jump to a
+   * section of the page already open (`/#features` on the home page) is not one,
+   * so it would stay open with the page locked behind it. Close it here, unlock
+   * the page, and scroll once the sheet is out of the way.
+   */
+  function onSheetLink(event: React.MouseEvent<HTMLAnchorElement>, path: string) {
+    setMenuOpen(false);
+    const hash = path.startsWith('/#') ? path.slice(2) : null;
+    if (hash && pathWithoutLocale === '') {
+      event.preventDefault();
+      document.body.style.overflow = '';
+      window.history.pushState(null, '', `#${hash}`);
+      requestAnimationFrame(() => document.getElementById(hash)?.scrollIntoView());
+    }
+  }
+
   const links = [
     { label: t.nav.product, path: `/#${sections.platform}` },
     { label: t.nav.features, path: `/#${sections.features}` },
@@ -221,6 +238,7 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
                   >
                     <Link
                       href={href(locale, link.path)}
+                      onClick={(event) => onSheetLink(event, link.path)}
                       className="block border-b border-cream-200 py-4 font-display text-xl font-semibold text-forest-900"
                     >
                       {link.label}
@@ -230,7 +248,12 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
               </nav>
 
               <div className="shell mt-6 space-y-3">
-                <ButtonLink href={href(locale, '/demo')} size="lg" className="w-full">
+                <ButtonLink
+                  href={href(locale, '/demo')}
+                  size="lg"
+                  className="w-full"
+                  onClick={() => setMenuOpen(false)}
+                >
                   {t.common.requestDemo}
                 </ButtonLink>
                 <div className="flex gap-2">
