@@ -711,6 +711,7 @@ export const en = {
       required: 'Required',
       submit: 'Request a Demo',
       submitting: 'Sending…',
+      failed: 'Your request could not be sent. Please try again in a moment, or email us at',
     },
     validation: {
       required: 'This field is required.',

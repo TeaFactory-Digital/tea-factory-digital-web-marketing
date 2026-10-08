@@ -24,7 +24,7 @@ export function DemoForm({ t }: { t: Dictionary }) {
   const f = t.demo.form;
   const [interest, setInterest] = React.useState<string[]>([]);
   const [errors, setErrors] = React.useState<Errors>({});
-  const [state, setState] = React.useState<'idle' | 'sending' | 'done'>('idle');
+  const [state, setState] = React.useState<'idle' | 'sending' | 'done' | 'failed'>('idle');
 
   const options = [
     { key: 'app', label: f.interestOptions.app },
@@ -61,17 +61,16 @@ export function DemoForm({ t }: { t: Dictionary }) {
     }
 
     setState('sending');
-    try {
-      await fetch('/api/demo-request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...values, interest }),
-      });
-    } catch {
-      // The submission is recorded best-effort; the confirmation below is the
-      // same either way so a network blip does not lose the person's context.
-    }
-    setState('done');
+    // "Thank you" only when the request reached the inbox. On failure the form
+    // keeps everything they typed and says so, with the email to use instead.
+    const sent = await fetch('/api/demo-request', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...values, interest }),
+    })
+      .then((response) => response.ok)
+      .catch(() => false);
+    setState(sent ? 'done' : 'failed');
   }
 
   if (state === 'done') {
@@ -188,6 +187,21 @@ export function DemoForm({ t }: { t: Dictionary }) {
         </Label>
         <Textarea id="message" name="message" placeholder={f.messagePlaceholder} />
       </div>
+
+      {/* Hidden from people. A bot fills it, and the server drops the request. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] size-px overflow-hidden">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      {state === 'failed' ? (
+        <p role="alert" className="mt-8 rounded-2xl bg-red-50 px-5 py-4 text-sm text-red-800">
+          {f.failed}{' '}
+          <a href={`mailto:${t.footer.contact.email}`} className="font-semibold underline">
+            {t.footer.contact.email}
+          </a>
+        </p>
+      ) : null}
 
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="flex items-center gap-2 text-sm text-char-400">

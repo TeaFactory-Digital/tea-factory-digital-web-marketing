@@ -130,12 +130,24 @@ console shows and the dashboard counts as its oldest.
 
 ## Demo form
 
-`POST /api/demo-request` validates the payload and logs it. **It does not send
-anything anywhere yet**. The destination (email, CRM, sheet) is the operator's
-choice, and there is a single `TODO` in the route marking where it goes. The
-shape, the validation and the error contract are already what a real destination
-needs. Validation runs in the browser for the message and again on the server
-because the browser's copy is a convenience.
+`POST /api/demo-request` validates the request and emails it to the company inbox
+through [Resend](https://resend.com). The email's Reply-To is the person who asked,
+so replying answers them directly. The form says "thank you" only when the email
+was sent; otherwise it keeps what they typed and shows the contact address. A
+hidden field catches simple bots.
+
+Settings (see `.env.example`; locally in `.env.local`, in production in the host):
+
+| Setting | Value |
+|---|---|
+| `RESEND_API_KEY` | API key from resend.com. Without it the form reports a failure. |
+| `DEMO_REQUEST_TO` | Receiving inbox, comma-separated for several. |
+| `DEMO_REQUEST_FROM` | `onboarding@resend.dev` until the domain is verified in Resend. |
+
+Until `teafactorydigital.lk` is verified in Resend, Resend sends only from
+`onboarding@resend.dev` and only **to the email the Resend account was created
+with**. After verifying the domain (DNS records in Resend → Domains), set
+`DEMO_REQUEST_FROM` to an address on it and `DEMO_REQUEST_TO` to any inbox.
 
 ## Design
 
@@ -165,7 +177,7 @@ and take `{ locale, t }`.
   registration details, the data-protection contact and any factory-specific
   terms are still blank. The app stores will ask for the privacy URL.
 - Replace the placeholder email in the footer contact block.
-- Point the demo form at a real destination.
+- Verify `teafactorydigital.lk` in Resend and point `DEMO_REQUEST_TO` at the company inbox.
 - Optionally drop in photography. See `public/images/README.md`.
 
 ## Checks
