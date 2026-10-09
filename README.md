@@ -121,7 +121,8 @@ background is `#F2F5F4`. The section around it on this site is dark; the console
 inside it is not, and darkening it to suit the page would be the mismatch.
 
 **The figures are consistent.** The daily kilos sum to the month's total, the
-total times the total rate is the gross, the deductions subtract to the balance,
+gross is the total times the total rate plus last month's coins brought forward
+(as the app's Earnings block adds them), the deductions subtract to the balance,
 and the coins carried forward are the fraction the slip rounds off. Keep it that
 way. A factory accountant reads a mockup like an account. The same goes for the
 console: the queue ages sit inside or past the console's real response targets,

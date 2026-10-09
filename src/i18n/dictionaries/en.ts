@@ -339,16 +339,16 @@ export const en = {
       four: { title: 'Supplier receives notification', desc: 'The decision reaches the phone, and the request history records it.' },
     },
     example: {
-      title: 'Advance Request',
+      title: 'Loan Request',
       amountLabel: 'Amount',
       amountValue: 'Rs. 25,000.00',
       statusLabel: 'Status',
       statusValue: 'Pending Review',
-      termLabel: 'Repayment',
+      termLabel: 'Repay over',
       termValue: '3 monthly accounts',
     },
     queue: {
-      title: 'New Advance Request',
+      title: 'New Loan Request',
       supplierLabel: 'Supplier',
       supplierValue: 'S. Perera',
       amountLabel: 'Amount',
@@ -506,6 +506,12 @@ export const en = {
     },
     /** The topbar prints the raw role id, untranslated, in every language. */
     user: { name: 'Ruwan Gunawardena', role: 'manager' },
+    /** Who is signed in on each console mockup; the role line is the raw role id, untranslated. */
+    users: {
+      manager: { name: 'Ruwan Gunawardena', role: 'manager' },
+      clerk: { name: 'Nimali Perera', role: 'clerk' },
+      factoryAdmin: { name: 'Sunil Jayawardena', role: 'factoryAdmin' },
+    },
     /** The inquiry screen (`modules/inquiries/*`), in the console's own words. */
     inquiry: {
       title: 'Inquiries',
@@ -540,6 +546,7 @@ export const en = {
       notesHint: 'Only the office sees these',
       notesEmpty: 'No notes yet',
       notesPlaceholder: 'For example: called the supplier, will call back on Monday',
+      notesAdd: 'Add note',
     },
   },
 

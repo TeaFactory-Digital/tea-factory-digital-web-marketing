@@ -22,7 +22,7 @@ import type { Dictionary } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { ConsoleCard, ConsoleFrame, ConsolePageHeader, ConsoleShell } from './ConsoleChrome';
 
-export const FACTORY_SYSTEM_SHOT = { width: 1280, height: 1050 } as const;
+export const FACTORY_SYSTEM_SHOT = { width: 1280, height: 900 } as const;
 
 /** The section rail, in `ConfigurationScreen.tsx`'s order and with its icons. */
 const SECTIONS: { id: keyof Dictionary['records']['sectionTitles']; icon: LucideIcon }[] = [
@@ -43,9 +43,10 @@ const SECTIONS: { id: keyof Dictionary['records']['sectionTitles']; icon: Lucide
  * Configuration → Factory system (M14), reproduced from `ConfigurationScreen.tsx` and
  * `FactorySystemSection.tsx`: the settings rail, then the two choices as radio cards.
  *
- * Shown saved with the sync **off**, the state the section exists for: the sidebar already
- * carries the *Factory records* menu that appears with it, and the footer says nothing has
- * changed, as it does once the save has gone through.
+ * Shown saved with the sync **off**, the state the section exists for, and as the factory
+ * administrator sees it: the only role that may change configuration (`flagsAndBranding: W`),
+ * which is why the footer offers Save. That role reads no leaf or rates, so its sidebar has no
+ * *Factory records* menu; the clerk's Leaf intake screen (`ConsoleImport`) shows it.
  */
 export function ConsoleFactorySystem({
   t,
@@ -65,7 +66,7 @@ export function ConsoleFactorySystem({
       className={className}
       chrome={chrome}
     >
-      <ConsoleShell t={t} active="configuration" keepsRecords>
+      <ConsoleShell t={t} active="configuration" role="factoryAdmin" keepsRecords>
         <ConsolePageHeader
           title={r.configTitle}
           description={r.configSubtitle}

@@ -7,7 +7,8 @@ import { ADOPTION_SERIES, DAILY_SUPPLY, INCOME_SERIES } from '@/lib/sample-data'
  *
  * Drawn the way the app draws it (`components/bill/DailySupplyGrid.tsx`): seven
  * columns, a `primaryMuted` fill on days with a delivery and `surfaceVariant`
- * on days without, the day number in secondary text above the kilos. A blank
+ * on days without, the day number in secondary text above the kilos, both in the
+ * caption style (the kilos in the primary colour, not bolder). A blank
  * day is an en dash, not an empty cell, following the printed slip's convention.
  */
 export function DailySupplyGrid({ className }: { className?: string }) {
@@ -27,7 +28,7 @@ export function DailySupplyGrid({ className }: { className?: string }) {
           <span
             className={cn(
               'text-[10px] leading-[14px] tabular-nums sm:text-xs',
-              kg === null ? 'text-app-text-secondary' : 'font-medium text-app-primary',
+              kg === null ? 'text-app-text-secondary' : 'text-app-primary',
             )}
           >
             {kg === null ? '–' : kg}

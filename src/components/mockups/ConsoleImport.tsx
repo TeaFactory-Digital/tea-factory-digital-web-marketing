@@ -43,7 +43,7 @@ export function ConsoleImport({
   return (
     <ConsoleFrame width={IMPORT_SHOT.width} height={IMPORT_SHOT.height} className={className} chrome={chrome}>
       <div className="relative h-full">
-        <ConsoleShell t={t} active="deliveries" keepsRecords>
+        <ConsoleShell t={t} active="deliveries" role="clerk" keepsRecords>
           <ConsolePageHeader title={r.deliveriesTitle} description={r.deliveriesSubtitle} />
         </ConsoleShell>
 

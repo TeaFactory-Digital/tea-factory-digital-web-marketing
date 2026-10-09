@@ -332,16 +332,16 @@ export const ta: Dictionary = {
       four: { title: 'வழங்குநருக்கு அறிவிப்பு', desc: 'முடிவு கைபேசியை அடைகிறது, கோரிக்கை வரலாற்றில் பதிவாகிறது.' },
     },
     example: {
-      title: 'முன்பணக் கோரிக்கை',
+      title: 'கடன் கோரிக்கை',
       amountLabel: 'தொகை',
       amountValue: 'ரூ. 25,000.00',
       statusLabel: 'நிலை',
       statusValue: 'மறுஆய்வில்',
-      termLabel: 'திருப்பிச் செலுத்தல்',
+      termLabel: 'திருப்பிச் செலுத்தும் காலம்',
       termValue: '3 மாதாந்திரக் கணக்குகள்',
     },
     queue: {
-      title: 'புதிய முன்பணக் கோரிக்கை',
+      title: 'புதிய கடன் கோரிக்கை',
       supplierLabel: 'வழங்குநர்',
       supplierValue: 'எஸ். பெரேரா',
       amountLabel: 'தொகை',
@@ -499,6 +499,12 @@ export const ta: Dictionary = {
     },
     /** The topbar prints the raw role id, untranslated, in every language. */
     user: { name: 'Ruwan Gunawardena', role: 'manager' },
+    /** Who is signed in on each console mockup; the role line is the raw role id, untranslated. */
+    users: {
+      manager: { name: 'Ruwan Gunawardena', role: 'manager' },
+      clerk: { name: 'Nimali Perera', role: 'clerk' },
+      factoryAdmin: { name: 'Sunil Jayawardena', role: 'factoryAdmin' },
+    },
     /** The inquiry screen (`modules/inquiries/*`), in the console's own words. */
     inquiry: {
       title: 'விசாரணைகள்',
@@ -533,6 +539,7 @@ export const ta: Dictionary = {
       notesHint: 'இவற்றை அலுவலகம் மட்டுமே பார்க்கும்',
       notesEmpty: 'இன்னும் குறிப்புகள் இல்லை',
       notesPlaceholder: 'உதாரணம்: வழங்குநரை அழைத்தேன், திங்கள் மீண்டும் அழைப்பேன்',
+      notesAdd: 'குறிப்பைச் சேர்',
     },
   },
 

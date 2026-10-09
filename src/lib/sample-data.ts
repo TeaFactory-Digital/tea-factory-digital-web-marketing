@@ -3,8 +3,10 @@
  *
  * Invented for illustration, and every surface that renders them is labelled as
  * sample data. They are internally consistent on purpose: the kilos sum to the
- * total, the total times the rate is the gross, the deductions subtract to the
- * balance, and the coins carried forward are the fraction the slip rounds off.
+ * total, the green-leaf amount and the extra payment are the kilos times each
+ * rate, the gross adds last month's coins brought forward to them (as the app's
+ * Earnings block does), the deductions subtract to the balance, and the coins
+ * carried forward are the fraction the slip rounds off.
  * A factory accountant reads a mockup like an account.
  *
  * The deduction keys are the nine the app actually renders
@@ -17,7 +19,15 @@ export const KG_PER_MONTH = 1245;
 export const RATE_PER_KG = 105;
 export const EXTRA_RATE_PER_KG = 7.35;
 export const TOTAL_RATE_PER_KG = RATE_PER_KG + EXTRA_RATE_PER_KG; // 112.35
-export const GROSS_AMOUNT = KG_PER_MONTH * TOTAL_RATE_PER_KG; // 139,875.75
+
+/** Rupees to the cent, the way the bill rounds every line. */
+const round2 = (n: number) => Math.round(n * 100) / 100;
+
+/** The Earnings block: coins brought forward, green-leaf amount, extra payment, gross. */
+export const COINS_BROUGHT_FORWARD = 0.4;
+export const GREEN_LEAF_AMOUNT = round2(KG_PER_MONTH * RATE_PER_KG); // 130,725.00
+export const EXTRA_PAYMENT = round2(KG_PER_MONTH * EXTRA_RATE_PER_KG); // 9,150.75
+export const GROSS_AMOUNT = round2(COINS_BROUGHT_FORWARD + GREEN_LEAF_AMOUNT + EXTRA_PAYMENT); // 139,876.15
 
 export const DEDUCTIONS = [
   { key: 'transport', amount: 4980 },
@@ -32,10 +42,10 @@ export const DEDUCTIONS = [
 ] as const;
 
 export const TOTAL_DEDUCTIONS = DEDUCTIONS.reduce((sum, d) => sum + d.amount, 0); // 49,975
-export const BALANCE_AMOUNT = GROSS_AMOUNT - TOTAL_DEDUCTIONS; // 89,900.75
+export const BALANCE_AMOUNT = round2(GROSS_AMOUNT - TOTAL_DEDUCTIONS); // 89,901.15
 /** The slip pays whole rupees and carries the coins into next month. */
-export const COINS_CARRIED_FORWARD = 0.75;
-export const FINAL_BALANCE = BALANCE_AMOUNT - COINS_CARRIED_FORWARD; // 89,900
+export const COINS_CARRIED_FORWARD = round2(BALANCE_AMOUNT - Math.floor(BALANCE_AMOUNT)); // 0.15
+export const FINAL_BALANCE = round2(BALANCE_AMOUNT - COINS_CARRIED_FORWARD); // 89,901
 export const SAVINGS_TO_DATE = 74300;
 
 /** Day 1–31. `null` is a day with no delivery. Sums to KG_PER_MONTH. */
@@ -46,10 +56,10 @@ export const DAILY_SUPPLY: (number | null)[] = [
   null,
 ];
 
-/** Twelve months of final balance, oldest first. */
+/** Twelve months of final balance, oldest first. The last is the month on screen. */
 export const INCOME_SERIES = [
   62400, 58900, 71200, 66800, 79400, 84100,
-  76300, 81700, 88200, 83600, 91400, 89900,
+  76300, 81700, 88200, 83600, 91400, FINAL_BALANCE,
 ];
 
 /** Twelve months of app-request share, oldest first. Ends at the headline 72%. */

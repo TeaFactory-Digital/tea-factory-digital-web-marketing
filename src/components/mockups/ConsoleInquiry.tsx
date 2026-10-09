@@ -20,6 +20,14 @@ import { ConsoleCard, ConsoleFrame, ConsoleShell } from './ConsoleChrome';
 
 export const INQUIRY_SHOT = { width: 1280, height: 900 } as const;
 
+/** `Textarea`: the `Field` control, py-sm, `leading-normal`, a hairline `shadow-card`. Height is `rows` lines of 21px plus padding and border. */
+const TEXTAREA =
+  'overflow-hidden rounded-[10px] border border-app-border bg-app-surface px-[12px] py-[8px] text-[14px] leading-[1.5] text-app-text-secondary shadow-[0_1px_2px_rgb(11_13_18/0.05)]';
+
+/** `Button` size sm, variant secondary: h-9 (33.75px), px-md, text-label, `shadow-card`. */
+const BUTTON_SM =
+  'inline-flex h-[33.75px] items-center rounded-[10px] border border-app-border bg-app-surface px-[12px] text-[14px] font-medium leading-[20px] shadow-[0_1px_2px_rgb(11_13_18/0.05)]';
+
 /**
  * One inquiry in the office console (M10), reproduced from
  * `modules/inquiries/InquiryDetailScreen.tsx`: the conversation as a chat,
@@ -45,19 +53,25 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
 
   return (
     <ConsoleFrame width={INQUIRY_SHOT.width} height={INQUIRY_SHOT.height} className={className}>
-      <ConsoleShell t={t} active="inquiries">
-        {/* PageHeader with a breadcrumb and the status badge as its action */}
-        <header className="flex items-end justify-between gap-[12px]">
+      {/* Drawn as a clerk sees it: `inquiries: A` (a manager only reads them), and no
+          audit log, which a clerk cannot open. */}
+      <ConsoleShell t={t} active="inquiries" role="clerk">
+        {/* PageHeader with a breadcrumb (mb-xs, text-label), the h2-size title, the
+            description mt-xs under it, and the status Badge (with its dot) as the action */}
+        <header className="flex flex-wrap items-end justify-between gap-[12px]">
           <div className="min-w-0">
-            <p className="mb-[2px] text-[12px] leading-[16px] text-app-text-secondary">{c.title}</p>
-            <p className="text-[22px] font-semibold leading-[30px]">{th.subject}</p>
-            <p className="mt-[2px] text-[14px] leading-[20px] text-app-text-secondary">
+            <p className="mb-[4px] text-[14px] font-medium leading-[20px] text-app-text-secondary">{c.title}</p>
+            <p className="text-[26px] font-semibold leading-[34px] tracking-tight">{th.subject}</p>
+            <p className="mt-[4px] text-[14px] leading-[20px] text-app-text-secondary">
               {c.from.replace('{name}', t.bill.supplierName).replace('{code}', INQUIRY_THREAD.supplierCode)}
             </p>
           </div>
-          <span className="rounded-full bg-app-warning-muted px-[8px] py-[2px] text-[12px] font-medium leading-[16px] text-app-warning">
-            {c.statusOpen}
-          </span>
+          <div className="flex shrink-0 flex-wrap items-center gap-[8px]">
+            <span className="inline-flex items-center gap-[4px] whitespace-nowrap rounded-full bg-app-warning-muted px-[8px] py-[2px] text-[12px] font-medium leading-[16px] text-app-warning">
+              <span className="size-[5.625px] shrink-0 rounded-full bg-current" />
+              {c.statusOpen}
+            </span>
+          </div>
         </header>
 
         <div className="grid min-h-0 flex-1 grid-cols-3 gap-[16px]">
@@ -82,7 +96,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                   <React.Fragment key={i}>
                     {newDay ? (
                       <li className="my-[8px] self-center">
-                        <span className="rounded-full bg-app-surface px-[12px] py-[2px] text-[12px] leading-[16px] text-app-text-secondary shadow-[0_1px_3px_rgb(0_0_0/0.1)]">
+                        <span className="rounded-full bg-app-surface px-[12px] py-[2px] text-[12px] leading-[16px] text-app-text-secondary shadow-[0_1px_3px_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)]">
                           {INQUIRY_THREAD.consoleDays[m.day]}
                         </span>
                       </li>
@@ -102,7 +116,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                         </span>
                         <div
                           className={cn(
-                            'rounded-[11.25px] px-[12px] pb-[4px] pt-[8px] shadow-[0_1px_3px_rgb(0_0_0/0.1)]',
+                            'rounded-[24px] px-[12px] pb-[4px] pt-[8px] shadow-[0_1px_3px_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)]',
                             office
                               ? 'rounded-br-[6px] bg-app-primary text-white'
                               : 'rounded-bl-[6px] border border-app-border bg-app-surface',
@@ -122,7 +136,10 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                           <span className="mt-[2px] inline-flex items-center gap-[4px] rounded-full bg-app-success-muted py-[2px] pl-[8px] pr-[2px] text-[12px] font-medium leading-[16px] text-app-success">
                             <BellRing className="size-[12px]" strokeWidth={2} />
                             {c.pushSent}
-                            <InfoDot />
+                            {/* InfoTip compact: a 20-unit (18.75px) secondary-text button */}
+                            <span className="-my-[4px] grid size-[18.75px] place-items-center rounded-full text-app-text-secondary">
+                              <InfoDot />
+                            </span>
                           </span>
                         ) : null}
                       </div>
@@ -130,7 +147,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                   </React.Fragment>
                 );
               })}
-              <li className="mt-[4px] flex items-center gap-[8px] self-start pl-[41px] text-[12px] leading-[16px] text-app-text-secondary">
+              <li className="mt-[4px] flex items-center gap-[8px] self-start pl-[41.25px] text-[12px] leading-[16px] text-app-text-secondary">
                 <span className="size-[7.5px] rounded-full bg-app-warning" />
                 {c.awaitingReply}
               </li>
@@ -141,11 +158,11 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
               <div className="flex flex-col gap-[4px]">
                 <span className="flex items-center gap-[2px] text-[14px] font-medium leading-[20px]">
                   {c.replyLabel}
-                  <span className="grid size-[18.75px] place-items-center text-app-text-secondary">
+                  <span className="-my-[4px] grid size-[18.75px] place-items-center rounded-full text-app-text-secondary">
                     <InfoDot />
                   </span>
                 </span>
-                <div className="h-[100px] rounded-[10px] border border-app-border bg-app-surface px-[12px] py-[8px] text-[14px] leading-[1.5] text-app-text-secondary">
+                <div className={cn('h-[102px]', TEXTAREA)}>
                   {c.replyPlaceholder}
                 </div>
                 <div className="mt-[8px] flex flex-wrap items-center gap-[4px]">
@@ -154,7 +171,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                     (label) => (
                       <span
                         key={label}
-                        className="inline-flex h-[33.75px] items-center gap-[4px] rounded-[10px] border border-app-border bg-app-surface px-[12px] text-[14px] font-medium leading-[20px]"
+                        className={cn(BUTTON_SM, 'gap-[4px]')}
                       >
                         <Plus className="size-[12px]" strokeWidth={2.2} />
                         {label}
@@ -164,7 +181,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                 </div>
               </div>
               <div className="flex items-center justify-between gap-[8px]">
-                <span className="inline-flex h-[41.25px] items-center gap-[8px] rounded-[10px] px-[16px] text-[16px] font-medium leading-[22px]">
+                <span className="inline-flex h-[41.25px] items-center gap-[8px] rounded-[10px] px-[16px] text-[16px] font-medium leading-[22px] tracking-[0.2px]">
                   <X className="size-[16px]" strokeWidth={2} />
                   {c.close}
                 </span>
@@ -172,7 +189,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                   <span className="text-[12px] leading-[16px] text-app-text-secondary">
                     {c.replyCount.replace('{count}', '0').replace('{min}', '20')}
                   </span>
-                  <span className="inline-flex h-[41.25px] items-center gap-[8px] rounded-[10px] bg-[#C2CCC9] px-[16px] text-[16px] font-medium leading-[22px] text-[#7C8783]">
+                  <span className="inline-flex h-[41.25px] items-center gap-[8px] rounded-[10px] bg-[#D0D5DD] px-[16px] text-[16px] font-medium leading-[22px] tracking-[0.2px] text-[#98A2B3]">
                     <Send className="size-[16px]" strokeWidth={2} />
                     {c.sendReply}
                   </span>
@@ -212,7 +229,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                 <UserCheck className="size-[16px] text-app-text-secondary" strokeWidth={2} />
                 {c.nobody}
               </p>
-              <span className="inline-flex h-[33.75px] items-center justify-center gap-[4px] rounded-[10px] border border-app-border bg-app-surface px-[12px] text-[14px] font-medium leading-[20px]">
+              <span className={cn(BUTTON_SM, 'justify-center gap-[4px]')}>
                 <UserCheck className="size-[16px]" strokeWidth={2} />
                 {c.take}
               </span>
@@ -229,10 +246,11 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
               bodyClassName="flex flex-col gap-[12px]"
             >
               <p className="text-[14px] leading-[20px] text-app-text-secondary">{c.notesEmpty}</p>
-              <div className="h-[56px] rounded-[10px] border border-app-border px-[12px] py-[8px] text-[14px] leading-[1.5] text-app-text-secondary">
-                {c.notesPlaceholder}
-              </div>
+              <div className={cn('h-[60px]', TEXTAREA)}>{c.notesPlaceholder}</div>
+              {/* Add note: disabled until two characters are typed */}
+              <span className={cn(BUTTON_SM, 'self-end text-[#98A2B3] shadow-none')}>{c.notesAdd}</span>
             </ConsoleCard>
+
           </div>
         </div>
       </ConsoleShell>

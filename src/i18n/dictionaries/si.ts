@@ -332,16 +332,16 @@ export const si: Dictionary = {
       four: { title: 'සැපයුම්කරුට දැනුම් දෙයි', desc: 'තීරණය දුරකථනයට ළඟා වන අතර ඉල්ලීම් ඉතිහාසයේ වාර්තා වේ.' },
     },
     example: {
-      title: 'අත්තිකාරම් ඉල්ලීම',
+      title: 'ණය ඉල්ලීම',
       amountLabel: 'මුදල',
       amountValue: 'රු. 25,000.00',
       statusLabel: 'තත්ත්වය',
       statusValue: 'සමාලෝචනය වෙමින්',
-      termLabel: 'ආපසු ගෙවීම',
+      termLabel: 'ආපසු ගෙවීම බෙදන කාලය',
       termValue: 'මාසික ගිණුම් 3ක්',
     },
     queue: {
-      title: 'නව අත්තිකාරම් ඉල්ලීමක්',
+      title: 'නව ණය ඉල්ලීමක්',
       supplierLabel: 'සැපයුම්කරු',
       supplierValue: 'එස්. පෙරේරා',
       amountLabel: 'මුදල',
@@ -499,6 +499,12 @@ export const si: Dictionary = {
     },
     /** The topbar prints the raw role id, untranslated, in every language. */
     user: { name: 'Ruwan Gunawardena', role: 'manager' },
+    /** Who is signed in on each console mockup; the role line is the raw role id, untranslated. */
+    users: {
+      manager: { name: 'Ruwan Gunawardena', role: 'manager' },
+      clerk: { name: 'Nimali Perera', role: 'clerk' },
+      factoryAdmin: { name: 'Sunil Jayawardena', role: 'factoryAdmin' },
+    },
     /** The inquiry screen (`modules/inquiries/*`), in the console's own words. */
     inquiry: {
       title: 'විමසුම්',
@@ -533,6 +539,7 @@ export const si: Dictionary = {
       notesHint: 'මේවා දකින්නේ කාර්යාලය පමණි',
       notesEmpty: 'තවම සටහන් නැත',
       notesPlaceholder: 'උදා: සැපයුම්කරුට කතා කළා, සඳුදා නැවත කතා කරනවා',
+      notesAdd: 'සටහන එකතු කරන්න',
     },
   },
 

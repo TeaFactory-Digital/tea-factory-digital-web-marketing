@@ -110,6 +110,42 @@ function BrowserChrome() {
 
 export type ConsoleNavKey = 'dashboard' | 'inquiries' | 'deliveries' | 'configuration';
 
+/**
+ * Who is signed in. The sidebar shows only what that role may read, exactly as
+ * `isNavItemVisible` does with `DEFAULT_ROLE_MATRIX` (`packages/domain/src/rbac.ts`), so each
+ * screen is drawn as the person who would really be on it sees it.
+ */
+export type ConsoleRole = 'clerk' | 'manager' | 'factoryAdmin';
+
+type Capability =
+  | 'reports'
+  | 'suppliers'
+  | 'changeRequests'
+  | 'creditRequests'
+  | 'inquiries'
+  | 'billing'
+  | 'deliveries'
+  | 'ratesAndMonthClose'
+  | 'content'
+  | 'auditLog'
+  | 'flagsAndBranding'
+  | 'usersAndRoles';
+
+/** The capabilities each role can at least read, from the default role matrix. */
+const READS: Record<ConsoleRole, ReadonlySet<Capability>> = {
+  clerk: new Set<Capability>([
+    'reports', 'suppliers', 'changeRequests', 'creditRequests', 'inquiries', 'billing',
+    'deliveries', 'content', 'flagsAndBranding',
+  ]),
+  manager: new Set<Capability>([
+    'reports', 'suppliers', 'changeRequests', 'creditRequests', 'inquiries', 'billing',
+    'deliveries', 'ratesAndMonthClose', 'content', 'auditLog', 'flagsAndBranding', 'usersAndRoles',
+  ]),
+  factoryAdmin: new Set<Capability>([
+    'reports', 'suppliers', 'content', 'auditLog', 'flagsAndBranding', 'usersAndRoles',
+  ]),
+};
+
 /** Unread supplier activity on the sample bell. */
 const BELL_UNREAD = 3;
 
@@ -122,17 +158,19 @@ const BELL_UNREAD = 3;
 export function ConsoleShell({
   t,
   active,
+  role = 'manager',
   keepsRecords = false,
   children,
 }: {
   t: Dictionary;
   active: ConsoleNavKey;
+  role?: ConsoleRole;
   keepsRecords?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex h-full overflow-hidden bg-app-background text-app-text">
-      <Sidebar t={t} active={active} keepsRecords={keepsRecords} />
+      <Sidebar t={t} active={active} role={role} keepsRecords={keepsRecords} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar t={t} active={active} />
         {/* main: px-gutter(30) pt-xs(4) pb-xxl(24); the screen inside is a column, gap-lg(16) */}
@@ -159,41 +197,45 @@ function activeLabel(t: Dictionary, active: ConsoleNavKey): string {
 function Sidebar({
   t,
   active,
+  role,
   keepsRecords,
 }: {
   t: Dictionary;
   active: ConsoleNavKey;
+  role: ConsoleRole;
   keepsRecords: boolean;
 }) {
   const c = t.console;
+  const user = c.users[role];
 
-  const sections: {
+  const all: {
     title: string;
-    items: { key?: ConsoleNavKey; label: string; icon: LucideIcon; badge?: number }[];
+    items: { key?: ConsoleNavKey; label: string; icon: LucideIcon; badge?: number; cap: Capability }[];
   }[] = [
     {
       title: c.nav.sectionOverview,
       items: [
-        { key: 'dashboard', label: c.nav.dashboard, icon: LayoutDashboard },
-        { label: c.nav.suppliers, icon: Users },
+        { key: 'dashboard', label: c.nav.dashboard, icon: LayoutDashboard, cap: 'reports' as const },
+        { label: c.nav.suppliers, icon: Users, cap: 'suppliers' as const },
       ],
     },
     {
       title: c.nav.sectionQueues,
       items: [
-        { label: c.nav.changeRequests, icon: ClipboardList, badge: pending('changeRequests') },
+        { label: c.nav.changeRequests, icon: ClipboardList, badge: pending('changeRequests'), cap: 'changeRequests' as const },
         {
           label: c.nav.credit,
           icon: BadgeDollarSign,
+          cap: 'creditRequests' as const,
           badge: pending('advanceRequests') + pending('loanRequests') + pending('manureRequests'),
         },
-        { label: c.nav.teaPackets, icon: Package, badge: pending('teaPacketRequests') },
-        { key: 'inquiries', label: c.nav.inquiries, icon: MessageSquare, badge: pending('inquiries') },
+        { label: c.nav.teaPackets, icon: Package, badge: pending('teaPacketRequests'), cap: 'creditRequests' as const },
+        { key: 'inquiries', label: c.nav.inquiries, icon: MessageSquare, badge: pending('inquiries'), cap: 'inquiries' as const },
       ],
     },
     {
       title: c.nav.sectionSupport,
-      items: [{ label: c.nav.bills, icon: FileText }],
+      items: [{ label: c.nav.bills, icon: FileText, cap: 'billing' as const }],
     },
     // Only while the factory-system sync is off: the office keeps the records here.
     ...(keepsRecords
@@ -201,8 +243,8 @@ function Sidebar({
           {
             title: c.nav.sectionRecords,
             items: [
-              { key: 'deliveries' as const, label: c.nav.deliveries, icon: Scale },
-              { label: c.nav.rates, icon: Gauge },
+              { key: 'deliveries' as const, label: c.nav.deliveries, icon: Scale, cap: 'deliveries' as const },
+              { label: c.nav.rates, icon: Gauge, cap: 'ratesAndMonthClose' as const },
             ],
           },
         ]
@@ -210,22 +252,27 @@ function Sidebar({
     {
       title: c.nav.sectionContent,
       items: [
-        { label: c.nav.news, icon: Newspaper },
-        { label: c.nav.banners, icon: Megaphone },
-        { label: c.nav.content, icon: ScrollText },
-        { label: c.nav.notifications, icon: Bell },
+        { label: c.nav.news, icon: Newspaper, cap: 'content' as const },
+        { label: c.nav.banners, icon: Megaphone, cap: 'content' as const },
+        { label: c.nav.content, icon: ScrollText, cap: 'content' as const },
+        { label: c.nav.notifications, icon: Bell, cap: 'content' as const },
       ],
     },
     {
       title: c.nav.sectionAdmin,
       items: [
-        { label: c.nav.reports, icon: Gauge },
-        { label: c.nav.audit, icon: ShieldCheck },
-        { key: 'configuration', label: c.nav.configuration, icon: Settings },
-        { label: c.nav.users, icon: UsersRound },
+        { label: c.nav.reports, icon: Gauge, cap: 'reports' as const },
+        { label: c.nav.audit, icon: ShieldCheck, cap: 'auditLog' as const },
+        { key: 'configuration', label: c.nav.configuration, icon: Settings, cap: 'flagsAndBranding' as const },
+        { label: c.nav.users, icon: UsersRound, cap: 'usersAndRoles' as const },
       ],
     },
   ];
+
+  // `isNavItemVisible`: a row the role cannot read is absent, and so is an empty section.
+  const sections = all
+    .map((section) => ({ ...section, items: section.items.filter((item) => READS[role].has(item.cap)) }))
+    .filter((section) => section.items.length > 0);
 
   return (
     // w-64 (240) · px-md(12) py-lg(16) · gap-md(12), on the canvas with a rule to the right
@@ -295,11 +342,11 @@ function Sidebar({
       {/* UserMenu, placement "sidebar": avatar, name, role, and the menu chevron. */}
       <span className="flex w-full min-w-0 items-center gap-[8px] rounded-[10px] p-[4px]">
         <span className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-linear-to-br from-app-primary to-[#8fc13f] text-[12px] font-semibold leading-[16px] text-white">
-          {initials(c.user.name)}
+          {initials(user.name)}
         </span>
         <span className="flex min-w-0 flex-1 flex-col">
-          <span className="truncate text-[14px] font-semibold leading-[20px]">{c.user.name}</span>
-          <span className="truncate text-[12px] leading-[16px] text-app-text-secondary">{c.user.role}</span>
+          <span className="truncate text-[14px] font-semibold leading-[20px]">{user.name}</span>
+          <span className="truncate text-[12px] leading-[16px] text-app-text-secondary">{user.role}</span>
         </span>
         <ChevronsUpDown className="size-[16px] shrink-0 text-app-text-secondary" strokeWidth={2} />
       </span>
