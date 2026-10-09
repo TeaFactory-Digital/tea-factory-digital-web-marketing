@@ -124,12 +124,13 @@ export function ConsoleDashboard({
 }) {
   const c = t.console;
   // The product greets by the first word of the signed-in user's name.
-  const firstName = c.user.name.split(/\s+/)[0];
+  // The whole name, as the console greets: "Good morning, Ruwan Gunawardena".
+  const name = c.user.name;
 
   return (
     <ConsoleFrame width={CONSOLE_SHOT.width} height={CONSOLE_SHOT.height} className={className} chrome={chrome}>
       <ConsoleShell t={t} active="dashboard">
-        <ConsolePageHeader title={c.greeting.replace('{name}', firstName)} description={c.pageSubtitle} />
+        <ConsolePageHeader title={c.greeting.replace('{name}', name)} description={c.pageSubtitle} />
 
         <KpiRow c={c} />
 
