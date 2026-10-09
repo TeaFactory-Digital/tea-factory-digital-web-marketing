@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   BadgeDollarSign,
   Bell,
-  ChevronDown,
+  ChevronsUpDown,
   ClipboardList,
   FileText,
   Gauge,
@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import type { Dictionary } from '@/i18n';
 import { cn } from '@/lib/utils';
-import { CONSOLE_QUEUES } from '@/lib/sample-data';
+import { CONSOLE_ADOPTION, CONSOLE_INSTALLED_PERCENT, CONSOLE_QUEUES, count } from '@/lib/sample-data';
 import { DeviceShot } from './DeviceShot';
 
 /**
@@ -110,6 +110,9 @@ function BrowserChrome() {
 
 export type ConsoleNavKey = 'dashboard' | 'inquiries' | 'deliveries' | 'configuration';
 
+/** Unread supplier activity on the sample bell. */
+const BELL_UNREAD = 3;
+
 /**
  * Sidebar, topbar and the padded `main` every module screen renders into.
  *
@@ -131,9 +134,9 @@ export function ConsoleShell({
     <div className="flex h-full overflow-hidden bg-app-background text-app-text">
       <Sidebar t={t} active={active} keepsRecords={keepsRecords} />
       <div className="flex min-w-0 flex-1 flex-col">
-        <Topbar t={t} />
-        {/* main: px-gutter(30) py-lg(16); content gap-lg(16) */}
-        <div className="flex min-h-0 flex-1 flex-col gap-[16px] px-[30px] py-[16px]">{children}</div>
+        <Topbar t={t} active={active} />
+        {/* main: px-gutter(30) pt-xs(4) pb-xxl(24); the screen inside is a column, gap-lg(16) */}
+        <div className="flex min-h-0 flex-1 flex-col gap-[16px] px-[30px] pb-[24px] pt-[4px]">{children}</div>
       </div>
     </div>
   );
@@ -143,6 +146,16 @@ export function ConsoleShell({
 const pending = (key: (typeof CONSOLE_QUEUES)[number]['key']) =>
   CONSOLE_QUEUES.find((q) => q.key === key)?.pending ?? 0;
 
+/** The label of the open screen, for the rows and the breadcrumb. */
+function activeLabel(t: Dictionary, active: ConsoleNavKey): string {
+  return t.console.nav[active];
+}
+
+/**
+ * `Sidebar.tsx` as it ships: on the canvas, the factory's mark and name at the top as the
+ * way home, sentence-case section titles, the open row lifted onto a white key with its
+ * icon in the primary colour, the app-adoption meter and the signed-in user at the foot.
+ */
 function Sidebar({
   t,
   active,
@@ -215,24 +228,20 @@ function Sidebar({
   ];
 
   return (
-    <nav className="flex w-[240px] shrink-0 flex-col border-r border-app-border bg-app-surface">
-      {/* Header: the topbar's height, so the two bottom rules line up. */}
-      <div className="flex h-[52.5px] shrink-0 items-center border-b border-app-border px-[8px]">
-        <span className="flex min-w-0 items-center gap-[8px] px-[8px] py-[4px]">
-          <ConsoleLogo className="size-[32px] shrink-0" />
-          <span className="truncate text-[14px] font-semibold leading-[20px]">
-            {t.bill.factoryName}
-          </span>
+    // w-64 (240) · px-md(12) py-lg(16) · gap-md(12), on the canvas with a rule to the right
+    <nav className="flex w-[240px] shrink-0 flex-col gap-[12px] border-r border-app-border bg-app-background px-[12px] py-[16px]">
+      <span className="flex shrink-0 items-center gap-[8px] rounded-[10px] p-[4px]">
+        <ConsoleLogo className="size-[32px] shrink-0" />
+        <span className="flex min-w-0 flex-col">
+          <span className="truncate text-[14px] font-bold leading-[20px] tracking-tight">{t.bill.factoryName}</span>
+          <span className="truncate text-[12px] leading-[16px] text-app-text-secondary">{t.bill.factoryLocation}</span>
         </span>
-      </div>
+      </span>
 
-      <div className="flex-1 overflow-hidden px-[8px] py-[12px]">
+      <div className="min-h-0 flex-1 overflow-hidden">
         {sections.map((section, s) => (
-          <div
-            key={section.title}
-            className={s > 0 ? 'mt-[12px] border-t border-app-divider pt-[12px]' : undefined}
-          >
-            <p className="px-[8px] pb-[4px] text-[11px] font-medium uppercase leading-[16px] tracking-[0.05em] text-app-text-secondary">
+          <div key={section.title} className={s > 0 ? 'mt-[16px]' : undefined}>
+            <p className="px-[8px] pb-[4px] text-[12px] font-medium leading-[16px] text-app-text-secondary">
               {section.title}
             </p>
             <ul className="flex flex-col gap-[2px]">
@@ -242,20 +251,16 @@ function Sidebar({
                   <li key={item.label}>
                     <span
                       className={cn(
-                        'flex items-center gap-[8px] rounded-[10px] p-[4px] text-[14px] leading-[20px]',
+                        'flex h-[33.75px] items-center gap-[8px] rounded-[10px] px-[8px] text-[14px] font-medium leading-[20px]',
                         on
-                          ? 'bg-app-primary font-semibold text-white shadow-[0_1px_3px_rgb(0_0_0/0.1),0_1px_2px_-1px_rgb(0_0_0/0.1)]'
-                          : 'text-app-text',
+                          ? 'bg-app-surface text-app-text shadow-[0_1px_2px_rgb(11_13_18/0.05)] ring-1 ring-app-border'
+                          : 'text-app-text-secondary',
                       )}
                     >
-                      <span
-                        className={cn(
-                          'grid size-[30px] shrink-0 place-items-center rounded-[10px]',
-                          on ? 'bg-white/15 text-white' : 'bg-app-surface-variant text-app-text-secondary',
-                        )}
-                      >
-                        <item.icon className="size-[16px]" strokeWidth={2} />
-                      </span>
+                      <item.icon
+                        className={cn('size-[16px] shrink-0', on ? 'text-app-primary' : 'text-app-text-secondary')}
+                        strokeWidth={2}
+                      />
                       <span className="min-w-0 flex-1 truncate">{item.label}</span>
                       {item.badge ? (
                         <span className="inline-flex min-w-[22.5px] justify-center rounded-full bg-app-primary-muted px-[8px] py-[2px] text-[12px] font-medium leading-[16px] text-app-primary tabular-nums">
@@ -270,31 +275,71 @@ function Sidebar({
           </div>
         ))}
       </div>
+
+      {/* AdoptionMeter: the one figure the console is answerable for, on every screen. */}
+      <div className="flex shrink-0 flex-col gap-[8px] rounded-[16px] border border-app-border bg-app-surface p-[12px] shadow-[0_1px_2px_rgb(11_13_18/0.05)]">
+        <div className="flex items-baseline justify-between gap-[8px] text-[14px] font-medium leading-[20px]">
+          <span className="font-semibold">{c.appAdoption}</span>
+          <span className="tabular-nums text-app-text-secondary">{CONSOLE_INSTALLED_PERCENT}%</span>
+        </div>
+        <div className="h-[5.625px] w-full overflow-hidden rounded-full bg-app-primary/15">
+          <div className="h-full rounded-full bg-app-primary" style={{ width: `${CONSOLE_INSTALLED_PERCENT}%` }} />
+        </div>
+        <span className="text-[12px] leading-[16px] text-app-text-secondary tabular-nums">
+          {c.appInstalled
+            .replace('{withApp}', count(CONSOLE_ADOPTION.suppliersWithApp))
+            .replace('{total}', count(CONSOLE_ADOPTION.totalSuppliers))}
+        </span>
+      </div>
+
+      {/* UserMenu, placement "sidebar": avatar, name, role, and the menu chevron. */}
+      <span className="flex w-full min-w-0 items-center gap-[8px] rounded-[10px] p-[4px]">
+        <span className="flex size-[30px] shrink-0 items-center justify-center rounded-full bg-linear-to-br from-app-primary to-[#8fc13f] text-[12px] font-semibold leading-[16px] text-white">
+          {initials(c.user.name)}
+        </span>
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="truncate text-[14px] font-semibold leading-[20px]">{c.user.name}</span>
+          <span className="truncate text-[12px] leading-[16px] text-app-text-secondary">{c.user.role}</span>
+        </span>
+        <ChevronsUpDown className="size-[16px] shrink-0 text-app-text-secondary" strokeWidth={2} />
+      </span>
     </nav>
   );
 }
 
-function Topbar({ t }: { t: Dictionary }) {
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] ?? '') + (parts.length > 1 ? (parts[parts.length - 1]?.[0] ?? '') : '')).toUpperCase();
+}
+
+/**
+ * `Topbar.tsx` as it ships: on the canvas with no rule under it, the breadcrumb
+ * *factory · screen* on the left, then search and the notification bell on the right.
+ * The signed-in user is at the foot of the sidebar on a desk-sized window.
+ */
+function Topbar({ t, active }: { t: Dictionary; active: ConsoleNavKey }) {
   const c = t.console;
   return (
-    <header className="flex h-[52.5px] shrink-0 items-center justify-between gap-[12px] border-b border-app-border bg-app-surface px-[16px]">
-      <p className="min-w-0 truncate text-[14px] font-semibold leading-[20px]">{t.bill.factoryName}</p>
-      <div className="flex items-center gap-[12px]">
-        {/* CommandMenu trigger: Ctrl+K searches suppliers and pages. */}
-        <span className="flex items-center gap-[8px] rounded-[10px] border border-app-border bg-app-surface-variant px-[12px] py-[4px] text-[14px] leading-[20px] text-app-text-secondary">
-          <Search className="size-[16px]" strokeWidth={2} />
-          {c.search}
-          <kbd className="rounded-[6px] border border-app-border bg-app-surface px-[4px] font-sans text-[12px] leading-[16px]">
-            Ctrl K
-          </kbd>
+    // h-16 (60) · px-gutter (30) · gap-md (12)
+    <header className="flex h-[60px] shrink-0 items-center justify-between gap-[12px] px-[30px]">
+      <p className="flex min-w-0 items-center gap-[4px] text-[14px] font-medium leading-[20px] text-app-text-secondary">
+        <span className="truncate">{t.bill.factoryName}</span>
+        <span aria-hidden="true">·</span>
+        <span className="truncate text-app-text">{activeLabel(t, active)}</span>
+      </p>
+      <div className="flex items-center gap-[8px]">
+        {/* CommandMenu trigger: h-9 w-64, Ctrl K searches suppliers and pages. */}
+        <span className="flex h-[33.75px] w-[240px] items-center gap-[8px] rounded-[10px] border border-app-border bg-app-surface px-[8px] text-[14px] leading-[20px] text-app-text-secondary shadow-[0_1px_2px_rgb(11_13_18/0.05)]">
+          <Search className="size-[16px] shrink-0" strokeWidth={2} />
+          <span className="flex-1">{c.search}</span>
+          <kbd className="rounded-[6px] border border-app-border px-[4px] font-sans text-[12px] leading-[16px]">Ctrl K</kbd>
         </span>
-        {/* User menu: a ghost button. The role line is the raw role id, untranslated. */}
-        <span className="flex h-[33.75px] items-center gap-[4px] rounded-[10px] px-[12px]">
-          <span className="flex flex-col items-start">
-            <span className="text-[14px] font-medium leading-[20px]">{c.user.name}</span>
-            <span className="text-[12px] leading-[16px] text-app-text-secondary">{c.user.role}</span>
+        {/* NotificationBell: the waiting queues and the suppliers' recent activity. */}
+        <span className="relative flex size-[33.75px] items-center justify-center rounded-[10px] border border-app-border bg-app-surface text-app-text-secondary shadow-[0_1px_2px_rgb(11_13_18/0.05)]">
+          <Bell className="size-[16px]" strokeWidth={2} />
+          <span className="absolute -right-[4px] -top-[4px] flex h-[18.75px] min-w-[18.75px] items-center justify-center rounded-full bg-app-error px-[2px] text-[12px] font-semibold leading-[16px] text-white tabular-nums">
+            {BELL_UNREAD}
           </span>
-          <ChevronDown className="size-[16px] text-app-text-secondary" strokeWidth={2} />
         </span>
       </div>
     </header>

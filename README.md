@@ -97,7 +97,7 @@ than no mockup, because a factory recognises its own console.
 | `mockups/TeaBreeze.tsx` | mobile → `src/components/bill/TeaBreeze.tsx`, `TeaLandscape.tsx` |
 | `mockups/AppChrome.tsx`, `AppIcon.tsx` | mobile → `src/navigation/AppHeader.tsx`, `AppTabs.ios.tsx`, `src/components/icons/Icon.tsx`, `components/ui/Avatar.tsx` |
 | `mockups/InquiryThread.tsx` | mobile → `src/screens/inquiry/InquiryThreadScreen.tsx` |
-| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar,navigation}.tsx` (the *Factory records* section shows only with the sync off), `components/ui/{Card,PageHeader}.tsx`, `public/brand/logo.svg` |
+| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar,NotificationBell,UserMenu,navigation}.tsx` (the *Factory records* section shows only with the sync off), `components/ui/{Card,PageHeader}.tsx`, `public/brand/logo.svg` |
 | `mockups/ConsoleDashboard.tsx` | admin → `apps/admin/src/modules/dashboard/DashboardScreen.tsx` |
 | `mockups/ConsoleFactorySystem.tsx` | admin → `apps/admin/src/modules/configuration/ConfigurationScreen.tsx`, `FactorySystemSection.tsx`, `SectionFooter.tsx` |
 | `mockups/ConsoleImport.tsx` | admin → `apps/admin/src/components/ImportDialog.tsx`, `components/ui/Dialog.tsx`, `modules/deliveries/DeliveriesScreen.tsx` |

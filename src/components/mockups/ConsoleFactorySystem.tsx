@@ -22,7 +22,7 @@ import type { Dictionary } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { ConsoleCard, ConsoleFrame, ConsolePageHeader, ConsoleShell } from './ConsoleChrome';
 
-export const FACTORY_SYSTEM_SHOT = { width: 1280, height: 990 } as const;
+export const FACTORY_SYSTEM_SHOT = { width: 1280, height: 1050 } as const;
 
 /** The section rail, in `ConfigurationScreen.tsx`'s order and with its icons. */
 const SECTIONS: { id: keyof Dictionary['records']['sectionTitles']; icon: LucideIcon }[] = [
