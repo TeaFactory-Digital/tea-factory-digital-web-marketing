@@ -49,7 +49,8 @@ src/
   components/
     ui/                  button, field, card, section, motion helpers
     mockups/             PhoneFrame, AppChrome, GreenLeafBill, InquiryThread, TeaBreeze,
-                         ConsoleChrome, ConsoleDashboard, ConsoleInquiry, charts
+                         ConsoleChrome, ConsoleDashboard, ConsoleInquiry,
+                         ConsoleFactorySystem, ConsoleImport, charts
     sections/            one file per page section, named after the brief
     Navbar Footer Logo PlantationScene
   i18n/
@@ -96,8 +97,10 @@ than no mockup, because a factory recognises its own console.
 | `mockups/TeaBreeze.tsx` | mobile → `src/components/bill/TeaBreeze.tsx`, `TeaLandscape.tsx` |
 | `mockups/AppChrome.tsx`, `AppIcon.tsx` | mobile → `src/navigation/AppHeader.tsx`, `AppTabs.ios.tsx`, `src/components/icons/Icon.tsx`, `components/ui/Avatar.tsx` |
 | `mockups/InquiryThread.tsx` | mobile → `src/screens/inquiry/InquiryThreadScreen.tsx` |
-| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar}.tsx`, `components/ui/Card.tsx`, `public/brand/logo.svg` |
+| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar,navigation}.tsx` (the *Factory records* section shows only with the sync off), `components/ui/{Card,PageHeader}.tsx`, `public/brand/logo.svg` |
 | `mockups/ConsoleDashboard.tsx` | admin → `apps/admin/src/modules/dashboard/DashboardScreen.tsx` |
+| `mockups/ConsoleFactorySystem.tsx` | admin → `apps/admin/src/modules/configuration/ConfigurationScreen.tsx`, `FactorySystemSection.tsx`, `SectionFooter.tsx` |
+| `mockups/ConsoleImport.tsx` | admin → `apps/admin/src/components/ImportDialog.tsx`, `components/ui/Dialog.tsx`, `modules/deliveries/DeliveriesScreen.tsx` |
 | `mockups/ConsoleInquiry.tsx` | admin → `apps/admin/src/modules/inquiries/InquiryDetailScreen.tsx`, `ReplyDialog.tsx`, `InquiryOfficeCards.tsx` |
 | The `thread` block and `console.inquiry` | the mobile `inquiry.*` strings and the console's `inquiries.*` strings |
 | `--color-app-*` in `globals.css` | `packages/brand/src/colors.ts`, overridden by the `default` (Galaboda) client: primary `#2E8B57`, muted `#DCEEE2` |
@@ -125,8 +128,8 @@ console: the queue ages sit inside or past the console's real response targets,
 and the inquiry on the phone is the same conversation, 27 h old, that the
 console shows and the dashboard counts as its oldest.
 
-**Last matched to the products on 6 October 2026** (mobile `3a32348`, admin
-`aad534a`).
+**Last matched to the products on 9 October 2026** (mobile `5eff4d5`, admin `3eb5b65`,
+plus the uncommitted factory-records work in both).
 
 ## Demo form
 

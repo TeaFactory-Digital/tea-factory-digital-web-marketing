@@ -4,6 +4,8 @@ import { getDictionary, isLocale, type Locale } from '@/i18n';
 import { PageHero, SplitBlock } from '@/components/sections/PageHero';
 import { ConsoleDashboard } from '@/components/mockups/ConsoleDashboard';
 import { ConsoleInquiry } from '@/components/mockups/ConsoleInquiry';
+import { ConsoleFactorySystem } from '@/components/mockups/ConsoleFactorySystem';
+import { ConsoleImport } from '@/components/mockups/ConsoleImport';
 import { ConsoleSection } from '@/components/sections/ConsoleSection';
 import { AnalyticsSection } from '@/components/sections/AnalyticsSection';
 import { IntegrationSection } from '@/components/sections/IntegrationSection';
@@ -142,6 +144,22 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
 
       <SplitBlock
         index="05"
+        title={s.factorySystem.title}
+        body={s.factorySystem.body}
+        tone="white"
+        visual={<ConsoleFactorySystem t={t} />}
+      />
+
+      <SplitBlock
+        index="06"
+        flip
+        title={s.factoryRecords.title}
+        body={s.factoryRecords.body}
+        visual={<ConsoleImport t={t} />}
+      />
+
+      <SplitBlock
+        index="07"
         title={s.records.title}
         body={s.records.body}
         tone="white"
@@ -168,7 +186,7 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
       />
 
       <SplitBlock
-        index="06"
+        index="08"
         title={s.governance.title}
         body={s.governance.body}
         flip

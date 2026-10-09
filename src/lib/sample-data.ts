@@ -104,15 +104,19 @@ export function formatAge(hours: number): string {
 export const CONSOLE_CONTENT = {
   bannersLive: 2,
   articlesWithGaps: 3,
-  bannersExpired: 1,
-  staticPagesUnwritten: 1,
+  bannersExpired: 2,
+  staticPagesUnwritten: 2,
 } as const;
 
 /**
- * Twelve months of the adoption trend end in the dashboard's current month,
- * August 2026, and the X axis prints the two-digit month (`monthKey.slice(5)`).
+ * The month keys of `ADOPTION_SERIES`: twelve months ending in the dashboard's
+ * current month, August 2026. The chart prints the short month (`Sep`), the
+ * headline the long one (`August 2026`).
  */
-export const ADOPTION_MONTHS = ['09', '10', '11', '12', '01', '02', '03', '04', '05', '06', '07', '08'];
+export const ADOPTION_MONTH_KEYS = [
+  '2025-09', '2025-10', '2025-11', '2025-12', '2026-01', '2026-02',
+  '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08',
+];
 
 /** The three supporting tiles under the adoption headline. */
 export const ANALYTICS_TILES = [

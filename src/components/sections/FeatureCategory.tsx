@@ -30,6 +30,12 @@ import {
   Sprout,
   TrendingUp,
   type LucideIcon,
+  Cable,
+  UserPlus,
+  Scale,
+  FileSpreadsheet,
+  Calculator,
+  Truck,
 } from 'lucide-react';
 import type { Dictionary } from '@/i18n';
 import { Section, SectionHeading } from '@/components/ui/section';
@@ -143,6 +149,14 @@ export function Features({ t }: { t: Dictionary }) {
       tone: 'leaf' as const,
       items: Object.values(f.records.items) as Item[],
       icons: [IdCard, ClipboardList, BookOpen, BellDot, ChartColumn, Search],
+    },
+    {
+      index: '06',
+      title: f.factoryRecords.title,
+      description: f.factoryRecords.description,
+      tone: 'gold' as const,
+      items: Object.values(f.factoryRecords.items) as Item[],
+      icons: [Cable, UserPlus, Scale, FileSpreadsheet, Calculator, Truck],
     },
   ];
 

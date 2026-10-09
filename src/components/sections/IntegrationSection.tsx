@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArrowDown, ArrowRight, Factory, Layers, Monitor, Smartphone, X } from 'lucide-react';
+import { ArrowDown, ArrowRight, Cloud, Factory, Layers, Monitor, PencilLine, Smartphone, X } from 'lucide-react';
 import type { Dictionary, Locale } from '@/i18n';
 import { href, sections } from '@/lib/routes';
 import { Section, SectionHeading } from '@/components/ui/section';
@@ -12,6 +12,10 @@ import { Reveal } from '@/components/ui/motion';
  * The existing factory system sits *beside* the platform, not under it, and
  * inside its own dashed frame. Nothing crosses that frame in this diagram,
  * because nothing has to.
+ *
+ * Under it, the two ways a factory runs, as the console's own switch states them
+ * (Configuration → Factory system): the sync on, or the records kept in the console
+ * for a factory whose system cannot be connected.
  */
 export function IntegrationSection({ locale, t }: { locale: Locale; t: Dictionary }) {
   const assurances = [
@@ -95,6 +99,28 @@ export function IntegrationSection({ locale, t }: { locale: Locale; t: Dictionar
           </Reveal>
         </div>
 
+        {/* ---- The switch: sync on, or records kept here ---- */}
+        <Reveal delay={0.08} className="mt-14">
+          <h3 className="font-display text-xl font-semibold text-forest-900 md:text-2xl">
+            {t.integration.modes.title}
+          </h3>
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            <ModeCard
+              icon={<Cloud className="size-[18px]" strokeWidth={2} />}
+              title={t.records.mode.syncTitle}
+              body={t.records.mode.syncBody}
+              points={[t.records.mode.syncP1, t.records.mode.syncP2, t.records.mode.syncP3]}
+            />
+            <ModeCard
+              icon={<PencilLine className="size-[18px]" strokeWidth={2} />}
+              title={t.records.mode.manualTitle}
+              body={t.records.mode.manualBody}
+              points={[t.records.mode.manualP1, t.records.mode.manualP2, t.records.mode.manualP3]}
+            />
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-char-500">{t.integration.modes.note}</p>
+        </Reveal>
+
         {/* ---- Assurances ---- */}
         <Reveal delay={0.1} className="mt-12 grid gap-4 md:grid-cols-3">
           {assurances.map((line) => (
@@ -120,6 +146,35 @@ export function IntegrationSection({ locale, t }: { locale: Locale; t: Dictionar
         </Reveal>
       </div>
     </Section>
+  );
+}
+
+function ModeCard({
+  icon,
+  title,
+  body,
+  points,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  body: string;
+  points: string[];
+}) {
+  return (
+    <div className="rounded-3xl border border-cream-300/70 bg-white px-6 py-7 shadow-[0_1px_2px_rgb(4_21_14/0.03)]">
+      <div className="flex items-center gap-3">
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-leaf-100 text-leaf-700">
+          {icon}
+        </span>
+        <p className="font-display text-lg font-semibold leading-snug text-forest-900">{title}</p>
+      </div>
+      <p className="mt-4 text-sm leading-relaxed text-char-500">{body}</p>
+      <ul className="mt-3 list-disc space-y-1.5 ps-5 text-sm leading-relaxed text-char-700">
+        {points.map((point) => (
+          <li key={point}>{point}</li>
+        ))}
+      </ul>
+    </div>
   );
 }
 

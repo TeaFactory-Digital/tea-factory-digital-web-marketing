@@ -157,7 +157,7 @@ export const en = {
     factoryRegNo: 'M.F. 1041',
     supplierCode: '5708 (MAKADURA)',
     supplierName: 'K. Wijesinghe',
-    billNo: 'GL-26-07-5708',
+    billNo: '2026210412',
     phoneLabel: 'Phone',
     monthLabel: 'July 2026',
     billNoLabel: 'Bill No.',
@@ -177,7 +177,7 @@ export const en = {
       transport: 'Transport charges',
       tea: 'Tea',
       savings: 'Savings',
-      loansAdvance: 'Loans / advance',
+      loansAdvance: 'Loan',
       advance: 'Advance',
       manure: 'Manure',
       otherCards: 'Other deductions',
@@ -234,7 +234,7 @@ export const en = {
     eyebrow: 'Features',
     heading: 'Everything suppliers need. Everything the office needs to respond.',
     subtitle:
-      'Five groups of capability. The first two live on the supplier’s phone; the rest are how the office keeps up with them.',
+      'Six groups of capability. The first two live on the supplier’s phone; the next three are how the office keeps up with them, and the last is for a factory whose own system is not connected.',
     money: {
       title: 'Supplier Money',
       description: 'The monthly account, and the history behind it.',
@@ -293,6 +293,36 @@ export const en = {
         notify: { title: 'Notification Check', desc: 'For each notification category, whether a push reaches this supplier, and if it does not, why.' },
         reports: { title: 'Reports', desc: 'Month by month: how much is asked for in the app rather than at the office, the credit and tea packets given, and the savings the factory holds.' },
         search: { title: 'Search Anywhere', desc: 'Ctrl K jumps to any supplier by code or name, or to any page of the console.' },
+      },
+    },
+    factoryRecords: {
+      title: 'Factory Records (sync off)',
+      description: 'For a factory whose own system is not connected.',
+      items: {
+        sync: {
+          title: 'Factory System Switch',
+          desc: 'Sync on: records arrive from the factory system every hour. Sync off: the office keeps them in the console. One source at a time.',
+        },
+        suppliers: {
+          title: 'Suppliers & Opening Balances',
+          desc: 'Register a supplier with the factory’s own code, enter what they owed and held on the first day, and record credit requests made at the counter.',
+        },
+        leaf: {
+          title: 'Daily Leaf Intake',
+          desc: 'Each day’s weighings by collection point, entered in a grid, with a reason kept for any weighing withdrawn.',
+        },
+        import: {
+          title: 'Excel / CSV Import',
+          desc: 'Every record type from a file, with a template to start from. Checked row by row; one bad row and nothing is saved.',
+        },
+        bills: {
+          title: 'Bills Calculated Here',
+          desc: 'Enter the month’s rate, generate the bills, review them and publish. Laid out like the printed slip, paid in the factory’s unit, with its own bill numbers.',
+        },
+        deductions: {
+          title: 'Transport, Interest & Other Deductions',
+          desc: 'Transport per collection point or per supplier, advance interest a month, and other deductions with a reason the supplier reads.',
+        },
       },
     },
   },
@@ -376,7 +406,7 @@ export const en = {
     eyebrow: 'Integration',
     heading: 'Works alongside the system you already run.',
     subtitle:
-      'Tea Factory Digital handles the supplier experience and office workflows while your existing factory system continues running its internal processes.',
+      'Tea Factory Digital handles the supplier experience and office workflows. Where your factory system can be connected, it keeps running its internal processes and the app reads from it. Where it cannot, the office keeps the records in the console instead.',
     nodes: {
       supplier: 'Supplier Mobile App',
       platform: 'Tea Factory Digital Platform',
@@ -389,6 +419,10 @@ export const en = {
       two: 'No second weighing system.',
       three: 'No need to replace your existing factory software.',
     },
+    modes: {
+      title: 'Two ways to run, one switch',
+      note: 'Chosen in Configuration → Factory system. One source at a time, so a weighing is never entered in two places.',
+    },
     boundaryLabel: 'Stays where it is',
     cta: 'See Integration',
   },
@@ -400,13 +434,27 @@ export const en = {
     /**
      * From here down the strings are the console's own
      * (`apps/admin/src/i18n/locales/*.ts`), so the dashboard mockup reads
-     * exactly as the shipped screen does. `{age}`, `{count}` and
-     * `{value}` are substituted in the component.
+     * exactly as the shipped screen does. `{name}`, `{age}`, `{count}`,
+     * `{withApp}` and `{total}` are substituted in the component.
      */
-    pageTitle: 'Dashboard',
+    /** `dashboard.greeting.morning`: the mockup is set in the factory's morning. */
+    greeting: 'Good morning, {name}',
     pageSubtitle: 'The day at a glance',
     search: 'Search',
+    /** The four headline tiles (`dashboard.kpi.*`). */
+    kpi: {
+      waiting: 'Waiting for you',
+      now: 'Now',
+      overdue: '{count} overdue',
+      appRequests: 'App requests',
+      thisMonth: 'This month',
+      points: '{count} pts',
+      vsLastMonth: 'vs last month',
+      devices: 'Devices',
+      devicesCaption: 'registered for notifications',
+    },
     queuesTitle: 'Queues',
+    queuesHint: 'Oldest and most overdue first',
     oldestWaiting: 'Oldest {age}',
     pastTarget: '{count} past target',
     queue: {
@@ -417,11 +465,13 @@ export const en = {
       teaPacketRequests: 'Tea packets',
       inquiries: 'Inquiries',
     },
+    queueMix: 'Waiting by queue',
+    queueMixTotal: 'Waiting',
     appAdoption: 'App adoption',
     appInstalled: '{withApp} of {total} suppliers signed in',
     appWithout: '{count} have never installed it',
-    appDevices: '{count} devices registered for notifications',
-    appRequestShare: 'Requests raised in the app this month: {value}',
+    adoptionTrend: 'App adoption, last 12 months',
+    trendMonths: '{count}M',
     contentHealth: 'Content',
     bannersLive: 'banners live right now',
     contentArticlesWithGaps: '{count} published articles fall back to English',
@@ -429,7 +479,6 @@ export const en = {
     contentPagesUnwritten: '{count} fixed pages have never been written',
     alerts: 'Needs attention',
     noAlerts: 'Nothing needs attention',
-    adoptionTrend: 'App adoption, last 12 months',
     nav: {
       sectionOverview: 'Overview',
       sectionQueues: 'Queues',
@@ -451,9 +500,12 @@ export const en = {
       audit: 'Audit log',
       configuration: 'Configuration',
       users: 'Users & roles',
+      sectionRecords: 'Factory records',
+      deliveries: 'Leaf intake',
+      rates: 'Rates & month close',
     },
     /** The topbar prints the raw role id, untranslated, in every language. */
-    user: { name: 'R. Gunawardena', role: 'manager' },
+    user: { name: 'Ruwan Gunawardena', role: 'manager' },
     /** The inquiry screen (`modules/inquiries/*`), in the console's own words. */
     inquiry: {
       title: 'Inquiries',
@@ -645,6 +697,68 @@ export const en = {
     },
   },
 
+  /** The console's own strings (`apps/admin/src/i18n/locales/*.ts`) for the factory-records mockups. */
+  records: {
+    configTitle: 'Configuration',
+    configSubtitle: 'Everything about this factory that is data rather than code',
+    settings: 'Settings',
+    tenantId: 'Factory id',
+    sectionTitles: {
+      factory: 'The factory',
+      features: 'Features',
+      factorySystem: 'Factory system',
+      operations: 'Collection & savings',
+      banks: 'Banks & branches',
+      appearance: 'Languages & branding',
+      push: 'Notifications',
+      teaPackets: 'Tea packets',
+      creditRules: 'Credit rules',
+      billCalculation: 'Bill calculation',
+      notes: 'Common notes',
+    },
+    sectionHints: {
+      factory: 'Name, registration, contact',
+      features: 'What this factory offers',
+      factorySystem: 'Sync on, or records kept here',
+      operations: 'Points, savings, fertilizer',
+      banks: 'What the app offers for payout details',
+      appearance: 'Languages, logo, colours',
+      push: 'What may be sent',
+      teaPackets: 'What a packet is and what it costs',
+      creditRules: 'How much a supplier may borrow',
+      billCalculation: 'Rounding, bill numbers, advance interest',
+      notes: 'Chips under the note boxes',
+    },
+    factorySystemDescription: 'Where suppliers, daily leaf, rates, bills and balances come from.',
+    mode: {
+      syncTitle: 'Factory system sync: on',
+      syncBody: 'Records arrive from the factory’s own system every hour.',
+      syncP1: 'Suppliers, leaf, rates, bills and balances are read only here.',
+      syncP2: 'Bills are the factory system’s, shown as they arrive.',
+      syncP3: 'No entry or import screens.',
+      manualTitle: 'Factory system sync: off',
+      manualBody: 'The office keeps the records in this console.',
+      manualP1: 'Add suppliers and enter daily leaf, one at a time or from an Excel/CSV file.',
+      manualP2: 'Enter the monthly rate; bills are calculated here and checked before publishing.',
+      manualP3: 'Enter opening balances and walk-in credit requests.',
+    },
+    save: 'Save this section',
+    undo: 'Undo changes',
+    nothingToSave: 'Nothing has changed.',
+    deliveriesTitle: 'Leaf collection',
+    deliveriesSubtitle: 'What the factory weighed in, day by day',
+    importTitle: 'Import daily leaf',
+    importIntro: 'One row per weighing: the date, the supplier code and the kilos.',
+    fileName: 'leaf-2026-10-08.xlsx',
+    rowCount: '{count} rows',
+    problems: 'Problems found: {count}. Fix them in the file and choose it again. Nothing has been saved.',
+    problemLine: 'Row {row}, {column}: {message}',
+    notANumber: 'not a number',
+    submit: 'Import {count} rows',
+    another: 'Choose another file',
+    cancel: 'Cancel',
+  },
+
   consolePage: {
     eyebrow: 'For factories',
     title: 'One place to answer the app.',
@@ -670,6 +784,14 @@ export const en = {
       records: {
         title: 'The counter’s questions, answered on one page',
         body: 'The supplier record puts the app, the bank account, the savings rate and the collection point at the top, with every request, the savings passbook, the income the supplier sees and a check of why a phone did or did not ring underneath. Reports show the shift to the app, the credit and tea packets given and the savings held, month by month, and the data status page says how current the figures are.',
+      },
+      factorySystem: {
+        title: 'Connected to your factory system, or not',
+        body: 'With the sync on, suppliers, leaf, rates, bills and balances arrive from the factory’s own system every hour and are read only in the console. A factory whose system cannot be connected switches it off, and the office keeps those records in the console instead: the Factory records menu appears, and the bills are calculated here, checked and published. One switch, and one source at a time.',
+      },
+      factoryRecords: {
+        title: 'One at a time, or a whole file at once',
+        body: 'Suppliers, daily leaf, monthly rates, opening balances, walk-in credit requests, transport rates and other deductions can each be entered on a form or imported from an Excel or CSV file. Every row is checked before anything is saved, problems are named by row and column, and a file with one bad row saves nothing, so a file is never half imported.',
       },
       governance: {
         title: 'Who may decide, and what they decided',

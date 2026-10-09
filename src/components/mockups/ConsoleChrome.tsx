@@ -11,6 +11,7 @@ import {
   MessageSquare,
   Newspaper,
   Package,
+  Scale,
   ScrollText,
   Search,
   Settings,
@@ -23,6 +24,33 @@ import type { Dictionary } from '@/i18n';
 import { cn } from '@/lib/utils';
 import { CONSOLE_QUEUES } from '@/lib/sample-data';
 import { DeviceShot } from './DeviceShot';
+
+/**
+ * The console's own palette: `@tfd/brand`'s base light colours with Galaboda's primary
+ * over them (`packages/brand/src/{colors,clients}`). The site's `--color-app-*` tokens are
+ * the mobile app's, which are different greys, so every console screen resets them here.
+ */
+const CONSOLE_PALETTE = {
+  '--color-app-primary': '#2e8b57',
+  '--color-app-primary-muted': '#dceee2',
+  '--color-app-background': '#f5f6f8',
+  '--color-app-surface': '#ffffff',
+  '--color-app-surface-variant': '#f2f4f7',
+  '--color-app-text': '#0b0d12',
+  '--color-app-text-secondary': '#667085',
+  '--color-app-border': '#e7e9ee',
+  '--color-app-divider': '#eef0f3',
+  '--color-app-success': '#067647',
+  '--color-app-warning': '#b54708',
+  '--color-app-error': '#c01f14',
+  '--color-app-info': '#175cd3',
+  '--color-app-success-muted': '#e7f8ef',
+  '--color-app-warning-muted': '#fef4e6',
+  '--color-app-error-muted': '#feedec',
+  '--color-app-info-muted': '#eaf3fe',
+  '--color-app-table-header': '#fafbfc',
+  '--color-app-row-alt': '#fcfcfd',
+} as React.CSSProperties;
 
 /**
  * The console's frame: the real `AppShell`, `Sidebar` and `Topbar`
@@ -51,6 +79,7 @@ export function ConsoleFrame({
         'overflow-hidden rounded-2xl border border-black/10 bg-app-surface shadow-panel sm:rounded-3xl',
         className,
       )}
+      style={CONSOLE_PALETTE}
     >
       {chrome ? <BrowserChrome /> : null}
       <DeviceShot width={width} height={height}>
@@ -79,21 +108,28 @@ function BrowserChrome() {
   );
 }
 
-export type ConsoleNavKey = 'dashboard' | 'inquiries';
+export type ConsoleNavKey = 'dashboard' | 'inquiries' | 'deliveries' | 'configuration';
 
-/** Sidebar, topbar and the padded `main` every module screen renders into. */
+/**
+ * Sidebar, topbar and the padded `main` every module screen renders into.
+ *
+ * `keepsRecords` is the factory-system sync switched **off**: the sidebar then carries the
+ * *Factory records* section, exactly as `navigation.ts` shows it only in that mode.
+ */
 export function ConsoleShell({
   t,
   active,
+  keepsRecords = false,
   children,
 }: {
   t: Dictionary;
   active: ConsoleNavKey;
+  keepsRecords?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className="flex h-full overflow-hidden bg-app-background text-app-text">
-      <Sidebar t={t} active={active} />
+      <Sidebar t={t} active={active} keepsRecords={keepsRecords} />
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar t={t} />
         {/* main: px-gutter(30) py-lg(16); content gap-lg(16) */}
@@ -107,7 +143,15 @@ export function ConsoleShell({
 const pending = (key: (typeof CONSOLE_QUEUES)[number]['key']) =>
   CONSOLE_QUEUES.find((q) => q.key === key)?.pending ?? 0;
 
-function Sidebar({ t, active }: { t: Dictionary; active: ConsoleNavKey }) {
+function Sidebar({
+  t,
+  active,
+  keepsRecords,
+}: {
+  t: Dictionary;
+  active: ConsoleNavKey;
+  keepsRecords: boolean;
+}) {
   const c = t.console;
 
   const sections: {
@@ -138,6 +182,18 @@ function Sidebar({ t, active }: { t: Dictionary; active: ConsoleNavKey }) {
       title: c.nav.sectionSupport,
       items: [{ label: c.nav.bills, icon: FileText }],
     },
+    // Only while the factory-system sync is off: the office keeps the records here.
+    ...(keepsRecords
+      ? [
+          {
+            title: c.nav.sectionRecords,
+            items: [
+              { key: 'deliveries' as const, label: c.nav.deliveries, icon: Scale },
+              { label: c.nav.rates, icon: Gauge },
+            ],
+          },
+        ]
+      : []),
     {
       title: c.nav.sectionContent,
       items: [
@@ -152,7 +208,7 @@ function Sidebar({ t, active }: { t: Dictionary; active: ConsoleNavKey }) {
       items: [
         { label: c.nav.reports, icon: Gauge },
         { label: c.nav.audit, icon: ShieldCheck },
-        { label: c.nav.configuration, icon: Settings },
+        { key: 'configuration', label: c.nav.configuration, icon: Settings },
         { label: c.nav.users, icon: UsersRound },
       ],
     },
@@ -291,32 +347,69 @@ function InfoGlyph() {
 }
 
 /**
- * `Card` / `CardHeader` / `CardBody` from `components/ui/Card.tsx`. Titles are
- * not heading elements here: this site styles every heading in its display
- * face, and the console sets them in the system one.
+ * `Card` / `CardHeader` / `CardBody` from `components/ui/Card.tsx`, as they ship today: no
+ * rule under the header (the title's weight separates it), a 16px subtitle-size title, a
+ * hairline `shadow-card`, and a body that drops its top padding under a header. Titles are
+ * not heading elements here: this site styles every heading in its display face, and the
+ * console sets them in the system one.
  */
 export function ConsoleCard({
   title,
   description,
+  actions,
   className,
   bodyClassName,
   children,
 }: {
-  title: React.ReactNode;
+  title?: React.ReactNode;
   description?: React.ReactNode;
+  actions?: React.ReactNode;
   className?: string;
   bodyClassName?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className={cn('flex flex-col rounded-[16px] border border-app-border bg-app-surface', className)}>
-      <header className="border-b border-app-divider px-[16px] py-[12px]">
-        <p className="text-[18px] font-semibold leading-[26px]">{title}</p>
-        {description ? (
-          <p className="mt-[2px] text-[14px] leading-[20px] text-app-text-secondary">{description}</p>
-        ) : null}
-      </header>
-      <div className={cn('px-[16px] py-[12px]', bodyClassName)}>{children}</div>
+    <section
+      className={cn(
+        'flex flex-col rounded-[16px] border border-app-border bg-app-surface shadow-[0_1px_2px_rgb(11_31_28/0.05)]',
+        className,
+      )}
+    >
+      {title ? (
+        <header className="flex items-start justify-between gap-[12px] px-[16px] pb-[12px] pt-[16px]">
+          <div className="min-w-0">
+            <p className="text-[16px] font-semibold leading-[24px] tracking-tight">{title}</p>
+            {description ? (
+              <p className="mt-[2px] text-[14px] leading-[20px] text-app-text-secondary">{description}</p>
+            ) : null}
+          </div>
+          {actions ? <div className="flex shrink-0 items-center gap-[8px]">{actions}</div> : null}
+        </header>
+      ) : null}
+      <div className={cn(title ? 'px-[16px] pb-[16px]' : 'p-[16px]', bodyClassName)}>{children}</div>
     </section>
+  );
+}
+
+/** `PageHeader`: an `h1` in the h2 size (26/34) set semibold and tight, the description 4px under it. */
+export function ConsolePageHeader({
+  title,
+  description,
+  actions,
+}: {
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  actions?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-[12px]">
+      <div className="min-w-0">
+        <p className="text-[26px] font-semibold leading-[34px] tracking-tight">{title}</p>
+        {description ? (
+          <p className="mt-[4px] text-[14px] leading-[20px] text-app-text-secondary">{description}</p>
+        ) : null}
+      </div>
+      {actions ? <div className="flex shrink-0 flex-wrap items-center gap-[8px]">{actions}</div> : null}
+    </div>
   );
 }
