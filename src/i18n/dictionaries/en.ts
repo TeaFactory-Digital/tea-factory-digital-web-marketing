@@ -180,7 +180,7 @@ export const en = {
       loansAdvance: 'Loans / advance',
       advance: 'Advance',
       manure: 'Manure',
-      otherCards: 'Other cards',
+      otherCards: 'Other deductions',
       stamps: 'Stamps',
       previousDebts: 'Previous debts',
     },

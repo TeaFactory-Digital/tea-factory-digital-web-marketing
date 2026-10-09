@@ -174,7 +174,7 @@ export const si: Dictionary = {
       loansAdvance: 'ණය / අත්තිකාරම්',
       advance: 'අත්තිකාරම්',
       manure: 'පොහොර',
-      otherCards: 'වෙනත් කාඩ්පත්',
+      otherCards: 'වෙනත් අඩුකිරීම්',
       stamps: 'මුද්දර',
       previousDebts: 'පෙර ණය',
     },

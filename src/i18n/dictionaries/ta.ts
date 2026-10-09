@@ -174,7 +174,7 @@ export const ta: Dictionary = {
       loansAdvance: 'கடன் / முன்பணம்',
       advance: 'முன்பணம்',
       manure: 'உரம்',
-      otherCards: 'பிற அட்டைகள்',
+      otherCards: 'பிற கழிவுகள்',
       stamps: 'முத்திரைகள்',
       previousDebts: 'முந்தைய கடன்கள்',
     },
