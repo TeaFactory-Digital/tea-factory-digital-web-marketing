@@ -6,6 +6,17 @@ import { DeviceShot } from './DeviceShot';
 export const PHONE_SCREEN = { width: 384, height: 832 } as const;
 
 /**
+ * Corner radii as a share of the device's own width / height, so the shell
+ * keeps the same silhouette at any size. A fixed rem radius turns a narrow
+ * phone into a capsule and clips the screen's corners.
+ */
+export const PHONE_RADIUS = {
+  outer: '11.8% / 5.4%',
+  bezel: '11.2% / 5.15%',
+  screen: '10.6% / 4.9%',
+} as const;
+
+/**
  * A device shell around a product screen.
  *
  * The frame has no aspect ratio of its own: its height comes from the screen
@@ -26,21 +37,26 @@ export function PhoneFrame({
   return (
     <div
       className={cn(
-        'relative w-full rounded-[2.6rem] p-[3px]',
+        'relative w-full p-[3px]',
         tone === 'dark'
           ? 'bg-gradient-to-b from-char-700 via-char-900 to-char-800'
           : 'bg-gradient-to-b from-cream-300 via-cream-200 to-cream-300',
         shadow && 'shadow-device',
         className,
       )}
+      style={{ borderRadius: PHONE_RADIUS.outer }}
     >
       <div
         className={cn(
-          'relative overflow-hidden rounded-[2.45rem]',
+          'relative overflow-hidden',
           tone === 'dark' ? 'bg-char-900' : 'bg-white',
         )}
+        style={{ borderRadius: PHONE_RADIUS.bezel }}
       >
-        <div className="overflow-hidden rounded-[2.3rem] bg-app-background">
+        <div
+          className="overflow-hidden bg-app-background"
+          style={{ borderRadius: PHONE_RADIUS.screen }}
+        >
           <DeviceShot width={PHONE_SCREEN.width} height={PHONE_SCREEN.height}>
             {children}
           </DeviceShot>

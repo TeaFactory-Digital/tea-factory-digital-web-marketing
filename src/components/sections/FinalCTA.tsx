@@ -4,7 +4,7 @@ import type { Dictionary, Locale } from '@/i18n';
 import { href, sections } from '@/lib/routes';
 import { ButtonLink } from '@/components/ui/button';
 import { Reveal } from '@/components/ui/motion';
-import { PhoneFrame } from '@/components/mockups/PhoneFrame';
+import { PHONE_RADIUS, PhoneFrame } from '@/components/mockups/PhoneFrame';
 import { GreenLeafBill } from '@/components/mockups/GreenLeafBill';
 import { ConsoleDashboard } from '@/components/mockups/ConsoleDashboard';
 
@@ -47,7 +47,13 @@ export function FinalCTA({ locale, t }: { locale: Locale; t: Dictionary }) {
               <ConsoleDashboard t={t} chrome={false} />
             </div>
             <div className="absolute -bottom-2 start-1/2 w-[8.5rem] -translate-x-1/2 sm:start-[14%] sm:w-[11rem] sm:translate-x-0 md:w-[12.5rem]">
-              <div className="[mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
+              {/* Opaque backing, so the console never shows through the phone's fade. */}
+              <div
+                className="absolute inset-0 bg-forest-900"
+                style={{ borderRadius: PHONE_RADIUS.outer }}
+                aria-hidden="true"
+              />
+              <div className="relative [mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
                 <PhoneFrame>
                   <GreenLeafBill t={t} />
                 </PhoneFrame>
