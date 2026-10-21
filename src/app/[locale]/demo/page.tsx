@@ -25,7 +25,20 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
   const asideItems = Object.values(t.demo.aside.items);
 
   return (
-    <div className="relative bg-cream-100 pb-24 pt-32 md:pb-32 md:pt-40">
+    <div className="relative isolate overflow-hidden bg-cream-100 pb-24 pt-32 md:pb-32 md:pt-40">
+      {/* The estate photograph, blurred, behind the form. It fades in below the
+          heading so the title stays on plain cream, and the cards in front are
+          frosted so the photo reads through them as colour, not detail. */}
+      <div
+        className="pointer-events-none absolute inset-0 -z-10 [mask-image:linear-gradient(to_bottom,transparent_14rem,black_34rem)]"
+        aria-hidden="true"
+      >
+        <div
+          className="photo-slot photo-slot--estate absolute -inset-16 scale-110 blur-2xl"
+          style={{ backgroundPosition: '30% 60%' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-cream-100/30 via-cream-100/15 to-forest-950/25" />
+      </div>
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-80 bg-gradient-to-b from-cream-200/70 to-transparent"
         aria-hidden="true"
@@ -45,7 +58,7 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
 
           <Reveal delay={0.1}>
             <aside className="lg:sticky lg:top-28">
-              <div className="rounded-4xl border border-cream-300/70 bg-white p-7 shadow-lift">
+              <div className="rounded-4xl border border-white/60 bg-white/80 p-7 shadow-lift backdrop-blur-xl">
                 <h2 className="font-display text-lg font-semibold text-forest-900">
                   {t.demo.aside.title}
                 </h2>
@@ -61,7 +74,7 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
                 </ul>
               </div>
 
-              <div className="mt-4 rounded-4xl bg-forest-900 p-7 text-cream-100">
+              <div className="mt-4 rounded-4xl bg-forest-900/90 p-7 text-cream-100 backdrop-blur-xl">
                 <p className="t-eyebrow text-leaf-300">{t.footer.contact.title}</p>
                 <div className="mt-4 space-y-3">
                   <a

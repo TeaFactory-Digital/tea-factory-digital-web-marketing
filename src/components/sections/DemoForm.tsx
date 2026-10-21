@@ -79,7 +79,7 @@ export function DemoForm({ t }: { t: Dictionary }) {
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="rounded-4xl border border-leaf-300 bg-white p-9 text-center shadow-lift md:p-12"
+        className="rounded-4xl border border-leaf-300 bg-white/85 p-9 text-center shadow-lift backdrop-blur-xl md:p-12"
       >
         <span className="mx-auto grid size-14 place-items-center rounded-full bg-leaf-100 text-leaf-700">
           <CheckCircle2 className="size-7" strokeWidth={2} />
@@ -109,7 +109,7 @@ export function DemoForm({ t }: { t: Dictionary }) {
     <form
       onSubmit={onSubmit}
       noValidate
-      className="rounded-4xl border border-cream-300/70 bg-white p-7 shadow-lift md:p-10"
+      className="rounded-4xl border border-white/60 bg-white/85 p-7 shadow-lift backdrop-blur-xl md:p-10"
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field id="fullName" label={f.fullName} error={errors.fullName} required>
