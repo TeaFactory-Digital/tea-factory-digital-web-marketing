@@ -384,11 +384,11 @@ export const en = {
       different: 'Different brand.',
       config: 'Different configuration.',
     },
-    /** Real clients from the mobile repo's config, not invented brands. */
+    /** Galaboda is the real client; the other two are labelled samples, so no visitor reads them as customers. */
     factories: {
       a: 'Galaboda Tea Factory',
-      b: 'Hill Country Tea',
-      c: 'Highland Estate',
+      b: 'Sample factory B',
+      c: 'Sample factory C',
     },
     configurable: {
       logo: 'Logo',

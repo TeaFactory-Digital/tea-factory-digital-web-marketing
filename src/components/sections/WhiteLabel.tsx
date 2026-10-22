@@ -18,10 +18,8 @@ type Brand = {
 };
 
 /**
- * The three clients that actually exist in the mobile repo's
- * `src/config/clients/`: the Galaboda default, plus `clientA` and `clientB`.
- * The palettes are their configured `theme.colors.light` values, not invented
- * ones. The whole claim of this section is that a brand is a config row.
+ * Galaboda's real palette (the mobile `default` client) beside two sample palettes,
+ * named as samples. The whole claim of this section is that a brand is a config row.
  */
 const BRANDS: Brand[] = [
   { primary: '#2E8B57', muted: '#DCEEE2', secondary: '#8FC13F' },

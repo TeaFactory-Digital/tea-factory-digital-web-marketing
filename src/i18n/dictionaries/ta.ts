@@ -377,11 +377,11 @@ export const ta: Dictionary = {
       different: 'வேறு முத்திரை.',
       config: 'வேறு கட்டமைப்பு.',
     },
-    /** Real clients from the mobile repo's config, not invented brands. */
+    /** Galaboda is the real client; the other two are labelled samples, so no visitor reads them as customers. */
     factories: {
       a: 'Galaboda Tea Factory',
-      b: 'Hill Country Tea',
-      c: 'Highland Estate',
+      b: 'மாதிரித் தொழிற்சாலை B',
+      c: 'மாதிரித் தொழிற்சாலை C',
     },
     configurable: {
       logo: 'சின்னம்',

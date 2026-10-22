@@ -106,7 +106,7 @@ than no mockup, because a factory recognises its own console.
 | `--color-app-*` in `globals.css` | `packages/brand/src/colors.ts`, overridden by the `default` (Galaboda) client: primary `#2E8B57`, muted `#DCEEE2` |
 | The `bill` block in each dictionary | the mobile string table, `src/config/clients/default/strings.ts` |
 | The `console` block in each dictionary | the console's own locales, `apps/admin/src/i18n/locales/*.ts` |
-| The three white-label palettes | `src/config/clients/{default,clientA,clientB}`: Galaboda, Hill Country Tea, Highland Estate |
+| The white-label palettes | Galaboda's is the mobile `default` client's; the other two are samples, labelled as such |
 
 **True-size rendering.** The mockups are written at the size the real product
 runs at (a 384px phone screen, a 1280px console) using the product's own

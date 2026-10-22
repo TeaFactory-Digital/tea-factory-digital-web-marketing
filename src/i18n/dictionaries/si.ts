@@ -377,11 +377,11 @@ export const si: Dictionary = {
       different: 'වෙනස් සන්නාමය.',
       config: 'වෙනස් වින්‍යාසය.',
     },
-    /** Real clients from the mobile repo's config, not invented brands. */
+    /** Galaboda is the real client; the other two are labelled samples, so no visitor reads them as customers. */
     factories: {
       a: 'Galaboda Tea Factory',
-      b: 'Hill Country Tea',
-      c: 'Highland Estate',
+      b: 'නියැදි කර්මාන්තශාලාව B',
+      c: 'නියැදි කර්මාන්තශාලාව C',
     },
     configurable: {
       logo: 'ලාංඡනය',
