@@ -106,7 +106,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
             style={{ perspective: 1200 }}
           >
             <PhoneFrame>
-              <GreenLeafBill t={t} />
+              <GreenLeafBill t={t} monthToDate />
             </PhoneFrame>
           </motion.div>
 

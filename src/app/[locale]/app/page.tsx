@@ -71,9 +71,24 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
 
       <SplitBlock
         index="02"
+        title={s.monthToDate.title}
+        body={s.monthToDate.body}
+        flip
+        visual={
+          <div className="mx-auto w-full max-w-[17rem]">
+            <PhoneFrame>
+              <GreenLeafBill t={t} monthToDate />
+            </PhoneFrame>
+            <p className="mt-4 text-center text-xs text-char-400">{t.common.sampleDataNote}</p>
+          </div>
+        }
+      />
+
+      <SplitBlock
+        index="03"
         title={s.history.title}
         body={s.history.body}
-        flip
+        tone="white"
         visual={
           <Card className="p-6 md:p-8">
             <p className="t-eyebrow mb-5 text-leaf-700">{t.greenLeaf.incomeTitle}</p>
@@ -88,10 +103,10 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
       <CreditFlow t={t} />
 
       <SplitBlock
-        index="03"
+        index="04"
         title={s.requests.title}
         body={s.requests.body}
-        tone="white"
+        flip
         visual={
           <div className="mx-auto w-full max-w-[17rem]">
             <PhoneFrame>
@@ -102,10 +117,10 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
       />
 
       <SplitBlock
-        index="04"
+        index="05"
         title={s.conversation.title}
         body={s.conversation.body}
-        flip
+        tone="white"
         visual={
           <div className="mx-auto w-full max-w-[17rem]">
             <PhoneFrame>
@@ -116,10 +131,10 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
       />
 
       <SplitBlock
-        index="05"
-        tone="white"
+        index="06"
         title={s.settings.title}
         body={s.settings.body}
+        flip
         visual={
           <Card className="p-6 md:p-8">
             <ul className="divide-y divide-cream-200">

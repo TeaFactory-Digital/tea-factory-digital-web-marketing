@@ -199,6 +199,19 @@ export const en = {
     /** The app header's title and the four tabs (`home.title`, `tab.home`, `income.title`, `news.title`, `settings.title`). */
     appTitle: 'Green Leaf Account',
     tabs: { home: 'Account', income: 'Income history', news: 'News', settings: 'Settings' },
+    /** "This month so far" (`mtd.*`, `bill.daily.noSupply`): the month whose bill is next. */
+    monthToDate: {
+      title: 'This month so far',
+      monthLabel: 'August 2026',
+      days: 'Leaf on {n} days',
+      lastSupply: 'last on {date}',
+      lastDate: '14 August 2026',
+      approved: 'Approved this month',
+      advance: 'Advance',
+      teaPackets: 'Tea packets',
+      note: 'Kilograms recorded so far. Your payment comes with the bill after the auction.',
+      noSupply: 'No supply days are left blank.',
+    },
   },
 
 
@@ -240,7 +253,7 @@ export const en = {
       description: 'The monthly account, and the history behind it.',
       items: {
         account: { title: 'Green Leaf Account', desc: 'The month’s rate, kilos, gross, deductions and balance in the order the printed slip states them.' },
-        calendar: { title: 'Daily Supply Calendar', desc: 'Day 1 to 31 with the kilos recorded against each, plus a bar chart of the month.' },
+        calendar: { title: 'Daily Supply Calendar', desc: 'Day 1 to 31 with the kilos recorded against each, plus a bar chart of the month. Where the factory turns it on, this month’s kilos so far too, before the bill is out.' },
         income: { title: 'Income History', desc: 'Past months as a graph, a list or a chart, any month’s full account one tap away, and the year as a PDF summary.' },
         deductions: { title: 'Deduction Breakdown', desc: 'Where the money went: transport, tea, savings, loan, advance, manure and the rest, itemised.' },
         savings: { title: 'Savings Ledger', desc: 'This month, the previous balance and the running total, with a trend over time.' },
@@ -678,6 +691,10 @@ export const en = {
       account: {
         title: 'The monthly account, as it is printed',
         body: 'The app follows the Green Leaf Account slip a supplier already reads: the rate and extra rate, the kilos, the gross, every deduction line in order, the balance and the coins carried forward. Nothing is renamed and nothing is reordered, because the point is recognition, not redesign.',
+      },
+      monthToDate: {
+        title: 'This month, before the bill',
+        body: 'A bill comes once the month is closed and the auction rate is in, so mid-month the app showed only last month. Where the factory turns it on, the Account tab now opens with this month so far: the kilos recorded, the days with leaf, a bar for each day, and the advance or tea packets approved, which this month’s bill will take back. No money figure is shown until the bill is published, so nothing on the phone can disagree with the slip. It suits a factory whose office enters the leaf daily, or whose own system is connected.',
       },
       history: {
         title: 'Twelve months, three ways to read them',

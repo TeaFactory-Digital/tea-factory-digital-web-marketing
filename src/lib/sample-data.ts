@@ -56,6 +56,21 @@ export const DAILY_SUPPLY: (number | null)[] = [
   null,
 ];
 
+/**
+ * "This month so far" on the Account tab: August up to the 14th, the month after the July
+ * bill above it, before its own bill is out.
+ * Day 1 to 31, `null` a day without leaf (days not reached yet included). Sums to MTD_KG.
+ */
+export const MTD_DAILY_SUPPLY: (number | null)[] = [
+  46, 51, null, 49, 53, 45, null, 56, 48, 50,
+  52, null, 55, 47,
+  ...Array.from({ length: 17 }, () => null),
+];
+export const MTD_KG = MTD_DAILY_SUPPLY.reduce<number>((sum, kg) => sum + (kg ?? 0), 0); // 552
+export const MTD_SUPPLY_DAYS = MTD_DAILY_SUPPLY.filter((kg) => kg !== null).length; // 11
+/** Approved in August: the advance and the tea packets come off August's bill. */
+export const MTD_APPROVED = { advance: 15000, teaPackets: 900 } as const;
+
 /** Twelve months of final balance, oldest first. The last is the month on screen. */
 export const INCOME_SERIES = [
   62400, 58900, 71200, 66800, 79400, 84100,

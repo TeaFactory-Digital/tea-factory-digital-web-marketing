@@ -4,6 +4,10 @@ import {
   EXTRA_RATE_PER_KG,
   FINAL_BALANCE,
   KG_PER_MONTH,
+  MTD_APPROVED,
+  MTD_DAILY_SUPPLY,
+  MTD_KG,
+  MTD_SUPPLY_DAYS,
   RATE_PER_KG,
   TOTAL_RATE_PER_KG,
   kilos,
@@ -36,11 +40,14 @@ export function GreenLeafBill({
   signal = 'full',
   brand,
   factoryName,
+  monthToDate = false,
 }: {
   t: Dictionary;
   signal?: 'full' | 'weak';
   brand?: AppBrand;
   factoryName?: string;
+  /** The factory has `enableMonthToDate` on: "This month so far" sits above the bill. */
+  monthToDate?: boolean;
 }) {
   const b = t.bill;
   const perKg = (n: number) => `${b.currency} ${money(n)}${b.perKg}`;
@@ -61,6 +68,8 @@ export function GreenLeafBill({
 
       {/* Screen: paddingHorizontal lg(16), gap lg(16), paddingTop md(12) */}
       <div className="flex flex-col gap-[16px] px-[16px] pt-[12px]">
+        {monthToDate ? <MonthToDateCard t={t} /> : null}
+
         {/* ── BillSummaryHero, with the breeze behind it ──────────────── */}
         <div className="relative rounded-[24px] bg-app-primary p-[20px] shadow-[0_6px_14px_rgb(0_0_0/0.15)]">
           <TeaBreeze />
@@ -154,6 +163,81 @@ export function GreenLeafBill({
   );
 }
 
+/**
+ * `MonthToDateCard`: a section over a card, for the month after the bill below (August,
+ * under July's bill). The month as an overline, the kilos in `h1`, the days in `bodySmall`,
+ * a 56px `BarChart` strip with no axis, the approvals as `AmountRow`s, the note in `caption`.
+ */
+function MonthToDateCard({ t }: { t: Dictionary }) {
+  const b = t.bill;
+  const m = b.monthToDate;
+  const rupees = (n: number) => `${b.currency} ${money(n)}`;
+  return (
+    <Section title={m.title}>
+      <p className="text-[11px] font-medium leading-[16px] tracking-[1px] text-app-text-secondary">
+        {m.monthLabel}
+      </p>
+      <p className="mt-[4px] text-[32px] font-bold leading-[40px] tracking-[-0.3px] tabular-nums">
+        {MTD_KG.toFixed(1)} {b.kg}
+      </p>
+      <p className="text-[14px] leading-[20px] text-app-text-secondary">
+        {m.days.replace('{n}', String(MTD_SUPPLY_DAYS))} · {m.lastSupply.replace('{date}', m.lastDate)}
+      </p>
+      <div className="mt-[12px]">
+        <DailyStrip />
+      </div>
+      <div className="mt-[12px]">
+        <p className="mb-[4px] text-[12px] leading-[16px] text-app-text-secondary">{m.approved}</p>
+        <AmountRow label={m.advance} value={rupees(MTD_APPROVED.advance)} />
+        <AmountRow label={m.teaPackets} value={rupees(MTD_APPROVED.teaPackets)} />
+      </div>
+      <p className="mt-[12px] text-[12px] leading-[16px] text-app-text-secondary">{m.note}</p>
+    </Section>
+  );
+}
+
+/**
+ * The app's `BarChart` with `height={56}` and `showYAxis={false}`: a 4px gutter, a 1px
+ * baseline, bars at 60% of their slot, scaled to `axisTicks`' tidy top (100 for a 56 kg
+ * day). The card's inner width is 384 - 2x16 - 2x16 = 320px.
+ */
+function DailyStrip() {
+  const width = 320;
+  const height = 56;
+  const gutter = 4;
+  const topPad = 10;
+  const chartHeight = height - 6 - topPad;
+  const top = 100;
+  const slot = (width - gutter) / MTD_DAILY_SUPPLY.length;
+  const barWidth = Math.max(2, slot * 0.6);
+  return (
+    <svg width={width} height={height} aria-hidden="true" className="block">
+      <line
+        x1={gutter}
+        x2={width}
+        y1={topPad + chartHeight}
+        y2={topPad + chartHeight}
+        stroke="var(--color-app-divider)"
+        strokeWidth={1}
+      />
+      {MTD_DAILY_SUPPLY.map((kg, i) => {
+        const h = kg ? (kg / top) * chartHeight : 0;
+        return h > 0 ? (
+          <rect
+            key={i}
+            x={gutter + i * slot + (slot - barWidth) / 2}
+            y={topPad + chartHeight - h}
+            width={barWidth}
+            height={h}
+            rx={2}
+            fill="var(--color-app-primary)"
+          />
+        ) : null;
+      })}
+    </svg>
+  );
+}
+
 /** A white tile inside the primary hero: caption over a bodyStrong value. */
 function StatTile({ label, value }: { label: string; value: string }) {
   return (
@@ -171,7 +255,7 @@ function StatTile({ label, value }: { label: string; value: string }) {
  * its own 8px margin) over a `Card`, in a column with an 8px gap, so the
  * header sits 16px above the card.
  */
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+export function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-[8px]">
       <p className="mb-[8px] text-[11px] font-medium uppercase leading-[16px] tracking-[1px] text-app-text-secondary">
@@ -185,7 +269,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 /** `AmountRow`: label left, value right, a hairline above a total. */
-function AmountRow({
+export function AmountRow({
   label,
   value,
   emphasized = false,

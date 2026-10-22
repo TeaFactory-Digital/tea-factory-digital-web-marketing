@@ -49,7 +49,7 @@ export function GreenLeafAccount({ t }: { t: Dictionary }) {
                 aria-hidden="true"
               />
               <PhoneFrame>
-                <GreenLeafBill t={t} />
+                <GreenLeafBill t={t} monthToDate />
               </PhoneFrame>
             </div>
 
