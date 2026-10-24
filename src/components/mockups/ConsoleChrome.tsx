@@ -108,7 +108,7 @@ function BrowserChrome() {
   );
 }
 
-export type ConsoleNavKey = 'dashboard' | 'inquiries' | 'deliveries' | 'configuration';
+export type ConsoleNavKey = 'dashboard' | 'inquiries' | 'deliveries' | 'rates' | 'configuration';
 
 /**
  * Who is signed in. The sidebar shows only what that role may read, exactly as
@@ -141,8 +141,10 @@ const READS: Record<ConsoleRole, ReadonlySet<Capability>> = {
     'reports', 'suppliers', 'changeRequests', 'creditRequests', 'inquiries', 'billing',
     'deliveries', 'ratesAndMonthClose', 'content', 'auditLog', 'flagsAndBranding', 'usersAndRoles',
   ]),
+  // Reads the factory's records too (leaf, rates, bills), never changes them.
   factoryAdmin: new Set<Capability>([
-    'reports', 'suppliers', 'content', 'auditLog', 'flagsAndBranding', 'usersAndRoles',
+    'reports', 'suppliers', 'billing', 'deliveries', 'ratesAndMonthClose', 'content', 'auditLog',
+    'flagsAndBranding', 'usersAndRoles',
   ]),
 };
 
@@ -244,7 +246,7 @@ function Sidebar({
             title: c.nav.sectionRecords,
             items: [
               { key: 'deliveries' as const, label: c.nav.deliveries, icon: Scale, cap: 'deliveries' as const },
-              { label: c.nav.rates, icon: Gauge, cap: 'ratesAndMonthClose' as const },
+              { key: 'rates' as const, label: c.nav.rates, icon: Gauge, cap: 'ratesAndMonthClose' as const },
             ],
           },
         ]

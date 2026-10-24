@@ -45,8 +45,8 @@ const SECTIONS: { id: keyof Dictionary['records']['sectionTitles']; icon: Lucide
  *
  * Shown saved with the sync **off**, the state the section exists for, and as the factory
  * administrator sees it: the only role that may change configuration (`flagsAndBranding: W`),
- * which is why the footer offers Save. That role reads no leaf or rates, so its sidebar has no
- * *Factory records* menu; the clerk's Leaf intake screen (`ConsoleImport`) shows it.
+ * which is why the footer offers Save. With the sync off its sidebar carries the *Factory
+ * records* menu too: the administrator reads the leaf, rates and bills, and changes none.
  */
 export function ConsoleFactorySystem({
   t,

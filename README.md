@@ -50,7 +50,7 @@ src/
     ui/                  button, field, card, section, motion helpers
     mockups/             PhoneFrame, AppChrome, GreenLeafBill, InquiryThread, TeaBreeze,
                          ConsoleChrome, ConsoleDashboard, ConsoleInquiry,
-                         ConsoleFactorySystem, ConsoleImport, charts
+                         ConsoleFactorySystem, ConsoleImport, ConsoleSlipComparison, charts
     sections/            one file per page section, named after the brief
     Navbar Footer Logo PlantationScene
   i18n/
@@ -93,7 +93,7 @@ than no mockup, because a factory recognises its own console.
 
 | On this site | Source of truth |
 | --- | --- |
-| `mockups/GreenLeafBill.tsx` | `tea-factory-digital-mobile-frontend` → `src/screens/home/HomeScreen.tsx` and `src/components/bill/*` |
+| `mockups/GreenLeafBill.tsx` | `tea-factory-digital-mobile-frontend` → `src/screens/home/HomeScreen.tsx` and `src/components/bill/*` (with `monthToDate`, `MonthToDateCard.tsx` above the bill) |
 | `mockups/TeaBreeze.tsx` | mobile → `src/components/bill/TeaBreeze.tsx`, `TeaLandscape.tsx` |
 | `mockups/AppChrome.tsx`, `AppIcon.tsx` | mobile → `src/navigation/AppHeader.tsx`, `AppTabs.ios.tsx`, `src/components/icons/Icon.tsx`, `components/ui/Avatar.tsx` |
 | `mockups/InquiryThread.tsx` | mobile → `src/screens/inquiry/InquiryThreadScreen.tsx` |
@@ -101,6 +101,7 @@ than no mockup, because a factory recognises its own console.
 | `mockups/ConsoleDashboard.tsx` | admin → `apps/admin/src/modules/dashboard/DashboardScreen.tsx` |
 | `mockups/ConsoleFactorySystem.tsx` | admin → `apps/admin/src/modules/configuration/ConfigurationScreen.tsx`, `FactorySystemSection.tsx`, `SectionFooter.tsx` |
 | `mockups/ConsoleImport.tsx` | admin → `apps/admin/src/components/ImportDialog.tsx`, `components/ui/Dialog.tsx`, `modules/deliveries/DeliveriesScreen.tsx` |
+| `mockups/ConsoleSlipComparison.tsx` | admin → `apps/admin/src/modules/bills/SlipComparisonCard.tsx` on `modules/months/MonthCloseScreen.tsx` |
 | `mockups/ConsoleInquiry.tsx` | admin → `apps/admin/src/modules/inquiries/InquiryDetailScreen.tsx`, `ReplyDialog.tsx`, `InquiryOfficeCards.tsx` |
 | The `thread` block and `console.inquiry` | the mobile `inquiry.*` strings and the console's `inquiries.*` strings |
 | `--color-app-*` in `globals.css` | `packages/brand/src/colors.ts`, overridden by the `default` (Galaboda) client: primary `#2E8B57`, muted `#DCEEE2` |

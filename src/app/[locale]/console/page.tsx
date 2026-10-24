@@ -6,6 +6,7 @@ import { ConsoleDashboard } from '@/components/mockups/ConsoleDashboard';
 import { ConsoleInquiry } from '@/components/mockups/ConsoleInquiry';
 import { ConsoleFactorySystem } from '@/components/mockups/ConsoleFactorySystem';
 import { ConsoleImport } from '@/components/mockups/ConsoleImport';
+import { ConsoleSlipComparison } from '@/components/mockups/ConsoleSlipComparison';
 import { ConsoleSection } from '@/components/sections/ConsoleSection';
 import { AnalyticsSection } from '@/components/sections/AnalyticsSection';
 import { IntegrationSection } from '@/components/sections/IntegrationSection';
@@ -160,9 +161,17 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
 
       <SplitBlock
         index="07"
+        title={s.slips.title}
+        body={s.slips.body}
+        tone="white"
+        visual={<ConsoleSlipComparison t={t} />}
+      />
+
+      <SplitBlock
+        index="08"
+        flip
         title={s.records.title}
         body={s.records.body}
-        tone="white"
         visual={
           <Card className="p-6 md:p-8">
             <p className="t-eyebrow mb-5 text-leaf-700">{t.features.records.title}</p>
@@ -186,10 +195,10 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
       />
 
       <SplitBlock
-        index="08"
+        index="09"
         title={s.governance.title}
         body={s.governance.body}
-        flip
+        tone="white"
         visual={<ConsoleDashboard t={t} />}
       />
 

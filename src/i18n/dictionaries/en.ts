@@ -329,8 +329,8 @@ export const en = {
           desc: 'Every record type from a file, with a template to start from. Checked row by row; one bad row and nothing is saved.',
         },
         bills: {
-          title: 'Bills Calculated Here',
-          desc: 'Enter the month’s rate, generate the bills, review them and publish. Laid out like the printed slip, paid in the factory’s unit, with its own bill numbers.',
+          title: 'Bills: Imported or Calculated',
+          desc: 'Import the finished bills from the factory’s own system, or enter the month’s rate and calculate them here. Calculated bills are compared with the factory’s printed slips; one that differs is held until it matches.',
         },
         deductions: {
           title: 'Transport, Interest & Other Deductions',
@@ -763,7 +763,7 @@ export const en = {
       manualTitle: 'Factory system sync: off',
       manualBody: 'The office keeps the records in this console.',
       manualP1: 'Add suppliers and enter daily leaf, one at a time or from an Excel/CSV file.',
-      manualP2: 'Enter the monthly rate; bills are calculated here and checked before publishing.',
+      manualP2: 'Import the finished bills from the factory’s own system, or enter the monthly rate and calculate them here; either way they are checked before publishing.',
       manualP3: 'Enter opening balances and walk-in credit requests.',
     },
     save: 'Save this section',
@@ -781,6 +781,30 @@ export const en = {
     submit: 'Import {count} rows',
     another: 'Choose another file',
     cancel: 'Cancel',
+    /** "Compare with printed slips" on Rates & month close (`SlipComparisonCard.tsx`). */
+    slips: {
+      monthsTitle: 'Rates & month close',
+      monthsSubtitle: 'The auction rate, and what is stopping the month closing',
+      importButton: 'Import from file',
+      title: 'Compare with printed slips',
+      description: 'The factory’s own system prints a slip for every supplier. Enter or import each slip’s Balance; ours must match it to the rupee before the month is published.',
+      countMatch: 'Match',
+      countMismatch: 'Do not match',
+      countMissing: 'No printed figure',
+      countHeld: 'Held',
+      blocking: '{count} bills do not match or have no printed figure. The month cannot be published until each one is fixed or held.',
+      colSupplier: 'Supplier',
+      colOurs: 'Ours',
+      colPrinted: 'Printed',
+      colDifference: 'Difference',
+      colStatus: 'Status',
+      statusMismatch: 'Does not match',
+      statusHeld: 'Held',
+      enterPrinted: 'Enter printed',
+      hold: 'Hold',
+      sampleReason: 'Society fee of Rs. 550 is only on the printed slip',
+      howToFix: 'To fix a difference, find the line that differs (leaf, rate, an approval entered in only one system), correct it in the system that is wrong, recalculate the bills, then compare again.',
+    },
   },
 
   consolePage: {
@@ -811,11 +835,15 @@ export const en = {
       },
       factorySystem: {
         title: 'Connected to your factory system, or not',
-        body: 'With the sync on, suppliers, leaf, rates, bills and balances arrive from the factory’s own system every hour and are read only in the console. A factory whose system cannot be connected switches it off, and the office keeps those records in the console instead: the Factory records menu appears, and the bills are calculated here, checked and published. One switch, and one source at a time.',
+        body: 'With the sync on, suppliers, leaf, rates, bills and balances arrive from the factory’s own system every hour and are read only in the console. A factory whose system cannot be connected switches it off, and the office keeps those records in the console instead: the Factory records menu appears, and the bills are imported from the factory’s own system or calculated here, checked and published. One switch, and one source at a time.',
       },
       factoryRecords: {
         title: 'One at a time, or a whole file at once',
         body: 'Suppliers, daily leaf, monthly rates, opening balances, walk-in credit requests, transport rates and other deductions can each be entered on a form or imported from an Excel or CSV file. Every row is checked before anything is saved, problems are named by row and column, and a file with one bad row saves nothing, so a file is never half imported.',
+      },
+      slips: {
+        title: 'Your bills and the factory’s printed slips agree',
+        body: 'A factory whose bills are calculated in the console still prints its own slips, and the supplier holds both, so they must agree to the rupee. The office enters or imports each printed slip’s Balance, and the console lists every bill that differs: ours, printed, the difference. The month cannot be published until each one is fixed or held. A held bill stays out of the publish, so the supplier is never shown a figure the factory did not pay; it is corrected, compared again and released on its own, and a supplier’s next bill waits until it is.',
       },
       governance: {
         title: 'Who may decide, and what they decided',
