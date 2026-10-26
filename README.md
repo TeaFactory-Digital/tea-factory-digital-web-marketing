@@ -48,9 +48,10 @@ src/
     robots.ts sitemap.ts
   components/
     ui/                  button, field, card, section, motion helpers
-    mockups/             PhoneFrame, AppChrome, GreenLeafBill, InquiryThread, TeaBreeze,
-                         ConsoleChrome, ConsoleDashboard, ConsoleInquiry,
-                         ConsoleFactorySystem, ConsoleImport, ConsoleSlipComparison, charts
+    mockups/             PhoneFrame, DeviceShot, AppChrome, AppIcon, GreenLeafBill,
+                         InquiryThread, TeaBreeze, ConsoleChrome, ConsoleDashboard,
+                         ConsoleInquiry, ConsoleFactorySystem, ConsoleImport,
+                         ConsoleSlipComparison, charts
     sections/            one file per page section, named after the brief
     Navbar Footer Logo PlantationScene
   i18n/
@@ -85,7 +86,8 @@ Three things are worth knowing before editing copy:
 ## Mockups: they are the product, not an impression of it
 
 The phone screens and the console are **real markup reproduced from the two
-product repos**, not screenshots and not a marketing interpretation. If you
+product repos**: React components drawn at the product's true size, not screenshot
+images and not a marketing interpretation. If you
 change either product, change these too; a mockup that has drifted is worse
 than no mockup, because a factory recognises its own console.
 
@@ -93,15 +95,15 @@ than no mockup, because a factory recognises its own console.
 
 | On this site | Source of truth |
 | --- | --- |
-| `mockups/GreenLeafBill.tsx` | `tea-factory-digital-mobile-frontend` → `src/screens/home/HomeScreen.tsx` and `src/components/bill/*` (with `monthToDate`, `MonthToDateCard.tsx` above the bill) |
+| `mockups/GreenLeafBill.tsx` | `tea-factory-digital-mobile-frontend` → `src/screens/home/HomeScreen.tsx` and `src/components/bill/*`. The `monthToDate` prop draws "This month so far" (`MonthToDateCard.tsx`) above the bill, as the app does with `enableMonthToDate` on; the home Hero, the Green Leaf Account section and block 02 of the App page pass it |
 | `mockups/TeaBreeze.tsx` | mobile → `src/components/bill/TeaBreeze.tsx`, `TeaLandscape.tsx` |
 | `mockups/AppChrome.tsx`, `AppIcon.tsx` | mobile → `src/navigation/AppHeader.tsx`, `AppTabs.ios.tsx`, `src/components/icons/Icon.tsx`, `components/ui/Avatar.tsx` |
 | `mockups/InquiryThread.tsx` | mobile → `src/screens/inquiry/InquiryThreadScreen.tsx` |
-| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar,NotificationBell,UserMenu,navigation}.tsx` (the *Factory records* section shows only with the sync off), `components/ui/{Card,PageHeader}.tsx`, `public/brand/logo.svg` |
+| `mockups/ConsoleChrome.tsx` | `tea-factory-digital-admin-frontend` → `apps/admin/src/layout/{AppShell,Sidebar,Topbar,NotificationBell,UserMenu}.tsx` and `navigation.ts`, `components/ui/{Card,PageHeader}.tsx`, `public/brand/logo.svg`. The sidebar is drawn per role from `DEFAULT_ROLE_MATRIX` (`packages/domain/src/rbac.ts`); the *Factory records* section shows only with the sync off, and the factory admin sees it too, with read-only access |
 | `mockups/ConsoleDashboard.tsx` | admin → `apps/admin/src/modules/dashboard/DashboardScreen.tsx` |
 | `mockups/ConsoleFactorySystem.tsx` | admin → `apps/admin/src/modules/configuration/ConfigurationScreen.tsx`, `FactorySystemSection.tsx`, `SectionFooter.tsx` |
 | `mockups/ConsoleImport.tsx` | admin → `apps/admin/src/components/ImportDialog.tsx`, `components/ui/Dialog.tsx`, `modules/deliveries/DeliveriesScreen.tsx` |
-| `mockups/ConsoleSlipComparison.tsx` | admin → `apps/admin/src/modules/bills/SlipComparisonCard.tsx` on `modules/months/MonthCloseScreen.tsx` |
+| `mockups/ConsoleSlipComparison.tsx` | admin → `apps/admin/src/modules/bills/SlipComparisonCard.tsx` on `modules/months/MonthCloseScreen.tsx`; block 07 of the Console page |
 | `mockups/ConsoleInquiry.tsx` | admin → `apps/admin/src/modules/inquiries/InquiryDetailScreen.tsx`, `ReplyDialog.tsx`, `InquiryOfficeCards.tsx` |
 | The `thread` block and `console.inquiry` | the mobile `inquiry.*` strings and the console's `inquiries.*` strings |
 | `--color-app-*` in `globals.css` | `packages/brand/src/colors.ts`, overridden by the `default` (Galaboda) client: primary `#2E8B57`, muted `#DCEEE2` |
@@ -124,14 +126,17 @@ inside it is not, and darkening it to suit the page would be the mismatch.
 **The figures are consistent.** The daily kilos sum to the month's total, the
 gross is the total times the total rate plus last month's coins brought forward
 (as the app's Earnings block adds them), the deductions subtract to the balance,
-and the coins carried forward are the fraction the slip rounds off. Keep it that
+and the coins carried forward are the fraction the slip rounds off (the sample pays
+whole rupees; a factory may pay in fives or tens). Keep it that
 way. A factory accountant reads a mockup like an account. The same goes for the
 console: the queue ages sit inside or past the console's real response targets,
 and the inquiry on the phone is the same conversation, 27 h old, that the
 console shows and the dashboard counts as its oldest.
 
 **Last matched to the products on 9 October 2026** (mobile `5eff4d5`, admin `3eb5b65`,
-plus the uncommitted factory-records work in both).
+plus the uncommitted factory-records work in both). Added since: the month-to-date
+card (22 October, from mobile `8053be1`), the slip comparison (24 October) and the
+factory admin's read-only *Factory records*.
 
 ## Demo form
 
@@ -183,7 +188,9 @@ and take `{ locale, t }`.
   terms are still blank. The app stores will ask for the privacy URL.
 - Replace the placeholder email in the footer contact block.
 - Verify `teafactorydigital.lk` in Resend and point `DEMO_REQUEST_TO` at the company inbox.
-- Optionally drop in photography. See `public/images/README.md`.
+- Photography: `public/images/plantation.jpg` and `tea-estate.jpg` are in place and
+  picked up at build time (`src/app/[locale]/layout.tsx`); remove either and the
+  drawn `PlantationScene` backdrop shows instead.
 
 ## Checks
 
