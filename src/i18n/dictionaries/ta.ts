@@ -192,7 +192,7 @@ export const ta: Dictionary = {
     currency: 'ரூ.',
     /** The app header's title and the four tabs (`home.title`, `tab.home`, `income.title`, `news.title`, `settings.title`). */
     appTitle: 'பச்சை இலை கணக்கு',
-    tabs: { home: 'கணக்கு', income: 'வருமான வரலாறு', news: 'செய்திகள்', settings: 'அமைப்புகள்' },
+    tabs: { home: 'கணக்கு', income: 'வருமான வரலாறு', news: 'செய்திகள்', profile: 'சுயவிவரம்', settings: 'அமைப்புகள்' },
     /** "This month so far" (`mtd.*`, `bill.daily.noSupply`): the month whose bill is next. */
     monthToDate: {
       title: 'இந்த மாதம் இதுவரை',
