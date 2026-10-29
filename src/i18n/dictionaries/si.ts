@@ -192,7 +192,7 @@ export const si: Dictionary = {
     currency: 'රු.',
     /** The app header's title and the four tabs (`home.title`, `tab.home`, `income.title`, `news.title`, `settings.title`). */
     appTitle: 'දළු ගිණුම',
-    tabs: { home: 'දළු ගිණුම', income: 'ආදායම් ඉතිහාසය', news: 'පුවත්', profile: 'පැතිකඩ', settings: 'සැකසුම්' },
+    tabs: { home: 'දළු ගිණුම', income: 'ආදායම් ඉතිහාසය', news: 'පුවත්', settings: 'සැකසුම්' },
     /** "This month so far" (`mtd.*`, `bill.daily.noSupply`): the month whose bill is next. */
     monthToDate: {
       title: 'මේ මාසය මෙතෙක්',

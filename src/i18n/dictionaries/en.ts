@@ -198,7 +198,7 @@ export const en = {
     currency: 'Rs.',
     /** The app header's title and the four tabs (`home.title`, `tab.home`, `income.title`, `news.title`, `settings.title`). */
     appTitle: 'Green Leaf Account',
-    tabs: { home: 'Account', income: 'Income history', news: 'News', profile: 'Profile', settings: 'Settings' },
+    tabs: { home: 'Account', income: 'Income history', news: 'News', settings: 'Settings' },
     /** "This month so far" (`mtd.*`, `bill.daily.noSupply`): the month whose bill is next. */
     monthToDate: {
       title: 'This month so far',

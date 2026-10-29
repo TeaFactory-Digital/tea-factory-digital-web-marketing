@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChartLine, CircleUserRound, House, Newspaper, Settings, type LucideIcon } from 'lucide-react';
+import { ChartLine, House, Newspaper, Settings, type LucideIcon } from 'lucide-react';
 import type { Dictionary } from '@/i18n';
 import { AppIcon } from './AppIcon';
 import { StatusBar } from './PhoneFrame';
@@ -50,8 +50,8 @@ export function AppHeader({
 
 /**
  * The tab bar on iOS: the app builds against the iOS 26 SDK, so the system
- * draws its floating Liquid Glass bar (`AppTabs.ios.tsx`). Five tabs (Profile is on in
- * the reference factory, `enableProfileTab`), active
+ * draws its floating Liquid Glass bar (`AppTabs.ios.tsx`). Four tabs (Profile is not a
+ * tab: it opens from Settings and the sidebar), active
  * tint the brand primary, inactive the secondary text colour. The glass is
  * approximated with a translucent white fill, a backdrop blur and a bright rim.
  */
@@ -60,7 +60,6 @@ export function AppTabBar({ t, active = 0 }: { t: Dictionary; active?: number })
     { label: t.bill.tabs.home, icon: House },
     { label: t.bill.tabs.income, icon: ChartLine },
     { label: t.bill.tabs.news, icon: Newspaper },
-    { label: t.bill.tabs.profile, icon: CircleUserRound },
     { label: t.bill.tabs.settings, icon: Settings },
   ];
 
