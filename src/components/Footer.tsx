@@ -47,12 +47,12 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_2.2fr]">
           <div className="max-w-sm">
             <Logo tone="light" />
-            <p className="mt-5 text-[0.95rem] leading-relaxed text-cream-100/55">
+            <p className="mt-5 text-[0.95rem] leading-relaxed text-cream-100/70">
               {t.footer.description}
             </p>
 
             <div className="mt-7 space-y-2.5">
-              <p className="t-eyebrow text-cream-100/35">{t.footer.contact.title}</p>
+              <p className="t-eyebrow text-cream-100/70">{t.footer.contact.title}</p>
               <a
                 href={`mailto:${t.footer.contact.email}`}
                 className="flex items-center gap-2.5 text-sm text-cream-100/70 transition-colors hover:text-leaf-300"
@@ -77,13 +77,13 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
           <div className="grid gap-10 sm:grid-cols-3">
             {columns.map((column) => (
               <div key={column.title}>
-                <p className="t-eyebrow mb-4 text-cream-100/35">{column.title}</p>
+                <p className="t-eyebrow mb-4 text-cream-100/70">{column.title}</p>
                 <ul className="space-y-3">
                   {column.links.map((link) => (
                     <li key={link.label}>
                       <Link
                         href={href(locale, link.path)}
-                        className="text-[0.92rem] text-cream-100/62 transition-colors hover:text-leaf-300"
+                        className="text-[0.92rem] text-cream-100/72 transition-colors hover:text-leaf-300"
                       >
                         {link.label}
                       </Link>
@@ -96,7 +96,7 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
         </div>
 
         <div className="mt-14 flex flex-col gap-5 border-t border-cream-50/8 pt-7 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.82rem] text-cream-100/40">
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[0.82rem] text-cream-100/70">
             <span>{t.footer.copyright}</span>
             <span className="hidden sm:inline">·</span>
             <span>{t.footer.tagline}</span>
@@ -111,7 +111,7 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
                 className={
                   l === locale
                     ? 'rounded-full bg-cream-50/10 px-3 py-1.5 text-xs font-semibold text-cream-50'
-                    : 'rounded-full px-3 py-1.5 text-xs font-medium text-cream-100/45 transition-colors hover:text-cream-100'
+                    : 'rounded-full px-3 py-1.5 text-xs font-medium text-cream-100/70 transition-colors hover:text-cream-100'
                 }
               >
                 {localeNames[l]}

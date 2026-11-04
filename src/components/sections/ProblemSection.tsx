@@ -34,7 +34,7 @@ export function ProblemSection({ t }: { t: Dictionary }) {
         <Stagger className="mt-12 grid gap-4 md:mt-16 md:grid-cols-3 md:gap-5">
           {cards.map((card) => (
             <StaggerItem key={card.num}>
-              <div className="group relative h-full overflow-hidden rounded-4xl border border-cream-300/70 bg-white p-8 shadow-lift transition-all duration-400 hover:-translate-y-1 hover:border-leaf-300 hover:shadow-panel md:p-10">
+              <div className="hover-lift group relative h-full overflow-hidden rounded-4xl border border-cream-300/70 bg-white p-8 shadow-lift md:p-10">
                 <span
                   className="pointer-events-none absolute -end-3 -top-6 font-display text-[6rem] font-semibold leading-none text-cream-200/70 transition-colors duration-400 group-hover:text-leaf-100 md:text-[7.5rem]"
                   aria-hidden="true"

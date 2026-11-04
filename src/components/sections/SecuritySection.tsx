@@ -55,7 +55,7 @@ export function SecuritySection({ t }: { t: Dictionary }) {
                       <span className="grid size-10 place-items-center rounded-2xl bg-forest-800/8 text-forest-700 transition-colors duration-300 group-hover:bg-forest-800 group-hover:text-cream-50">
                         <card.icon className="size-[18px]" strokeWidth={1.9} />
                       </span>
-                      <span className="font-display text-xs font-semibold tracking-[0.12em] text-char-300">
+                      <span className="font-display text-xs font-semibold tracking-[0.12em] text-char-500">
                         {card.num}
                       </span>
                     </div>

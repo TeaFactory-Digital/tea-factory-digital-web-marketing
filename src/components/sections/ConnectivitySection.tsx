@@ -54,7 +54,7 @@ export function ConnectivitySection({ t }: { t: Dictionary }) {
                 ))}
               </ul>
 
-              <p className="mt-6 text-sm text-char-400">{t.connectivity.note}</p>
+              <p className="mt-6 text-sm text-char-500">{t.connectivity.note}</p>
             </Reveal>
           </div>
         </div>

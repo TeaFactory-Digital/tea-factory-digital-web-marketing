@@ -351,6 +351,7 @@ export const en = {
       three: { title: 'Manager reviews', desc: 'Approve, adjust or decline. Above a threshold only a manager may decide.' },
       four: { title: 'Supplier receives notification', desc: 'The decision reaches the phone, and the request history records it.' },
     },
+    sameFor: 'The same four steps in every credit queue',
     example: {
       title: 'Loan Request',
       amountLabel: 'Amount',
@@ -634,6 +635,21 @@ export const en = {
   proof: {
     eyebrow: 'Why this shape',
     heading: 'Built for the realities of tea-factory operations.',
+    facts: {
+      title: 'The platform at a glance',
+      languages: 'languages, with Sinhala as the default',
+      queues: 'office queues, each with a response target',
+      anytime: 'supplier access to their own account',
+      replaced: 'factory systems replaced: weighing, rates and payouts stay in yours',
+    },
+    /** Shown in place of `facts` once `IMPACT_METRICS` (lib/impact.ts) holds reported figures. */
+    impact: {
+      title: 'In production',
+      leafKilos: 'kg of green leaf on supplier accounts',
+      approvalHours: 'average hours to an office decision',
+      factories: 'factories live',
+      asOf: 'Reported figures, {date}',
+    },
     points: {
       one: 'Supplier-first design',
       two: 'Existing-system friendly',

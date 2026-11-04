@@ -97,20 +97,27 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
           </Link>
 
           <nav className="ms-2 hidden min-w-0 items-center gap-0.5 xl:flex">
-            {links.map((link) => (
-              <Link
-                key={link.path}
-                href={href(locale, link.path)}
-                className={cn(
-                  'nav-link whitespace-nowrap rounded-full px-3 py-2 text-[0.875rem] font-medium transition-colors',
-                  transparent
-                    ? 'text-cream-100/80 hover:bg-cream-50/10 hover:text-cream-50'
-                    : 'text-char-700 hover:bg-forest-900/[0.05] hover:text-forest-900',
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {links.map((link) => {
+              // Only the two page links can be current; the rest jump to home sections.
+              const current = link.path === pathWithoutLocale;
+              return (
+                <Link
+                  key={link.path}
+                  href={href(locale, link.path)}
+                  aria-current={current ? 'page' : undefined}
+                  className={cn(
+                    'nav-link relative whitespace-nowrap rounded-full px-3 py-2 text-[0.875rem] font-medium transition-colors duration-200',
+                    // A short rule under the label: grows in on hover, stays for the current page.
+                    'after:absolute after:inset-x-3 after:bottom-1 after:h-[2px] after:origin-center after:scale-x-0 after:rounded-full after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100 aria-[current=page]:after:scale-x-100',
+                    transparent
+                      ? 'text-cream-100/85 after:bg-leaf-300 hover:bg-cream-50/10 hover:text-cream-50 aria-[current=page]:text-cream-50'
+                      : 'text-char-700 after:bg-leaf-600 hover:bg-forest-900/[0.05] hover:text-forest-900 aria-[current=page]:text-forest-900',
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="ms-auto flex shrink-0 items-center gap-1.5">
@@ -239,7 +246,8 @@ export function Navbar({ locale, t }: { locale: Locale; t: Dictionary }) {
                     <Link
                       href={href(locale, link.path)}
                       onClick={(event) => onSheetLink(event, link.path)}
-                      className="block border-b border-cream-200 py-4 font-display text-xl font-semibold text-forest-900"
+                      aria-current={link.path === pathWithoutLocale ? 'page' : undefined}
+                      className="block border-b border-cream-200 py-4 font-display text-xl font-semibold text-forest-900 transition-colors hover:text-leaf-700 aria-[current=page]:text-leaf-700"
                     >
                       {link.label}
                     </Link>

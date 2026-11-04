@@ -70,7 +70,7 @@ export function IntegrationSection({ locale, t }: { locale: Locale; t: Dictionar
           <Reveal delay={0.08} className="flex items-center justify-center py-2 lg:h-full lg:w-24 lg:py-0">
             <div className="flex items-center gap-3 lg:flex-col">
               <span className="h-px w-10 bg-cream-300 lg:h-14 lg:w-px" aria-hidden="true" />
-              <span className="grid size-10 place-items-center rounded-full border border-cream-300 bg-cream-50 text-char-400">
+              <span className="grid size-10 place-items-center rounded-full border border-cream-300 bg-cream-50 text-char-500">
                 <X className="size-4" strokeWidth={2.4} />
               </span>
               <span className="h-px w-10 bg-cream-300 lg:h-14 lg:w-px" aria-hidden="true" />
@@ -214,7 +214,7 @@ function Node({
 function Connector() {
   return (
     <div className="flex justify-center" aria-hidden="true">
-      <span className="grid size-6 place-items-center rounded-full bg-cream-100 text-char-400">
+      <span className="grid size-6 place-items-center rounded-full bg-cream-100 text-char-500">
         <ArrowDown className="size-3.5" strokeWidth={2.4} />
       </span>
     </div>

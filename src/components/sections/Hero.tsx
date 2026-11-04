@@ -14,7 +14,7 @@ const EASE = [0.22, 0.61, 0.36, 1] as const;
 
 export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
   return (
-    <section className="relative isolate overflow-hidden bg-forest-950 pb-20 pt-32 md:pb-28 md:pt-36 lg:pb-32 lg:pt-40">
+    <section className="relative isolate overflow-hidden bg-forest-950 pb-24 pt-32 md:pb-32 md:pt-36 lg:pb-40 lg:pt-40">
       {/* The estate shot, not the default photograph: this is the tallest slot
           on the site, so it needs the high-resolution file. No blur, and so no
           scale either: the 4903px source is downscaled to fit at every
@@ -52,7 +52,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.42, ease: EASE }}
-            className="mt-7 max-w-xl text-lg leading-relaxed text-cream-100/72 md:text-xl"
+            className="t-lead mt-7 max-w-xl text-cream-100/78"
           >
             {t.hero.subtitle}
           </motion.p>
@@ -85,7 +85,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dictionary }) {
             className="mt-10 flex flex-col gap-3 border-t border-cream-50/10 pt-7 sm:flex-row sm:items-center sm:gap-6"
           >
             <p className="font-display text-sm font-semibold text-cream-50">{t.hero.trust}</p>
-            <p className="flex items-center gap-2 text-sm text-cream-100/55">
+            <p className="flex items-center gap-2 text-sm text-cream-100/70">
               <CheckCircle2 className="size-4 shrink-0 text-leaf-400" strokeWidth={2.2} />
               {t.hero.alongside}
             </p>

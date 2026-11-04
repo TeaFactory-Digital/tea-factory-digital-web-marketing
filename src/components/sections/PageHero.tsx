@@ -28,7 +28,7 @@ export function PageHero({
   variant?: 'dusk' | 'morning' | 'aerial';
 }) {
   return (
-    <section className="relative isolate overflow-hidden bg-forest-950 pb-20 pt-32 md:pb-28 md:pt-36 lg:pt-40">
+    <section className="relative isolate overflow-hidden bg-forest-950 pb-24 pt-32 md:pb-32 md:pt-36 lg:pb-36 lg:pt-40">
       <PhotoBackdrop
         variant={variant}
         overlay="from-forest-950/48 via-forest-950/34 to-forest-900/74"
@@ -44,13 +44,13 @@ export function PageHero({
             {eyebrow}
           </Eyebrow>
           <h1 className="t-display font-semibold text-cream-50">{title}</h1>
-          <p className="mt-7 max-w-xl text-lg leading-relaxed text-cream-100/72 md:text-xl">
+          <p className="t-lead mt-7 max-w-xl text-cream-100/78">
             {subtitle}
           </p>
 
           <ul className="mt-9 flex flex-wrap gap-x-6 gap-y-3">
             {highlights.map((item) => (
-              <li key={item} className="flex items-center gap-2 text-sm text-cream-100/62">
+              <li key={item} className="flex items-center gap-2 text-sm text-cream-100/72">
                 <Check className="size-4 shrink-0 text-leaf-400" strokeWidth={2.6} />
                 {item}
               </li>
@@ -88,7 +88,7 @@ export function SplitBlock({
   return (
     <div
       className={
-        'py-16 md:py-20 ' + (tone === 'white' ? 'bg-white' : 'bg-cream-50')
+        'py-20 md:py-28 ' + (tone === 'white' ? 'bg-white' : 'bg-cream-50')
       }
     >
       <div className="shell">
@@ -96,7 +96,7 @@ export function SplitBlock({
           <Reveal className={flip ? 'lg:order-2' : undefined}>
             <span className="t-eyebrow text-leaf-700">{index}</span>
             <h2 className="t-h3 mt-4 font-semibold text-forest-900">{title}</h2>
-            <p className="mt-5 text-[1.02rem] leading-relaxed text-char-500">{body}</p>
+            <p className="t-lead mt-5 text-char-500">{body}</p>
           </Reveal>
 
           <Reveal delay={0.1} className={flip ? 'lg:order-1' : undefined}>

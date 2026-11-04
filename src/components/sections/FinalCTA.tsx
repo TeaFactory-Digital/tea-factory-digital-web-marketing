@@ -11,7 +11,7 @@ import { ConsoleDashboard } from '@/components/mockups/ConsoleDashboard';
 /** The close: the two surfaces overlapping, and one thing to do next. */
 export function FinalCTA({ locale, t }: { locale: Locale; t: Dictionary }) {
   return (
-    <section className="relative overflow-hidden bg-forest-900 pb-0 pt-20 md:pt-28">
+    <section className="relative overflow-hidden bg-forest-900 pb-0 pt-24 md:pt-32 lg:pt-40">
       <div className="grid-veil absolute inset-0 opacity-50" aria-hidden="true" />
       <div
         className="absolute left-1/2 top-10 size-[34rem] -translate-x-1/2 rounded-full bg-leaf-600/12 blur-3xl"
@@ -21,7 +21,7 @@ export function FinalCTA({ locale, t }: { locale: Locale; t: Dictionary }) {
       <div className="shell relative">
         <Reveal className="mx-auto max-w-2xl text-center">
           <h2 className="t-h2 font-semibold text-cream-50">{t.finalCta.headline}</h2>
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cream-100/68">
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cream-100/72">
             {t.finalCta.text}
           </p>
 

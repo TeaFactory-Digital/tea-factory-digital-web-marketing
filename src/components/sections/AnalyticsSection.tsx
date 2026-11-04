@@ -49,7 +49,7 @@ export function AnalyticsSection({ t }: { t: Dictionary }) {
 
               <div className="mt-8">
                 <AdoptionLine tone="light" className="h-28 md:h-32" />
-                <div className="mt-2 flex justify-between text-[0.7rem] font-medium text-char-400">
+                <div className="mt-2 flex justify-between text-[0.7rem] font-medium text-char-500">
                   {['−12', '−9', '−6', '−3', '0'].map((label) => (
                     <span key={label}>{label}</span>
                   ))}
@@ -70,7 +70,7 @@ export function AnalyticsSection({ t }: { t: Dictionary }) {
                 <p className="relative mt-3 font-display text-5xl font-semibold leading-none tabular-nums">
                   <CountUp to={ADOPTION_SERIES[ADOPTION_SERIES.length - 1]} suffix="%" />
                 </p>
-                <p className="relative mt-3 text-sm text-cream-100/55">
+                <p className="relative mt-3 text-sm text-cream-100/70">
                   {t.analytics.charts.requests}
                 </p>
                 <div className="relative mt-7 h-20">
@@ -88,7 +88,7 @@ export function AnalyticsSection({ t }: { t: Dictionary }) {
             const Icon = meta.icon;
             return (
               <StaggerItem key={tile.key}>
-                <Card className="flex h-full items-center gap-5 p-6">
+                <Card interactive className="flex h-full items-center gap-5 p-6">
                   <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-cream-100 text-forest-700">
                     <Icon className="size-5" strokeWidth={2} />
                   </span>
@@ -105,7 +105,7 @@ export function AnalyticsSection({ t }: { t: Dictionary }) {
         </Stagger>
 
         <Reveal delay={0.1}>
-          <p className="mt-7 text-sm text-char-400">{t.analytics.note}</p>
+          <p className="mt-7 text-sm text-char-500">{t.analytics.note}</p>
         </Reveal>
       </div>
     </Section>

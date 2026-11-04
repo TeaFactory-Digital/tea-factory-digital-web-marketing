@@ -204,7 +204,7 @@ export function DemoForm({ t }: { t: Dictionary }) {
       ) : null}
 
       <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="flex items-center gap-2 text-sm text-char-400">
+        <p className="flex items-center gap-2 text-sm text-char-500">
           <Clock3 className="size-4 shrink-0" strokeWidth={2} />
           {t.demo.aside.duration}
         </p>

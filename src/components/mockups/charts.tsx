@@ -81,8 +81,8 @@ export function IncomeBars({
               i === labels.length - 1
                 ? 'text-leaf-600'
                 : tone === 'dark'
-                  ? 'text-cream-50/35'
-                  : 'text-char-400',
+                  ? 'text-cream-50/70'
+                  : 'text-char-500',
             )}
           >
             {label}

@@ -34,5 +34,5 @@ export function FieldError({ children }: { children?: React.ReactNode }) {
 }
 
 export function Optional({ children }: { children: React.ReactNode }) {
-  return <span className="ml-1.5 font-sans text-xs font-normal text-char-400">({children})</span>;
+  return <span className="ml-1.5 font-sans text-xs font-normal text-char-500">({children})</span>;
 }

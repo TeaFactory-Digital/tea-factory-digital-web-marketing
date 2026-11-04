@@ -1,21 +1,26 @@
 import * as React from 'react';
-import { ArrowRight, BellRing, ChevronRight, ClipboardCheck, Inbox, Send, Timer } from 'lucide-react';
+import { ArrowRight, BellRing, ChevronRight, ClipboardCheck, Inbox, Monitor, Send, Smartphone, Timer } from 'lucide-react';
 import type { Dictionary } from '@/i18n';
 import { Section, SectionHeading } from '@/components/ui/section';
 import { Badge } from '@/components/ui/card';
 import { Reveal, Stagger, StaggerItem } from '@/components/ui/motion';
+import { cn } from '@/lib/utils';
 
 /**
  * A request's four steps, then the same request as the supplier sees it and as
  * the office sees it. The pair is the argument: one submission, two views,
  * no paper between them.
+ *
+ * The steps are the credit queues' (advances, loans, manure): the ceiling in
+ * step one and the manager threshold in step three are credit rules, so tea
+ * packets are deliberately not listed with them.
  */
 export function CreditFlow({ t }: { t: Dictionary }) {
   const steps = [
-    { num: '01', icon: Send, ...t.creditFlow.steps.one },
-    { num: '02', icon: Inbox, ...t.creditFlow.steps.two },
-    { num: '03', icon: ClipboardCheck, ...t.creditFlow.steps.three },
-    { num: '04', icon: BellRing, ...t.creditFlow.steps.four },
+    { num: '01', icon: Send, side: 'app', ...t.creditFlow.steps.one },
+    { num: '02', icon: Inbox, side: 'console', ...t.creditFlow.steps.two },
+    { num: '03', icon: ClipboardCheck, side: 'console', ...t.creditFlow.steps.three },
+    { num: '04', icon: BellRing, side: 'app', ...t.creditFlow.steps.four },
   ];
 
   return (
@@ -29,46 +34,81 @@ export function CreditFlow({ t }: { t: Dictionary }) {
           />
         </Reveal>
 
-        {/* ---- Four steps ---- */}
-        <Stagger className="mt-14 grid gap-3.5 md:mt-16 md:grid-cols-2 lg:grid-cols-4" step={0.085}>
-          {steps.map((step, i) => (
-            <StaggerItem key={step.num} className="relative">
-              <div className="h-full rounded-3xl border border-cream-300/70 bg-white p-6 shadow-lift">
-                <div className="flex items-center justify-between">
-                  <span className="grid size-10 place-items-center rounded-2xl bg-forest-800 text-cream-50">
-                    <step.icon className="size-[18px]" strokeWidth={2} />
-                  </span>
-                  <span className="font-display text-sm font-semibold text-cream-300">{step.num}</span>
+        {/* ---- Four steps ----
+            Each card says who acts at that step, so the hand-off between the
+            phone and the office reads at a glance, before anyone reads a word
+            of the descriptions. */}
+        <Stagger className="mt-14 grid gap-4 md:mt-20 md:grid-cols-2 lg:grid-cols-4" step={0.085}>
+          {steps.map((step, i) => {
+            const onApp = step.side === 'app';
+            return (
+              <StaggerItem key={step.num} className="relative">
+                <div className="hover-lift group flex h-full flex-col rounded-3xl border border-cream-300/70 bg-white p-6 shadow-lift md:p-7">
+                  <div className="flex items-center justify-between gap-3">
+                    <span
+                      className={cn(
+                        'grid size-11 place-items-center rounded-2xl transition-transform duration-300 group-hover:scale-105',
+                        onApp ? 'bg-leaf-600 text-white' : 'bg-forest-800 text-cream-50',
+                      )}
+                    >
+                      <step.icon className="size-[18px]" strokeWidth={2} />
+                    </span>
+                    <span
+                      className={cn(
+                        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 font-display text-[0.72rem] font-semibold',
+                        onApp ? 'bg-leaf-100 text-leaf-700' : 'bg-forest-800/[0.07] text-forest-700',
+                      )}
+                    >
+                      {onApp ? (
+                        <Smartphone className="size-3" strokeWidth={2.4} />
+                      ) : (
+                        <Monitor className="size-3" strokeWidth={2.4} />
+                      )}
+                      {onApp ? t.common.supplierApp : t.common.officeConsole}
+                    </span>
+                  </div>
+                  <span className="t-eyebrow mt-6 text-leaf-700 tabular-nums">{step.num}</span>
+                  <h3 className="t-h4 mt-2 text-forest-900">{step.title}</h3>
+                  <p className="t-body mt-2 text-char-500">{step.desc}</p>
                 </div>
-                <h3 className="mt-5 font-display text-[1.02rem] font-semibold leading-snug text-forest-900">
-                  {step.title}
-                </h3>
-                <p className="mt-2 text-[0.87rem] leading-relaxed text-char-500">{step.desc}</p>
-              </div>
 
-              {i < steps.length - 1 ? (
-                <span
-                  className="absolute -bottom-3 left-1/2 z-10 grid size-6 -translate-x-1/2 place-items-center rounded-full border border-cream-300 bg-cream-50 text-leaf-600 md:hidden"
-                  aria-hidden="true"
-                >
-                  <ArrowRight className="size-3 rotate-90" strokeWidth={2.6} />
-                </span>
-              ) : null}
+                {i < steps.length - 1 ? (
+                  <span
+                    className="absolute -bottom-[22px] left-1/2 z-10 grid size-7 -translate-x-1/2 place-items-center rounded-full border border-cream-300 bg-cream-50 text-leaf-600 shadow-lift md:hidden"
+                    aria-hidden="true"
+                  >
+                    <ArrowRight className="size-3.5 rotate-90" strokeWidth={2.6} />
+                  </span>
+                ) : null}
 
-              {i < steps.length - 1 ? (
-                <span
-                  className="absolute -end-[13px] top-1/2 z-10 hidden size-6 -translate-y-1/2 place-items-center rounded-full border border-cream-300 bg-cream-50 text-leaf-600 lg:grid"
-                  aria-hidden="true"
-                >
-                  <ArrowRight className="size-3 rtl:rotate-180" strokeWidth={2.6} />
-                </span>
-              ) : null}
-            </StaggerItem>
-          ))}
+                {i < steps.length - 1 ? (
+                  <span
+                    className="absolute -end-[22px] top-1/2 z-10 hidden size-7 -translate-y-1/2 place-items-center rounded-full border border-cream-300 bg-cream-50 text-leaf-600 shadow-lift lg:grid"
+                    aria-hidden="true"
+                  >
+                    <ArrowRight className="size-3.5 rtl:rotate-180" strokeWidth={2.6} />
+                  </span>
+                ) : null}
+              </StaggerItem>
+            );
+          })}
         </Stagger>
 
+        <Reveal delay={0.08} className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <p className="t-meta font-medium text-char-500">{t.creditFlow.sameFor}</p>
+          <ul className="flex flex-wrap gap-2">
+            {[t.console.queue.advanceRequests, t.console.queue.loanRequests, t.console.queue.manureRequests].map(
+              (queue) => (
+                <li key={queue}>
+                  <Badge tone="leaf">{queue}</Badge>
+                </li>
+              ),
+            )}
+          </ul>
+        </Reveal>
+
         {/* ---- The same request, both sides ---- */}
-        <div className="mt-8 grid gap-4 lg:grid-cols-2 lg:gap-5">
+        <div className="mt-12 grid gap-4 md:mt-16 lg:grid-cols-2 lg:gap-5">
           <Reveal delay={0.05}>
             <div className="h-full rounded-4xl border border-cream-300/70 bg-white p-7 shadow-lift md:p-8">
               <div className="mb-5 flex items-center justify-between">
@@ -157,7 +197,7 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
 function DarkRow({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <dt className="text-sm text-cream-100/50">{label}</dt>
+      <dt className="text-sm text-cream-100/70">{label}</dt>
       <dd
         className={
           strong

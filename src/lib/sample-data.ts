@@ -98,9 +98,9 @@ export const CONSOLE_INSTALLED_PERCENT = Math.round(
 
 /**
  * Pending items per queue, with the age of the oldest in hours. Response targets
- * are the console's `QUEUE_SLA_HOURS` (advances 24, change requests and
- * inquiries 48, the rest 72), so only the advances can be past target here, and
- * their oldest item is older than a day.
+ * are the console's `QUEUE_SLA_HOURS` (advances 24, inquiries 48, change
+ * requests, manure and tea packets 72, loans 120), so only the advances can be
+ * past target here, and their oldest item is older than a day.
  */
 export const CONSOLE_QUEUES = [
   { key: 'changeRequests', pending: 4, oldestHours: 6, breaching: 0 },

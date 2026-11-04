@@ -14,11 +14,6 @@ import { GreenLeafBill } from '@/components/mockups/GreenLeafBill';
  */
 const SHOWN: Locale[] = ['si', 'en', 'ta'];
 
-const fontFor: Record<Locale, string | undefined> = {
-  si: 'var(--font-sinhala), var(--font-inter), sans-serif',
-  en: undefined,
-  ta: 'var(--font-tamil), var(--font-inter), sans-serif',
-};
 
 export function LanguageSection({ t }: { t: Dictionary }) {
   const rows: { key: keyof Dictionary['language']['samples'] }[] = [
@@ -57,7 +52,6 @@ export function LanguageSection({ t }: { t: Dictionary }) {
                 <div
                   className="w-full max-w-[13rem] sm:max-w-none"
                   lang={locale}
-                  style={fontFor[locale] ? { fontFamily: fontFor[locale] } : undefined}
                 >
                   <PhoneFrame>
                     <GreenLeafBill t={d} />
@@ -66,7 +60,6 @@ export function LanguageSection({ t }: { t: Dictionary }) {
                 <p
                   className="mt-5 font-display text-lg font-semibold text-cream-50"
                   lang={locale}
-                  style={fontFor[locale] ? { fontFamily: fontFor[locale] } : undefined}
                 >
                   {localeNames[locale]}
                 </p>
@@ -96,9 +89,8 @@ export function LanguageSection({ t }: { t: Dictionary }) {
                     {SHOWN.map((locale) => (
                       <th
                         key={locale}
-                        className="px-6 py-3 text-start text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-cream-100/35"
+                        className="t-eyebrow px-6 py-3 text-start text-cream-100/70"
                         lang={locale}
-                        style={fontFor[locale] ? { fontFamily: fontFor[locale] } : undefined}
                       >
                         {localeNames[locale]}
                       </th>
@@ -115,7 +107,6 @@ export function LanguageSection({ t }: { t: Dictionary }) {
                             key={locale}
                             className="px-6 py-3.5 text-[0.92rem] text-cream-50"
                             lang={locale}
-                            style={fontFor[locale] ? { fontFamily: fontFor[locale] } : undefined}
                           >
                             {d.language.samples[key]}
                           </td>
@@ -128,7 +119,7 @@ export function LanguageSection({ t }: { t: Dictionary }) {
             </div>
           </div>
 
-          <p className="mx-auto mt-6 max-w-2xl text-center text-[0.95rem] leading-relaxed text-cream-100/55">
+          <p className="mx-auto mt-6 max-w-2xl text-center text-[0.95rem] leading-relaxed text-cream-100/70">
             {t.language.highlightNote}
           </p>
         </Reveal>

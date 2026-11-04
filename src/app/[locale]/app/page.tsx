@@ -64,7 +64,7 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
                 1,245 <span className="text-sm text-leaf-600">{t.bill.kg}</span>
               </span>
             </div>
-            <p className="mt-4 text-xs text-char-400">{t.common.sampleDataNote}</p>
+            <p className="mt-4 text-xs text-char-500">{t.common.sampleDataNote}</p>
           </Card>
         }
       />
@@ -79,7 +79,7 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
             <PhoneFrame>
               <GreenLeafBill t={t} monthToDate />
             </PhoneFrame>
-            <p className="mt-4 text-center text-xs text-char-400">{t.common.sampleDataNote}</p>
+            <p className="mt-4 text-center text-xs text-char-500">{t.common.sampleDataNote}</p>
           </div>
         }
       />
@@ -95,7 +95,7 @@ export default async function AppPage({ params }: { params: Promise<{ locale: st
             <div className="h-44">
               <IncomeBars />
             </div>
-            <p className="mt-4 text-xs text-char-400">{t.common.sampleDataNote}</p>
+            <p className="mt-4 text-xs text-char-500">{t.common.sampleDataNote}</p>
           </Card>
         }
       />

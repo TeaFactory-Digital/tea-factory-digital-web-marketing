@@ -75,8 +75,15 @@
   --color-app-table-header: #edf2f0;
   --color-app-row-alt: #fafcfb;
 
-  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /*
+   * One stack for every locale. Latin comes first so numerals, "LKR" and the
+   * product name set in the same face whichever language is on; the Noto
+   * families then supply the Sinhala and Tamil glyphs. Without them a Sinhala
+   * heading fell through Outfit to whatever the OS had (Sangam MN on a Mac,
+   * Nirmala UI on Windows), at a different weight and height on every device.
+   */
+  --font-display: var(--font-outfit), var(--font-sinhala), var(--font-tamil), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), var(--font-sinhala), var(--font-tamil), ui-sans-serif, system-ui, sans-serif;
 
   --radius-4xl: 2rem;
   --radius-5xl: 2.75rem;
@@ -84,6 +91,7 @@
   --shadow-lift: 0 1px 2px rgb(4 21 14 / 0.04), 0 12px 32px -12px rgb(4 21 14 / 0.14);
   --shadow-panel: 0 2px 4px rgb(4 21 14 / 0.05), 0 32px 64px -24px rgb(4 21 14 / 0.28);
   --shadow-device: 0 40px 80px -32px rgb(4 21 14 / 0.45), 0 8px 24px -8px rgb(4 21 14 / 0.25);
+  --shadow-hover: 0 2px 4px rgb(4 21 14 / 0.05), 0 22px 44px -18px rgb(4 21 14 / 0.24);
 
   --animate-marquee: marquee 44s linear infinite;
   --animate-drift: drift 9s ease-in-out infinite;
@@ -119,11 +127,20 @@
   --display-scale: 1;
 }
 
-:root:lang(si),
-:root:lang(ta) {
+/*
+ * `:lang()` rather than `:root:lang()`, so an element carrying its own `lang`
+ * (the trilingual section shows all three scripts on every locale) gets the
+ * treatment too. The two named leadings are overridden as well: a card that
+ * sets `leading-relaxed` would otherwise pin Sinhala to the Latin 1.625 and
+ * clip the vowel signs into the line above.
+ */
+:lang(si),
+:lang(ta) {
   --lh-display: 1.28;
   --lh-body: 1.85;
   --display-scale: 0.9;
+  --leading-relaxed: 1.85;
+  --leading-snug: 1.55;
 }
 
 @layer base {
@@ -175,9 +192,14 @@
     color: var(--color-forest-900);
   }
 
+  /*
+   * A two-tone ring: a cream halo inside a leaf outline. One of the two always
+   * contrasts, so the same ring reads on the cream sections and the forest ones.
+   */
   :focus-visible {
     outline: 2px solid var(--color-leaf-600);
-    outline-offset: 3px;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--color-cream-50);
     border-radius: 4px;
   }
 }
@@ -210,6 +232,39 @@
 
   .t-h3 {
     font-size: calc(clamp(1.35rem, 1.1rem + 1.1vw, 1.85rem) * var(--display-scale));
+  }
+
+  /* Body sizes. One step each, so a section never invents its own. */
+  .t-lead {
+    font-size: clamp(1.0625rem, 0.98rem + 0.4vw, 1.25rem);
+    line-height: var(--lh-body);
+  }
+
+  .t-h4 {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .t-body {
+    font-size: 0.9375rem;
+    line-height: var(--lh-body);
+  }
+
+  .t-meta {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  :lang(si) .t-h4,
+  :lang(ta) .t-h4 {
+    line-height: 1.55;
+  }
+
+  :lang(si) .t-meta,
+  :lang(ta) .t-meta {
+    line-height: 1.7;
   }
 
   .t-eyebrow {
@@ -255,6 +310,33 @@
   .device-shot > .device-shot-inner {
     transform-origin: top left;
     transform: scale(calc(100cqw / var(--shot-w)));
+  }
+
+  /*
+   * Primary buttons. The gradient is twice the button's width and slides on
+   * hover, so the light moves across the button rather than the colour
+   * snapping. The resting end is the flat brand colour; nothing changes until
+   * the pointer arrives.
+   */
+  .btn-sheen {
+    background-size: 220% 100%;
+    background-position: 0% 50%;
+  }
+
+  .btn-sheen:hover {
+    background-position: 100% 50%;
+  }
+
+  .btn-sheen--forest {
+    background-image: linear-gradient(110deg, var(--color-forest-800) 0%, var(--color-forest-800) 45%, var(--color-forest-500) 78%, var(--color-leaf-700) 100%);
+  }
+
+  .btn-sheen--cream {
+    background-image: linear-gradient(110deg, var(--color-cream-50) 0%, var(--color-cream-50) 45%, #ffffff 70%, var(--color-gold-200) 100%);
+  }
+
+  .btn-sheen--leaf {
+    background-image: linear-gradient(110deg, var(--color-leaf-600) 0%, var(--color-leaf-600) 45%, var(--color-leaf-500) 75%, var(--color-forest-500) 100%);
   }
 
   /* A hairline grid used behind dark sections. */
@@ -304,6 +386,38 @@
    */
   [data-photo='on'] .photo-slot--estate {
     background-image: url('/images/tea-estate.jpg');
+  }
+}
+
+/*
+ * The one hover for a scannable card: up 4px, a deeper shadow, a leaf
+ * border. Defined once so the feature cards, the steps and the queue widgets
+ * all move the same way. A utility rather than a component class, so its
+ * hover outranks the card's own `shadow-*` and `border-*` utilities.
+ */
+@utility hover-lift {
+  transition-property: transform, box-shadow, border-color, background-color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--color-leaf-300);
+  }
+}
+
+/* The same on a dark surface: the border and the fill carry it, not the shadow. */
+@utility hover-lift-dark {
+  transition-property: transform, box-shadow, border-color, background-color;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.6);
+    border-color: rgb(131 189 109 / 0.4);
+    background-color: rgb(252 250 245 / 0.07);
   }
 }
 

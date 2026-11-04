@@ -29,14 +29,14 @@ export function ActivityTicker({ t }: { t: Dictionary }) {
   ];
 
   return (
-    <section className="relative overflow-hidden border-y border-cream-200 bg-cream-100 py-14 md:py-16">
+    <section className="relative overflow-hidden border-y border-cream-200 bg-cream-100 py-16 md:py-20">
       <div className="shell">
         <Reveal className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div className="max-w-2xl">
             <Eyebrow className="mb-3">{t.activity.label}</Eyebrow>
             <h2 className="t-h3 font-semibold text-forest-900">{t.activity.heading}</h2>
           </div>
-          <p className="max-w-xs text-sm text-char-400 md:text-end">{t.activity.note}</p>
+          <p className="max-w-xs text-sm text-char-500 md:text-end">{t.activity.note}</p>
         </Reveal>
       </div>
 

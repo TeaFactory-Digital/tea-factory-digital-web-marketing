@@ -21,7 +21,11 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn('relative overflow-hidden py-20 md:py-28 lg:py-32', toneClass[tone], className)}
+      // The site's vertical rhythm. Sections set their own padding only when
+      // they are deliberately a band (the ticker, the proof strip), never to
+      // squeeze in. `overflow-clip`, not `-hidden`: hidden makes the section a
+      // scroll container, and a sticky column inside one never sticks.
+      className={cn('relative overflow-clip py-24 md:py-32 lg:py-40', toneClass[tone], className)}
       {...props}
     >
       {children}
@@ -53,7 +57,7 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
-        <Eyebrow tone={tone === 'light' ? 'light' : 'dark'} className="mb-4">
+        <Eyebrow tone={tone === 'light' ? 'light' : 'dark'} className="mb-5">
           {eyebrow}
         </Eyebrow>
       ) : null}
@@ -68,8 +72,9 @@ export function SectionHeading({
       {description ? (
         <p
           className={cn(
-            'mt-5 text-lg',
-            tone === 'light' ? 'text-cream-100/72' : 'text-char-500',
+            't-lead mt-6 max-w-2xl',
+            align === 'center' && 'mx-auto',
+            tone === 'light' ? 'text-cream-100/78' : 'text-char-500',
           )}
         >
           {description}

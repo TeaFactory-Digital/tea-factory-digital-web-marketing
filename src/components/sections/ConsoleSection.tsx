@@ -45,20 +45,20 @@ export function ConsoleSection({ t }: { t: Dictionary }) {
         </Parallax>
 
         <Reveal delay={0.1} className="mt-10">
-          <p className="t-eyebrow mb-4 text-cream-100/35">{t.console.queuesTitle}</p>
+          <p className="t-eyebrow mb-4 text-cream-100/70">{t.console.queuesTitle}</p>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {CONSOLE_QUEUES_SORTED.map((queue) => (
               <div
                 key={queue.key}
-                className="group rounded-3xl border border-cream-50/10 bg-cream-50/[0.04] p-6 transition-colors duration-300 hover:border-leaf-500/35 hover:bg-cream-50/[0.07]"
+                className="hover-lift-dark group rounded-3xl border border-cream-50/10 bg-cream-50/[0.04] p-6"
               >
                 <p className="font-display text-base font-semibold text-cream-50">
                   {t.console.queue[queue.key as keyof typeof t.console.queue]}
                 </p>
-                <p className="mt-4 font-display text-4xl font-semibold leading-none text-leaf-300 tabular-nums">
+                <p className="mt-4 font-display text-4xl font-semibold leading-none text-leaf-300 tabular-nums transition-colors duration-300 group-hover:text-leaf-100">
                   {queue.pending}
                 </p>
-                <p className="mt-2 text-sm text-cream-100/45">
+                <p className="mt-2 text-sm text-cream-100/70">
                   {t.console.oldestWaiting.replace('{age}', formatAge(queue.oldestHours))}
                 </p>
               </div>

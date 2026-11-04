@@ -25,7 +25,8 @@ const inter = Inter({
 /**
  * Sinhala and Tamil are loaded as variable-font families alongside the Latin
  * pair rather than instead of them: a Sinhala page still sets Latin numerals,
- * "LKR" and the product name.
+ * "LKR" and the product name. Both sit in the `--font-sans` and
+ * `--font-display` stacks behind the Latin face (globals.css).
  */
 const notoSinhala = Noto_Sans_Sinhala({
   subsets: ['sinhala'],
@@ -110,16 +111,10 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} className={fontVars} data-photo={hasPlantationPhoto ? 'on' : undefined}>
-      <body
-        className="min-h-dvh bg-cream-50 antialiased"
-        style={
-          locale === 'si'
-            ? { fontFamily: 'var(--font-sinhala), var(--font-inter), system-ui, sans-serif' }
-            : locale === 'ta'
-              ? { fontFamily: 'var(--font-tamil), var(--font-inter), system-ui, sans-serif' }
-              : undefined
-        }
-      >
+      {/* No per-locale font here: the stacks in globals.css carry all three
+          scripts, so switching language changes the glyphs, not the Latin face
+          beside them, and the numerals do not shift. */}
+      <body className="min-h-dvh bg-cream-50 antialiased">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-forest-900 focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-cream-50"

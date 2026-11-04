@@ -1,12 +1,21 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-/** The light surface used on cream sections. */
-export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+/**
+ * The light surface used on cream sections. `interactive` adds the site's one
+ * hover: a small lift, a deeper shadow and a leaf-tinted border. It is for
+ * cards a reader scans one by one, not for panels that hold a mockup.
+ */
+export function Card({
+  className,
+  interactive = false,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & { interactive?: boolean }) {
   return (
     <div
       className={cn(
         'rounded-3xl border border-cream-300/70 bg-white p-7 shadow-lift transition-[transform,box-shadow,border-color] duration-300 ease-out',
+        interactive && 'hover-lift',
         className,
       )}
       {...props}

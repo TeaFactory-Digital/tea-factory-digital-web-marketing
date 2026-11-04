@@ -34,6 +34,10 @@ screen is sample data from `src/lib/sample-data.ts` and every surface that shows
 one is labelled as such.
 
 When a pilot factory can be named, `ProofSection` is the component to replace.
+Its figure band shows facts about the platform itself (languages, queues) until
+`src/lib/impact.ts` holds reported figures with the month they were true for;
+fill that file and the band switches to them on its own. Leave it empty rather
+than estimate.
 
 ---
 
@@ -75,13 +79,21 @@ Three things are worth knowing before editing copy:
 - **The marketing site defaults to English; the product defaults to Sinhala.**
   Different audiences: factory management evaluate software in English, and
   suppliers read Sinhala. Both are deliberate.
+- **One font stack serves all three scripts.** `--font-sans` and `--font-display`
+  list the Latin face first, then Noto Sans Sinhala and Noto Sans Tamil, so a
+  Sinhala heading renders in Noto at the intended weight instead of whatever the
+  OS falls back to, and Latin numerals look the same in every locale. Do not set
+  `fontFamily` per locale or per element.
 - **All three script fonts load on every page.** The trilingual section renders
   Sinhala, English and Tamil side by side whatever locale you are on, from the
   real dictionaries rather than a mockup of them.
 - **Sinhala and Tamil get their own type treatment** via `:lang()` rules in
   `globals.css`: more line height, a smaller display scale, no uppercasing of
   eyebrows (neither script has a case), and smaller navbar labels. The navbar
-  is the one row where word length decides whether the layout fits.
+  is the one row where word length decides whether the layout fits. The rules
+  match any element's `lang`, not only `<html>`'s, and they retune
+  `leading-relaxed` and `leading-snug` too, so those utilities are safe on
+  Sinhala and Tamil copy.
 
 ## Mockups: they are the product, not an impression of it
 
@@ -166,9 +178,27 @@ gold. Tokens are declared once in the `@theme` block in `globals.css`; nothing
 uses a raw hex outside it except the three invented white-label brand palettes,
 which are meant to be different.
 
+**Type scale.** Use the classes in `globals.css` rather than one-off sizes:
+`t-display` (hero), `t-h2` (section), `t-h3` (block), `t-h4` (card title),
+`t-lead` (section and hero descriptions), `t-body` (card copy), `t-meta`
+(captions, notes) and `t-eyebrow`. Every section uses `Section`, whose padding
+(`py-24 md:py-32 lg:py-40`) is the site's rhythm.
+
+**Contrast.** Secondary text is at least `text-char-500` on light surfaces and
+`text-cream-100/70` on the forest ones, which is about 6:1 and 7:1. Suppliers
+read this outdoors on a phone; do not go lighter. The mockups keep the products'
+own colours (their secondary text is already above 5:1).
+
+**Interaction.** Scannable cards take `hover-lift` (or `hover-lift-dark` on
+forest), or `<Card interactive>`: one lift, one shadow, one border shift
+everywhere. The solid buttons carry a `btn-sheen` gradient that slides on hover
+and a two-tone focus ring sized for the surface the variant sits on.
+
 Motion is Framer Motion and is deliberately restrained: section reveals, a
-headline word rise, one marquee, a count-up on the two KPIs, and a slow drift on
-the hero cards. `prefers-reduced-motion` is honoured throughout.
+headline word rise, one marquee, a count-up on the KPIs, a slow drift on the
+hero cards, and a crossfade between the Supplier App and Office Console tabs in
+the platform section (one screen at a time, keyboard operable).
+`prefers-reduced-motion` is honoured throughout.
 
 ## Pages
 

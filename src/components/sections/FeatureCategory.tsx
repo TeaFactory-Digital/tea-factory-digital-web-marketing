@@ -75,7 +75,7 @@ export function FeatureCategory({
       <Reveal className="lg:sticky lg:top-28 lg:self-start">
         <Eyebrow className="mb-3">{index}</Eyebrow>
         <h3 className="t-h3 font-semibold text-forest-900">{title}</h3>
-        <p className="mt-3 text-[0.95rem] leading-relaxed text-char-500">{description}</p>
+        <p className="t-body mt-3 text-char-500">{description}</p>
         <span className="mt-6 block h-px w-16 bg-leaf-500" />
       </Reveal>
 
@@ -84,7 +84,7 @@ export function FeatureCategory({
           const Icon = icons[i];
           return (
             <StaggerItem key={item.title}>
-              <div className="group h-full rounded-3xl border border-cream-300/70 bg-white p-6 shadow-[0_1px_2px_rgb(4_21_14/0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-leaf-300 hover:shadow-lift">
+              <div className="hover-lift group h-full rounded-3xl border border-cream-300/70 bg-white p-6 shadow-[0_1px_2px_rgb(4_21_14/0.03)]">
                 <span
                   className={cn(
                     'grid size-10 place-items-center rounded-2xl transition-colors duration-300',
@@ -93,10 +93,8 @@ export function FeatureCategory({
                 >
                   <Icon className="size-[18px]" strokeWidth={1.9} />
                 </span>
-                <h4 className="mt-5 font-display text-[1.02rem] font-semibold leading-snug text-forest-900">
-                  {item.title}
-                </h4>
-                <p className="mt-2 text-[0.87rem] leading-relaxed text-char-500">{item.desc}</p>
+                <h4 className="t-h4 mt-5 text-forest-900">{item.title}</h4>
+                <p className="t-body mt-2 text-char-500">{item.desc}</p>
               </div>
             </StaggerItem>
           );
@@ -167,7 +165,7 @@ export function Features({ t }: { t: Dictionary }) {
           <SectionHeading eyebrow={f.eyebrow} title={f.heading} description={f.subtitle} />
         </Reveal>
 
-        <div className="mt-16 space-y-20 md:mt-20 md:space-y-24">
+        <div className="mt-16 space-y-24 md:mt-24 md:space-y-32">
           {groups.map((group) => (
             <FeatureCategory key={group.index} {...group} />
           ))}

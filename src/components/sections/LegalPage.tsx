@@ -28,7 +28,7 @@ export function LegalPage({
           <Eyebrow className="mb-4">{t.footer.legal.title}</Eyebrow>
           <h1 className="t-h2 font-semibold text-forest-900">{title}</h1>
           <p className="mt-5 text-lg leading-relaxed text-char-500">{intro}</p>
-          <p className="mt-6 text-sm text-char-400">
+          <p className="mt-6 text-sm text-char-500">
             {t.legal.lastUpdated}: {t.legal.lastUpdatedValue}
           </p>
         </Reveal>
@@ -43,7 +43,7 @@ export function LegalPage({
         <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,2.4fr)] lg:gap-16">
           {/* ---- Contents ---- */}
           <nav className="lg:sticky lg:top-28 lg:self-start" aria-label={title}>
-            <p className="t-eyebrow mb-4 text-char-400">{title}</p>
+            <p className="t-eyebrow mb-4 text-char-500">{title}</p>
             <ol className="space-y-2.5">
               {sections.map((section, i) => (
                 <li key={section.title}>
@@ -51,7 +51,7 @@ export function LegalPage({
                     href={`#${slug(section.title)}`}
                     className="flex gap-3 text-[0.9rem] leading-snug text-char-500 transition-colors hover:text-forest-900"
                   >
-                    <span className="tabular-nums text-char-300">
+                    <span className="tabular-nums text-char-500">
                       {String(i + 1).padStart(2, '0')}
                     </span>
                     {section.title}

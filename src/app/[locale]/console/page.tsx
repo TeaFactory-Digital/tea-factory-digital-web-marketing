@@ -63,7 +63,7 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
                     {t.console.queue[queue.key as keyof typeof t.console.queue]}
                   </span>
                   <span className="flex items-baseline gap-3">
-                    <span className="text-xs text-char-400">
+                    <span className="text-xs text-char-500">
                       {t.console.oldestWaiting.replace('{age}', formatAge(queue.oldestHours))}
                     </span>
                     <span className="font-display text-xl font-semibold text-leaf-700 tabular-nums">
@@ -73,7 +73,7 @@ export default async function ConsolePage({ params }: { params: Promise<{ locale
                 </li>
               ))}
             </ul>
-            <p className="mt-4 text-xs text-char-400">{t.common.sampleDataNote}</p>
+            <p className="mt-4 text-xs text-char-500">{t.common.sampleDataNote}</p>
           </Card>
         }
       />

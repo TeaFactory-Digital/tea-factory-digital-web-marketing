@@ -127,7 +127,7 @@ export function GreenLeafAccount({ t }: { t: Dictionary }) {
               </MaskReveal>
             </Parallax>
 
-            <p className="text-xs text-char-400">{t.common.sampleDataNote}</p>
+            <p className="text-xs text-char-500">{t.common.sampleDataNote}</p>
           </div>
         </div>
       </div>
