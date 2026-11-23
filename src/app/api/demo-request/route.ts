@@ -56,12 +56,12 @@ export async function POST(request: Request) {
   if (body.website?.trim()) return NextResponse.json({ ok: true });
 
   const errors: Record<string, string> = {};
-  for (const field of ['fullName', 'company', 'role', 'phone'] as const) {
+  // Three things to call back (24 November 2026); the rest is optional, the email checked
+  // only when given.
+  for (const field of ['fullName', 'company', 'phone'] as const) {
     if (!body[field]?.trim()) errors[field] = 'required';
   }
-  if (!body.email?.trim()) errors.email = 'required';
-  else if (!EMAIL.test(body.email.trim())) errors.email = 'email';
-  if (!body.interest?.length) errors.interest = 'required';
+  if (body.email?.trim() && !EMAIL.test(body.email.trim())) errors.email = 'email';
 
   if (Object.keys(errors).length > 0) {
     return NextResponse.json({ ok: false, errors }, { status: 422 });
@@ -80,12 +80,12 @@ export async function POST(request: Request) {
   const rows: Array<[string, string]> = [
     ['Name', body.fullName!.trim()],
     ['Company / factory', body.company!.trim()],
-    ['Role', body.role!.trim()],
-    ['Email', body.email!.trim()],
+    ['Role', body.role?.trim() || '-'],
+    ['Email', body.email?.trim() || '-'],
     ['Phone', body.phone!.trim()],
     ['Suppliers', body.suppliers?.trim() || '-'],
     ['Factories', body.factories?.trim() || '-'],
-    ['Interested in', body.interest!.map((key) => INTEREST_LABELS[key] ?? key).join(', ')],
+    ['Interested in', body.interest?.length ? body.interest.map((key) => INTEREST_LABELS[key] ?? key).join(', ') : '-'],
     ['Message', body.message?.trim() || '-'],
   ];
 
@@ -95,7 +95,8 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       from: process.env.DEMO_REQUEST_FROM || DEFAULT_FROM,
       to,
-      reply_to: body.email!.trim(),
+      // Answering goes to them only when they gave an email; otherwise the office calls.
+      ...(body.email?.trim() ? { reply_to: body.email.trim() } : {}),
       subject: `Demo request: ${body.company!.trim()}`,
       text: rows.map(([label, value]) => `${label}: ${value}`).join('\n'),
       html: emailHtml(rows),

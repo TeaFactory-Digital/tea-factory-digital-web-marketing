@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { Mail, MapPin, Phone } from 'lucide-react';
+import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import type { Dictionary, Locale } from '@/i18n';
 import { locales, localeNames } from '@/i18n';
 import { href, sections } from '@/lib/routes';
 import { Logo } from '@/components/Logo';
+import { whatsappLink } from '@/lib/site';
 
 export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
   const columns = [
@@ -66,6 +67,15 @@ export function Footer({ locale, t }: { locale: Locale; t: Dictionary }) {
               >
                 <Phone className="size-4 shrink-0 text-leaf-400" strokeWidth={2} />
                 {t.footer.contact.phone}
+              </a>
+              <a
+                href={whatsappLink(t.demo.whatsapp.text)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 text-sm text-cream-100/70 transition-colors hover:text-leaf-300"
+              >
+                <MessageCircle className="size-4 shrink-0 text-leaf-400" strokeWidth={2} />
+                {t.demo.whatsapp.button}
               </a>
               <p className="flex items-center gap-2.5 text-sm text-cream-100/70">
                 <MapPin className="size-4 shrink-0 text-leaf-400" strokeWidth={2} />

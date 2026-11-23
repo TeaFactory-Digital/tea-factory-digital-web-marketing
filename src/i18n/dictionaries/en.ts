@@ -163,7 +163,7 @@ export const en = {
     billNoLabel: 'Bill No.',
     dateLabel: 'Date',
     billDate: '31 July 2026',
-    savePdf: 'Save as PDF',
+    savePdf: 'Share or save PDF',
     finalBalance: 'Final balance',
     totalKg: 'Total kg',
     rateSection: 'Rate',
@@ -200,6 +200,30 @@ export const en = {
     appTitle: 'Green Leaf Account',
     tabs: { home: 'Account', income: 'Income history', news: 'News', settings: 'Settings' },
     /** "This month so far" (`mtd.*`, `bill.daily.noSupply`): the month whose bill is next. */
+    /** The Account tab's newer cards (`updated.*`, `change.*`, `why.*`, `explain.*`, `sixMonths.*`), 24 November 2026. */
+    updated: 'Updated just now',
+    change: {
+      title: 'Against June',
+      totalKgs: 'Total kg',
+      gross: 'Gross amount',
+      final: 'Final balance',
+    },
+    why: {
+      title: 'Why it changed',
+      kgs: 'You brought {{kgs}} less leaf',
+      rate: 'The rate went up by {{rate}} a kg',
+      deductions: 'Less was taken off, mostly {{line}}',
+    },
+    explain: { title: 'Your bill, explained', short: 'Earned {{gross}}, taken off {{off}}, paid {{paid}}' },
+    sixMonths: {
+      title: 'Last 6 months',
+      kgs: 'Kilos',
+      earned: 'Earnings',
+      average: 'Average {{value}} a month.',
+      seeAll: 'See every month',
+      /** The app's bar labels, its `monthShort.N` strings (`shortMonthLabel`), February to July. */
+      months: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+    },
     monthToDate: {
       title: 'This month so far',
       monthLabel: 'August 2026',
@@ -467,6 +491,16 @@ export const en = {
       devices: 'Devices',
       devicesCaption: 'registered for notifications',
     },
+    /** "Your work today" (`dashboard.today.*`), at the top of the dashboard since 24 November 2026. */
+    today: {
+      title: 'Your work today',
+      description: 'Where to start: overdue first, then oldest. Only what your role can decide.',
+      overdue: '{count} past the target in {queue}',
+      waiting: '{count} waiting in {queue}',
+      start: 'Start here',
+      open: 'Open',
+      more: '{count} more below, in the queues',
+    },
     queuesTitle: 'Queues',
     queuesHint: 'Oldest and most overdue first',
     oldestWaiting: 'Oldest {age}',
@@ -547,6 +581,10 @@ export const en = {
       suggestVisit: 'Visit the office',
       suggestCall: 'Call the office',
       suggestSorted: 'Sorted',
+      /** The redesigned screen (24 November 2026): escalate in the conversation header, the wait tick, the office-note chips. */
+      escalate: 'Pass to the manager',
+      awaitSupplier: 'This asks the supplier something: wait for their answer',
+      noteChips: ['Called the supplier', 'Checking the records', 'With the manager'],
       close: 'Close unanswered',
       replyCount: '{count} of at least {min} characters',
       sendReply: 'Send reply',
@@ -660,6 +698,111 @@ export const en = {
     },
   },
 
+  benefits: {
+    eyebrow: 'What changes for the factory',
+    heading: 'The same work, without the chasing.',
+    subtitle: 'What the office and its suppliers do today, and what they do with Tea Factory Digital. There are no figures here: we will publish results once a factory reports them.',
+    before: 'Today',
+    after: 'With Tea Factory Digital',
+    rows: {
+      calls: {
+        before: 'Suppliers call or visit to ask about their kilos, balance and bill.',
+        after: 'They read them on their phone, in their language, with the bill explained step by step and why it differs from last month.',
+      },
+      requests: {
+        before: 'Advance, loan, manure and tea-packet requests arrive on paper or by phone.',
+        after: 'Each one lands in its own queue, showing how long it has waited, and the decision reaches the supplier’s phone.',
+      },
+      inquiries: {
+        before: 'A complaint passes from person to person, with no record of who answered.',
+        after: 'Every inquiry is one conversation with a named owner. It can be passed to the manager, and the supplier sees every reply.',
+      },
+      details: {
+        before: 'A new bank account or address means a form and a trip to the office.',
+        after: 'The supplier asks for the change in the app, and nothing changes until the office approves it.',
+      },
+      overdue: {
+        before: 'The office learns a request is late when the supplier complains.',
+        after: 'The dashboard opens on what is past its response target, then on what has waited longest.',
+      },
+      system: {
+        before: 'New software usually means replacing the system that already works.',
+        after: 'Weighing, rates and payouts stay in your factory system. The platform reads from it and never replaces it.',
+      },
+    },
+  },
+
+  walkthrough: {
+    eyebrow: 'See it work',
+    heading: 'One month, from leaf records to an answer.',
+    subtitle: 'The real screens, in the order a month uses them. It moves on by itself; choose a step to stay on it.',
+    pause: 'Pause the walkthrough',
+    play: 'Play the walkthrough',
+    progress: 'Step {n} of {total}',
+    steps: {
+      import: {
+        title: 'Leaf records come in',
+        desc: 'From your factory system or a file. Every row is checked before anything is saved, and a problem is named by row and column.',
+      },
+      bill: {
+        title: 'The supplier sees the month',
+        desc: 'Kilos, deductions and what will be paid, on their phone, explained in their own language.',
+      },
+      ask: {
+        title: 'A question, without a phone call',
+        desc: 'The supplier asks in the app, and the office’s reply comes back to the same conversation.',
+      },
+      answer: {
+        title: 'The office answers in one place',
+        desc: 'The conversation, the supplier’s details and the common answers on one screen. Hard cases go to the manager.',
+      },
+      dashboard: {
+        title: 'Nothing waits unseen',
+        desc: 'The dashboard opens on today’s work: what is past its target first, then what has waited longest.',
+      },
+    },
+  },
+
+  faq: {
+    eyebrow: 'Questions factories ask',
+    heading: 'What we are asked before a demo.',
+    more: 'Something else? Ask us on WhatsApp.',
+    items: [
+      {
+        q: 'Do we have to replace our factory system?',
+        a: 'No. Weighing, rates, month close and payouts stay in the system you run. Where it can be connected, the platform reads from it; where it cannot, the office keeps the records in the console instead. Nothing is migrated.',
+      },
+      {
+        q: 'What about weak signal and older phones?',
+        a: 'The app is designed for low-end Android phones and keeps the last figures it loaded, so a supplier can read their account without a signal. Sending a request needs a connection.',
+      },
+      {
+        q: 'And suppliers without a smartphone?',
+        a: 'They are served at the office as they are today. When the factory keeps its records in the console, a walk-in credit request is entered there and goes through the same queue.',
+      },
+      {
+        q: 'Which languages does it support?',
+        a: 'Sinhala, English and Tamil, with Sinhala as the default. Each supplier chooses their own, and deduction names, months and request statuses are translated too, not only the menus.',
+      },
+      {
+        q: 'Who can see a supplier’s account?',
+        a: 'The supplier, signed in with the supplier code the factory issues and their password, and office staff whose role allows it. Every approval and edit in the console records who made it and when.',
+      },
+      {
+        q: 'Can the app carry our factory’s name and colours?',
+        a: 'Yes. Each factory’s app can have its own name, logo, colours, bank list and savings options, and runs only the facilities that factory offers.',
+      },
+      {
+        q: 'How does the office learn it?',
+        a: 'The console greets each person with a short tour, and screens explain themselves where it matters. Handbooks for the office and a manual for suppliers come in Sinhala, English and Tamil.',
+      },
+      {
+        q: 'What does it cost?',
+        a: 'It depends on the number of suppliers and factories and what you want to run. Tell us in a demo request or on WhatsApp and we will send a quote.',
+      },
+    ],
+  },
+
   finalCta: {
     headline: 'Ready to put your suppliers first?',
     text: 'See how Tea Factory Digital can connect your suppliers and office without replacing the system your factory already relies on.',
@@ -743,6 +886,8 @@ export const en = {
     configSubtitle: 'Everything about this factory that is data rather than code',
     settings: 'Settings',
     tenantId: 'Factory id',
+    /** `tip.aboutScreen`: the Configuration header's InfoTip, 24 November 2026. */
+    aboutScreen: 'About this screen',
     sectionTitles: {
       factory: 'The factory',
       features: 'Features',
@@ -819,6 +964,8 @@ export const en = {
       enterPrinted: 'Enter printed',
       hold: 'Hold',
       sampleReason: 'Society fee of Rs. 550 is only on the printed slip',
+      /** `tip.howToFix`: the sentence below now sits behind this "i" (24 November 2026). */
+      howToFixTip: 'How to fix it',
       howToFix: 'To fix a difference, find the line that differs (leaf, rate, an approval entered in only one system), correct it in the system that is wrong, recalculate the bills, then compare again.',
     },
   },
@@ -879,6 +1026,17 @@ export const en = {
     title: 'See it with your factory in mind.',
     subtitle:
       'Tell us how your factory works today and we will walk you through the supplier app and the office console, and where the boundary with your existing system sits.',
+    /** The quicker way in (24 November 2026): WhatsApp, then a three-field form. */
+    whatsapp: {
+      title: 'Quicker on WhatsApp',
+      body: 'Message us and we will reply on WhatsApp.',
+      button: 'Chat on WhatsApp',
+      /** Pre-filled in the chat, in the reader's language. */
+      text: 'Hello, I would like a demo of Tea Factory Digital for our factory.',
+    },
+    orForm: 'Or leave your details and we will call you',
+    more: 'Add more details',
+    moreHint: 'Role, size, what to show you',
     form: {
       fullName: 'Full Name',
       company: 'Company / Factory',
@@ -910,8 +1068,9 @@ export const en = {
     },
     success: {
       title: 'Thank you. Our team will contact you shortly.',
-      body: 'We will reply to the email address you gave us. If it is urgent, call the number in the footer.',
+      body: 'We will call or message the number you gave us within one working day.',
       again: 'Send another request',
+      whatsapp: 'Or message us now on WhatsApp',
     },
     aside: {
       title: 'What a walkthrough covers',

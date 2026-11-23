@@ -108,6 +108,12 @@
   50% { transform: translateY(-9px); }
 }
 
+/* The walkthrough's step timer: a bar that fills once; its end moves the step on. */
+@keyframes step-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
 @keyframes pulse-ring {
   0% { transform: scale(0.85); opacity: 0.55; }
   70% { transform: scale(1.5); opacity: 0; }
@@ -374,8 +380,16 @@
     background-repeat: no-repeat;
   }
 
+  /*
+   * Each photograph is served as WebP at the size its slot needs (24 November 2026;
+   * `npm run images` makes them from the JPEGs). The JPEG line comes first and is what a
+   * browser without `image-set(type())` keeps; every current browser takes the WebP
+   * instead and never requests the JPEG. The home hero's 1.7 MB original became 308 KB
+   * on a desktop and 156 KB on a phone.
+   */
   [data-photo='on'] .photo-slot {
     background-image: url('/images/plantation.jpg');
+    background-image: image-set(url('/images/plantation.webp') type('image/webp'), url('/images/plantation.jpg') type('image/jpeg'));
   }
 
   /*
@@ -386,6 +400,19 @@
    */
   [data-photo='on'] .photo-slot--estate {
     background-image: url('/images/tea-estate.jpg');
+    background-image: image-set(url('/images/tea-estate-2560.webp') type('image/webp'), url('/images/tea-estate.jpg') type('image/jpeg'));
+  }
+
+  @media (max-width: 767px) {
+    [data-photo='on'] .photo-slot--estate {
+      background-image: image-set(url('/images/tea-estate-1600.webp') type('image/webp'), url('/images/tea-estate.jpg') type('image/jpeg'));
+    }
+  }
+
+  /* Behind a heavy blur (the demo page) detail is lost anyway: a 27 KB copy will do. */
+  [data-photo='on'] .photo-slot--estate-soft {
+    background-image: url('/images/tea-estate.jpg');
+    background-image: image-set(url('/images/tea-estate-640.webp') type('image/webp'), url('/images/tea-estate.jpg') type('image/jpeg'));
   }
 }
 
@@ -483,4 +510,33 @@
 
 @media (prefers-reduced-motion: reduce) {
   .breeze * { animation: none !important; }
+}
+
+/*
+ * The hero's entrance, in CSS (24 November 2026). Framer-motion only starts once the
+ * page's JavaScript has run, and until then its elements sit at opacity 0: on a slow
+ * phone that hid the subtitle, the page's largest paint, for over five seconds. A CSS
+ * animation starts with the first paint. `--d` is each element's delay.
+ */
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes hero-device {
+  from { opacity: 0; transform: perspective(1200px) translateY(44px) rotateX(8deg) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(105%); }
+  to { opacity: 1; transform: none; }
+}
+
+.hero-in { animation: hero-in 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s) both; }
+.hero-device { animation: hero-device 1.05s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s) both; }
+.word-in { animation: word-in 0.86s cubic-bezier(0.22, 0.61, 0.36, 1) var(--d, 0s) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-in, .hero-device, .word-in { animation: none; }
 }

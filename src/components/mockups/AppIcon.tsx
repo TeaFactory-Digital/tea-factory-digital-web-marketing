@@ -15,6 +15,9 @@ const PATHS = {
   bell: ['M6 9a6 6 0 1 1 12 0c0 5 2 6 2 6H4s2-1 2-6Z', 'M10 20a2 2 0 0 0 4 0'],
   chevronLeft: ['m15 6-6 6 6 6'],
   send: ['M22 2 11 13', 'M22 2 15 22 11 13 2 9 22 2Z'],
+  share: ['M4 13v7h16v-7', 'M12 3v12', 'm7 8 5-5 5 5'],
+  chevronRight: ['m9 6 6 6-6 6'],
+  chevronDown: ['m6 9 6 6 6-6'],
 } as const;
 
 export type AppIconName = keyof typeof PATHS;

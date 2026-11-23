@@ -1,11 +1,10 @@
-import { existsSync } from 'node:fs';
-import path from 'node:path';
 import type { Metadata, Viewport } from 'next';
 import { Inter, Outfit, Noto_Sans_Sinhala, Noto_Sans_Tamil } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { getDictionary, isLocale, locales, type Locale } from '@/i18n';
 import { href } from '@/lib/routes';
 import { siteUrl } from '@/lib/site';
+import { hasPlantationPhoto } from '@/lib/photos';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import '../globals.css';
@@ -38,17 +37,13 @@ const notoTamil = Noto_Sans_Tamil({
   subsets: ['tamil'],
   variable: '--font-tamil',
   display: 'swap',
+  // Not preloaded (24 November 2026): a preload goes out on every page, so English and
+  // Sinhala pages fetched the Tamil font up front. The `unicode-range` still loads it the
+  // moment a page shows Tamil. Sinhala keeps its preload: it is the default language,
+  // and without it a Sinhala page shifted when the font swapped in.
+  preload: false,
 });
 
-/**
- * Photography is optional. Checked once here, on the server, at build time:
- * when either file is absent the `data-photo` flag is never set, the CSS rules
- * that reference them never match, and the browser makes no request for a file
- * that is not there. Drop them in and every backdrop picks them up.
- */
-const hasPlantationPhoto = ['plantation.jpg', 'tea-estate.jpg'].every((file) =>
-  existsSync(path.join(process.cwd(), 'public', 'images', file)),
-);
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

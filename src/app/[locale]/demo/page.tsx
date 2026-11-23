@@ -34,7 +34,7 @@ export default async function DemoPage({ params }: { params: Promise<{ locale: s
         aria-hidden="true"
       >
         <div
-          className="photo-slot photo-slot--estate absolute -inset-16 scale-110 blur-2xl"
+          className="photo-slot photo-slot--estate-soft absolute -inset-16 scale-110 blur-2xl"
           style={{ backgroundPosition: '30% 60%' }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-cream-100/30 via-cream-100/15 to-forest-950/25" />

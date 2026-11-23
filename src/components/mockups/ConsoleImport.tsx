@@ -43,12 +43,17 @@ export function ConsoleImport({
   return (
     <ConsoleFrame width={IMPORT_SHOT.width} height={IMPORT_SHOT.height} className={className} chrome={chrome}>
       <div className="relative h-full">
-        <ConsoleShell t={t} active="deliveries" role="clerk" keepsRecords>
-          <ConsolePageHeader title={r.deliveriesTitle} description={r.deliveriesSubtitle} />
-        </ConsoleShell>
+        {/* The page under the dialog, blurred by a plain filter rather than the dialog's
+            `backdrop-blur`: inside a scaled `DeviceShot` Chrome mirrors a backdrop blur's
+            edges, which drew the page upside down along the sides. Same look, no mirror. */}
+        <div className="h-full blur-[2px]">
+          <ConsoleShell t={t} active="deliveries" role="clerk" keepsRecords>
+            <ConsolePageHeader title={r.deliveriesTitle} description={r.deliveriesSubtitle} />
+          </ConsoleShell>
+        </div>
 
-        {/* Dialog overlay: bg-overlay (rgba(11,13,18,0.45)) with a light blur. */}
-        <div className="absolute inset-0 bg-[rgb(11_13_18/0.45)] backdrop-blur-[2px]" />
+        {/* Dialog overlay: bg-overlay (rgba(11,13,18,0.45)); the light blur is on the page above. */}
+        <div className="absolute inset-0 bg-[rgb(11_13_18/0.45)]" />
 
         {/* Dialog, size "md": max-w-dialog-wide (48rem at the console's 15px root = 720px). */}
         <div className="absolute left-1/2 top-1/2 w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-[16px] border border-app-border bg-app-surface text-app-text shadow-[0_12px_32px_rgb(0_0_0/0.18)]">

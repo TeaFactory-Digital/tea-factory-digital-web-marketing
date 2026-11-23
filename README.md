@@ -39,6 +39,12 @@ Its figure band shows facts about the platform itself (languages, queues) until
 fill that file and the band switches to them on its own. Leave it empty rather
 than estimate.
 
+The "What changes for the factory" section (`BenefitsSection`) follows the same rule:
+today beside the same task with the platform, each row something the products really do
+(queues with response targets, the bill explained, change requests held for approval,
+the factory system left in place), and no time-saved or percentage claims. Its subtitle
+says results will be published once a factory reports them.
+
 ---
 
 ## What is here
@@ -57,6 +63,8 @@ src/
                          ConsoleInquiry, ConsoleFactorySystem, ConsoleImport,
                          ConsoleSlipComparison, charts
     sections/            one file per page section, named after the brief
+                         (home order: Hero, ActivityTicker, Problem, Benefits,
+                         Walkthrough, AppConsoleSplit, ... Proof, Faq, FinalCTA)
     Navbar Footer Logo PlantationScene
   i18n/
     config.ts            the three locales
@@ -64,7 +72,11 @@ src/
   lib/
     sample-data.ts       every figure any mockup renders
     routes.ts            href(locale, path): the only way internal links are built
-    site.ts utils.ts
+    site.ts              site URL, WhatsApp number and `whatsappLink(text)`
+    photos.ts            whether the photographs are present (build time)
+    utils.ts
+scripts/
+  images.mjs             `npm run images`: the WebP copies of the photographs
 ```
 
 ## i18n
@@ -145,16 +157,29 @@ console: the queue ages sit inside or past the console's real response targets,
 and the inquiry on the phone is the same conversation, 27 h old, that the
 console shows and the dashboard counts as its oldest.
 
-**Last matched to the products on 9 October 2026** (mobile `5eff4d5`, admin `3eb5b65`,
-plus the uncommitted factory-records work in both). Added since: the month-to-date
-card (22 October, from mobile `8053be1`), the slip comparison (24 October) and the
-factory admin's read-only *Factory records*.
+**Last matched to the products on 24 November 2026**, against fresh screenshots of both:
+the Account tab's newer cards (when the figures were fetched, the change against June with
+why it changed, "Your bill, explained" closed, the last six months, "Share or save PDF"),
+"Your work today" on the dashboard, the redesigned inquiry screen (who and how in the header,
+Pass to the manager and Close unanswered in the conversation's header, pills for the
+suggestions, the supplier card holding when it came and who has it), the sidebar's adoption
+meter with its count behind an "i", the factory administrator reading the credit queues,
+"About this screen" on Configuration and "How to fix it" on the slip comparison. The June
+figures in `sample-data.ts` are consistent with July (coins, `INCOME_SERIES`) and the
+reasons follow the app's own `explainChange`.
 
 ## Demo form
 
+The demo page leads with **WhatsApp** (+94 77 995 1056, `whatsappLink` in
+`src/lib/site.ts`, the message already typed in the reader's language); the footer links
+it too. The form below asks for three things only: name, factory and phone. Role, email,
+size, interest and a message sit behind "Add more details", all optional; an email, when
+given, must be a valid one. The server checks the same rules.
+
 `POST /api/demo-request` validates the request and emails it to the company inbox
-through [Resend](https://resend.com). The email's Reply-To is the person who asked,
-so replying answers them directly. The form says "thank you" only when the email
+through [Resend](https://resend.com). When they gave an email, the email's Reply-To is
+the person who asked, so replying answers them directly; otherwise the office calls the
+phone number. Missing optional fields show as "-". The form says "thank you" only when the email
 was sent; otherwise it keeps what they typed and shows the contact address. A
 hidden field catches simple bots.
 
@@ -200,6 +225,43 @@ hero cards, and a crossfade between the Supplier App and Office Console tabs in
 the platform section (one screen at a time, keyboard operable).
 `prefers-reduced-motion` is honoured throughout.
 
+The **walkthrough** (`Walkthrough` and `WalkthroughPlayer`, in place of a video) shows five
+real mockups in the order a month uses them: leaf records imported, the bill on the phone,
+a question in the app, the office answering, the dashboard. It moves on every 6.5 s while
+on screen, stops while hovered or focused, stops on any step chosen, has a pause button
+(WCAG 2.2.2) and never starts with reduced motion. The steps are a keyboard-operable tab
+list. The **FAQ** (`FaqSection`) is plain `<details>` with FAQPage structured data; every
+answer restates something another section or the products show.
+
+The hero's entrance (`.hero-in`, `.hero-device`) and the headline word rise
+(`RevealWords`, `.word-in`) are CSS animations, not Framer Motion: they start with the
+first paint instead of after the JavaScript has run, which on a slow phone kept the
+subtitle (the page's largest paint) hidden for seconds.
+
+## Performance
+
+Measured on 24 November 2026 against `next build && next start`, as a phone (390 px,
+4x CPU slowdown, about 1.6 Mbps, 150 ms latency):
+
+| Page | LCP before | LCP after |
+|---|---|---|
+| Home (en) | 7.6 s | 2.2 s |
+| Home (si) | 8.1 s | 3.8 s |
+| Console page | 6.1 s | 3.2 s |
+
+What changed: the photographs are served as WebP at the size each slot needs (the hero's
+1.7 MB JPEG is 308 KB on a desktop and 156 KB on a phone; the demo page's blurred copy is
+27 KB; `npm run images` makes them, `image-set()` in `globals.css` picks them, the JPEGs
+stay as the fallback); the hero entrance moved to CSS; the Tamil font is no longer
+preloaded on every page (Sinhala keeps its preload, being the default, so Sinhala pages
+do not shift when it swaps in). CLS stays under 0.1 everywhere. The hero photograph is
+deliberately not preloaded: Chrome does not count a full-screen backdrop as the largest
+paint, and a preload hint travels in the home page's prefetch, so every other page would
+download it too.
+
+Still heavy, and worth watching: the home page is about 9,400 elements (each mockup is
+real markup, and the walkthrough alone holds five), about 260 KB of HTML over the wire.
+
 ## Pages
 
 Live: home, `/app`, `/console`, `/demo`, `/legal/privacy`, `/legal/terms`.
@@ -219,8 +281,9 @@ and take `{ locale, t }`.
 - Replace the placeholder email in the footer contact block.
 - Verify `teafactorydigital.lk` in Resend and point `DEMO_REQUEST_TO` at the company inbox.
 - Photography: `public/images/plantation.jpg` and `tea-estate.jpg` are in place and
-  picked up at build time (`src/app/[locale]/layout.tsx`); remove either and the
-  drawn `PlantationScene` backdrop shows instead.
+  picked up at build time (`src/lib/photos.ts`); remove either and the drawn
+  `PlantationScene` backdrop shows instead. After replacing one, run `npm run images`
+  so the WebP copies match.
 
 ## Checks
 

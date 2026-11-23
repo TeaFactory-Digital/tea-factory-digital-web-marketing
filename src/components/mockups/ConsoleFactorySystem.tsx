@@ -71,11 +71,21 @@ export function ConsoleFactorySystem({
           title={r.configTitle}
           description={r.configSubtitle}
           actions={
-            // The tenant id: shown, never editable (it comes from the subdomain).
-            <span className="flex items-baseline gap-[4px] whitespace-nowrap rounded-[10px] border border-app-border bg-app-surface px-[12px] py-[8px]">
-              <span className="text-[12px] leading-[16px] text-app-text-secondary">{r.tenantId}</span>
-              <span className="text-[16px] font-medium leading-[24px] tabular-nums">galaboda</span>
-            </span>
+            <>
+              {/* The tenant id: shown, never editable (it comes from the subdomain). */}
+              <span className="flex items-baseline gap-[4px] whitespace-nowrap rounded-[10px] border border-app-border bg-app-surface px-[12px] py-[8px]">
+                <span className="text-[12px] leading-[16px] text-app-text-secondary">{r.tenantId}</span>
+                <span className="text-[16px] font-medium leading-[24px] tabular-nums">galaboda</span>
+              </span>
+              {/* InfoTip with text: what the screen is for, behind "About this screen" (24 November). */}
+              <span className="inline-flex h-[30px] items-center gap-[2px] whitespace-nowrap rounded-full px-[8px] text-[12px] leading-[16px] text-app-text-secondary">
+                {r.aboutScreen}
+                <svg viewBox="0 0 24 24" className="size-[16px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 16v-4M12 8h.01" />
+                </svg>
+              </span>
+            </>
           }
         />
 

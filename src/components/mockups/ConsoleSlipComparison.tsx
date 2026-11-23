@@ -123,7 +123,14 @@ export function ConsoleSlipComparison({
             </table>
           </div>
 
-          <p className="text-[12px] leading-[16px] text-app-text-secondary">{s.howToFix}</p>
+          {/* InfoTip with text (h-8, px-sm, caption): "How to fix it", the sentence in its tooltip. */}
+          <span className="inline-flex h-[30px] items-center gap-[2px] self-start rounded-full px-[8px] text-[12px] leading-[16px] text-app-text-secondary">
+            {s.howToFixTip}
+            <svg viewBox="0 0 24 24" className="size-[16px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4M12 8h.01" />
+            </svg>
+          </span>
         </ConsoleCard>
       </ConsoleShell>
     </ConsoleFrame>

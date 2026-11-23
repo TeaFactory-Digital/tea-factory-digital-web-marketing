@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   ArrowRight,
+  AlarmClock,
   ArrowUpRight,
   BadgeDollarSign,
   BellRing,
@@ -40,9 +41,10 @@ import {
 
 /**
  * The console runs on a 1366×768 office laptop; this is that width. The height
- * fits the Tamil copy, the longest; English leaves the canvas showing below.
+ * fits the Tamil copy, the longest, with "Your work today" on top (24 November 2026);
+ * English leaves the canvas showing below.
  */
-export const CONSOLE_SHOT = { width: 1280, height: 1470 } as const;
+export const CONSOLE_SHOT = { width: 1280, height: 1830 } as const;
 
 type Console = Dictionary['console'];
 type QueueKey = (typeof CONSOLE_QUEUES)[number]['key'];
@@ -132,6 +134,8 @@ export function ConsoleDashboard({
       <ConsoleShell t={t} active="dashboard">
         <ConsolePageHeader title={c.greeting.replace('{name}', name)} description={c.pageSubtitle} />
 
+        <TodayCard c={c} />
+
         <KpiRow c={c} />
 
         <div className="grid grid-cols-3 gap-[16px]">
@@ -156,6 +160,74 @@ export function ConsoleDashboard({
   );
 }
 
+/* ─────────────────────────────── your work today ─────────────────────────────── */
+
+/** At most five rows; the queue cards below carry the rest (`TODAY_LIMIT`). */
+const TODAY_LIMIT = 5;
+
+/**
+ * `TodayCard` (`modules/dashboard/TodayCard.tsx`, `today.ts`): overdue first (most past
+ * target first), then what is waiting (oldest first), each row a link into its queue with
+ * the oldest's age under it; the first row's link is the filled "Start here". The manager
+ * decides every queue, and has taken no inquiry, so there is no "assigned" row.
+ */
+function TodayCard({ c }: { c: Console }) {
+  const overdue = CONSOLE_QUEUES.filter((q) => q.breaching > 0)
+    .sort((a, b) => b.breaching - a.breaching)
+    .map((q) => ({ kind: 'overdue' as const, q, n: q.breaching }));
+  const waiting = CONSOLE_QUEUES.filter((q) => q.pending - q.breaching > 0)
+    .sort((a, b) => b.oldestHours - a.oldestHours)
+    .map((q) => ({ kind: 'waiting' as const, q, n: q.pending - q.breaching }));
+  const items = [...overdue, ...waiting];
+  const shown = items.slice(0, TODAY_LIMIT);
+  return (
+    <ConsoleCard title={c.today.title} description={c.today.description}>
+      <ol className="flex flex-col gap-[4px]">
+        {shown.map((item, index) => {
+          const Icon = item.kind === 'overdue' ? AlarmClock : QUEUE_ICON[item.q.key];
+          const sentence = (item.kind === 'overdue' ? c.today.overdue : c.today.waiting)
+            .replace('{count}', String(item.n))
+            .replace('{queue}', c.queue[item.q.key]);
+          return (
+            <li key={item.kind + item.q.key} className="flex items-center gap-[12px] rounded-[10px] px-[8px] py-[4px]">
+              <span
+                className={cn(
+                  'grid size-[30px] shrink-0 place-items-center rounded-full',
+                  item.kind === 'overdue' ? 'bg-app-error-muted text-app-error' : 'bg-app-primary-muted text-app-primary',
+                )}
+              >
+                <Icon className="size-[16px]" />
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className={cn('text-[14px] font-medium leading-[20px]', item.kind === 'overdue' ? 'text-app-error' : 'text-app-text')}>
+                  {sentence}
+                </span>
+                <span className="text-[12px] leading-[16px] text-app-text-secondary">
+                  {c.oldestWaiting.replace('{age}', formatAge(item.q.oldestHours))}
+                </span>
+              </span>
+              <span
+                className={cn(
+                  'inline-flex shrink-0 items-center gap-[2px] text-[12px] font-medium leading-[16px]',
+                  index === 0 ? 'rounded-[10px] bg-app-primary px-[8px] py-[2px] text-white' : 'text-app-primary',
+                )}
+              >
+                {index === 0 ? c.today.start : c.today.open}
+                <ArrowRight className="size-[12px]" />
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+      {items.length > shown.length ? (
+        <p className="mt-[8px] text-[12px] leading-[16px] text-app-text-secondary">
+          {c.today.more.replace('{count}', String(items.length - shown.length))}
+        </p>
+      ) : null}
+    </ConsoleCard>
+  );
+}
+
 /* ─────────────────────────────── headline tiles ─────────────────────────────── */
 
 function KpiRow({ c }: { c: Console }) {
@@ -176,9 +248,7 @@ function KpiRow({ c }: { c: Console }) {
         icon={Smartphone}
         label={<TitleWithTip title={c.appAdoption} />}
         value={`${CONSOLE_INSTALLED_PERCENT}%`}
-        caption={c.appInstalled
-          .replace('{withApp}', count(CONSOLE_ADOPTION.suppliersWithApp))
-          .replace('{total}', count(CONSOLE_ADOPTION.totalSuppliers))}
+        // The count ("412 of 570 suppliers signed in") is behind the "i" since 24 November.
         footer={
           <div className="flex flex-col gap-[8px]">
             {/* Meter: h-1.5, a primary/15 track */}

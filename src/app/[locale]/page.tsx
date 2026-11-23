@@ -18,6 +18,9 @@ import { AudienceSection } from '@/components/sections/AudienceSection';
 import { WhiteLabelBanner } from '@/components/sections/WhiteLabelBanner';
 import { ProofSection } from '@/components/sections/ProofSection';
 import { FinalCTA } from '@/components/sections/FinalCTA';
+import { BenefitsSection } from '@/components/sections/BenefitsSection';
+import { Walkthrough } from '@/components/sections/Walkthrough';
+import { FaqSection } from '@/components/sections/FaqSection';
 
 export default async function HomePage({
   params,
@@ -34,6 +37,8 @@ export default async function HomePage({
       <Hero locale={l} t={t} />
       <ActivityTicker t={t} />
       <ProblemSection t={t} />
+      <BenefitsSection t={t} />
+      <Walkthrough t={t} />
       <AppConsoleSplit t={t} />
       <GreenLeafAccount t={t} />
       <Features t={t} />
@@ -48,6 +53,7 @@ export default async function HomePage({
       <AudienceSection t={t} />
       <WhiteLabelBanner locale={l} t={t} />
       <ProofSection t={t} />
+      <FaqSection t={t} />
       <FinalCTA locale={l} t={t} />
     </>
   );

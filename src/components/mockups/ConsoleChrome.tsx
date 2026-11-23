@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import type { Dictionary } from '@/i18n';
 import { cn } from '@/lib/utils';
-import { CONSOLE_ADOPTION, CONSOLE_INSTALLED_PERCENT, CONSOLE_QUEUES, count } from '@/lib/sample-data';
+import { CONSOLE_INSTALLED_PERCENT, CONSOLE_QUEUES } from '@/lib/sample-data';
 import { DeviceShot } from './DeviceShot';
 
 /**
@@ -141,9 +141,10 @@ const READS: Record<ConsoleRole, ReadonlySet<Capability>> = {
     'reports', 'suppliers', 'changeRequests', 'creditRequests', 'inquiries', 'billing',
     'deliveries', 'ratesAndMonthClose', 'content', 'auditLog', 'flagsAndBranding', 'usersAndRoles',
   ]),
-  // Reads the factory's records too (leaf, rates, bills), never changes them.
+  // Reads the factory's records too (leaf, rates, bills), never changes them, and reads the
+  // credit queues (`creditRequests: R`) to see what it is asked to decide above the threshold.
   factoryAdmin: new Set<Capability>([
-    'reports', 'suppliers', 'billing', 'deliveries', 'ratesAndMonthClose', 'content', 'auditLog',
+    'reports', 'suppliers', 'creditRequests', 'billing', 'deliveries', 'ratesAndMonthClose', 'content', 'auditLog',
     'flagsAndBranding', 'usersAndRoles',
   ]),
 };
@@ -325,20 +326,24 @@ function Sidebar({
         ))}
       </div>
 
-      {/* AdoptionMeter: the one figure the console is answerable for, on every screen. */}
+      {/* AdoptionMeter: the one figure the console is answerable for, on every screen. The
+          count behind the share sits behind the "i" (InfoTip, a 30px target), since 24 November. */}
       <div className="flex shrink-0 flex-col gap-[8px] rounded-[16px] border border-app-border bg-app-surface p-[12px] shadow-[0_1px_2px_rgb(11_13_18/0.05)]">
-        <div className="flex items-baseline justify-between gap-[8px] text-[14px] font-medium leading-[20px]">
-          <span className="font-semibold">{c.appAdoption}</span>
+        <div className="flex items-center justify-between gap-[8px] text-[14px] font-medium leading-[20px]">
+          <span className="flex items-center gap-[2px] font-semibold">
+            {c.appAdoption}
+            <span className="grid size-[30px] place-items-center rounded-full text-app-text-secondary">
+              <svg viewBox="0 0 24 24" className="size-[16px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4M12 8h.01" />
+              </svg>
+            </span>
+          </span>
           <span className="tabular-nums text-app-text-secondary">{CONSOLE_INSTALLED_PERCENT}%</span>
         </div>
         <div className="h-[5.625px] w-full overflow-hidden rounded-full bg-app-primary/15">
           <div className="h-full rounded-full bg-app-primary" style={{ width: `${CONSOLE_INSTALLED_PERCENT}%` }} />
         </div>
-        <span className="text-[12px] leading-[16px] text-app-text-secondary tabular-nums">
-          {c.appInstalled
-            .replace('{withApp}', count(CONSOLE_ADOPTION.suppliersWithApp))
-            .replace('{total}', count(CONSOLE_ADOPTION.totalSuppliers))}
-        </span>
       </div>
 
       {/* UserMenu, placement "sidebar": avatar, name, role, and the menu chevron. */}

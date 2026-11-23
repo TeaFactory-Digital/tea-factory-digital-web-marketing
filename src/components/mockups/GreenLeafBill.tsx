@@ -1,8 +1,14 @@
 import * as React from 'react';
 import type { Dictionary } from '@/i18n';
 import {
+  CHANGE,
   EXTRA_RATE_PER_KG,
   FINAL_BALANCE,
+  GROSS_AMOUNT,
+  SIX_MONTH_AVERAGE,
+  SIX_MONTH_KGS,
+  TOTAL_DEDUCTIONS,
+  WHY,
   KG_PER_MONTH,
   MTD_APPROVED,
   MTD_DAILY_SUPPLY,
@@ -24,9 +30,11 @@ export type AppBrand = { primary: string; muted: string };
  * The supplier app's Home screen, reproduced from the shipped one.
  *
  * It follows `screens/home/HomeScreen.tsx` block for block, under the
- * `AppHeader` and above the floating tab bar: the summary hero with its
- * TeaBreeze scene, the PDF action, the bill masthead, then the Rate section, as
- * much of the screen as fits above the fold of a real handset. Sizes are the
+ * `AppHeader` and above the floating tab bar: when the figures were fetched, the
+ * summary hero with its TeaBreeze scene, the change against last month with why it
+ * changed, "Your bill, explained" (closed), the last six months, the PDF action, the
+ * bill masthead, then the Rate section, as much of the screen as fits above the fold
+ * of a real handset (matched 24 November 2026). Sizes are the
  * product's own tokens (spacing 4/8/12/16/20, radius 10/16/24, the typography
  * scale from `theme/tokens/typography.ts`) at their real pixel values, because
  * `DeviceShot` scales the whole screen rather than each value.
@@ -68,6 +76,8 @@ export function GreenLeafBill({
 
       {/* Screen: paddingHorizontal lg(16), gap lg(16), paddingTop md(12) */}
       <div className="flex flex-col gap-[16px] px-[16px] pt-[12px]">
+        {/* UpdatedAgo: caption, textSecondary */}
+        <p className="text-[12px] leading-[16px] text-app-text-secondary">{b.updated}</p>
         {monthToDate ? <MonthToDateCard t={t} /> : null}
 
         {/* ── BillSummaryHero, with the breeze behind it ──────────────── */}
@@ -96,14 +106,18 @@ export function GreenLeafBill({
           </div>
         </div>
 
-        {/* ── Save as PDF (Button, variant="outline", fullWidth) ───────── */}
+        <ChangeCard t={t} />
+        <ExplainCard t={t} />
+        <SixMonthsCard t={t} />
+
+        {/* ── Share or save PDF (Button, variant="outline", fullWidth) ──── */}
         <button
           type="button"
           tabIndex={-1}
           aria-hidden="true"
           className="flex min-h-[48px] w-full items-center justify-center gap-[8px] rounded-[10px] border-[1.5px] border-app-primary px-[16px] py-[8px] text-[16px] font-semibold leading-[22px] tracking-[0.2px] text-app-primary"
         >
-          <AppIcon name="receipt" size={20} />
+          <AppIcon name="share" size={20} />
           {b.savePdf}
         </button>
 
@@ -235,6 +249,140 @@ function DailyStrip() {
         ) : null;
       })}
     </svg>
+  );
+}
+
+/** `Card padding="md"`: 12px, radius 16, the app's border. */
+function SmallCard({ children }: { children: React.ReactNode }) {
+  return <div className="rounded-[16px] border border-app-border bg-app-surface p-[12px]">{children}</div>;
+}
+
+/**
+ * `BillChangeCard`: the month against the one before, each figure with a chevron, then
+ * "Why it changed" in words, largest first (`explainChange`).
+ */
+function ChangeCard({ t }: { t: Dictionary }) {
+  const b = t.bill;
+  const rupees = (n: number) => `${b.currency} ${money(Math.abs(n))}`;
+  const rows = [
+    { label: b.change.totalKgs, delta: CHANGE.kgs, text: `${kilos(Math.abs(CHANGE.kgs))} ${b.kg}` },
+    { label: b.change.gross, delta: CHANGE.gross, text: rupees(CHANGE.gross) },
+    { label: b.change.final, delta: CHANGE.paid, text: rupees(CHANGE.paid) },
+  ];
+  const words = (kind: string) =>
+    kind === 'kgs'
+      ? b.why.kgs.replace('{{kgs}}', `${kilos(Math.abs(CHANGE.kgs))} ${b.kg}`)
+      : kind === 'rate'
+        ? b.why.rate.replace('{{rate}}', `${b.currency} ${money(1.5)}`)
+        : b.why.deductions.replace('{{line}}', b.deductions.advance);
+  return (
+    <SmallCard>
+      <div className="flex flex-col gap-[8px]">
+        <p className="text-[12px] leading-[16px] text-app-text-secondary">{b.change.title}</p>
+        {rows.map((row) => {
+          const up = row.delta > 0;
+          return (
+            <div key={row.label} className="flex items-center justify-between gap-[8px]">
+              <span className="min-w-0 shrink text-[14px] leading-[20px] text-app-text-secondary">{row.label}</span>
+              <span className={'flex shrink-0 items-center gap-[2px] whitespace-nowrap text-[16px] font-semibold leading-[24px] tabular-nums ' + (up ? 'text-app-success' : 'text-app-error')}>
+                <AppIcon name="chevronDown" size={16} className={up ? 'rotate-180' : ''} />
+                {(up ? '+' : '-') + row.text}
+              </span>
+            </div>
+          );
+        })}
+        <div className="mt-[4px] flex flex-col gap-[4px] border-t border-app-divider pt-[8px]">
+          <p className="text-[12px] leading-[16px] text-app-text-secondary">{b.why.title}</p>
+          {WHY.map((reason) => (
+            <div key={reason.kind} className="flex items-start justify-between gap-[8px]">
+              <span className="min-w-0 shrink text-[14px] leading-[20px]">{words(reason.kind)}</span>
+              <span className={'shrink-0 whitespace-nowrap text-[14px] leading-[20px] tabular-nums ' + (reason.effect > 0 ? 'text-app-success' : 'text-app-error')}>
+                {(reason.effect > 0 ? '+' : '-') + rupees(reason.effect)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </SmallCard>
+  );
+}
+
+/** `BillExplainCard`, closed: the title and what was paid in the header, the one-line story under it. */
+function ExplainCard({ t }: { t: Dictionary }) {
+  const b = t.bill;
+  const rupees = (n: number) => `${b.currency} ${money(n)}`;
+  return (
+    <SmallCard>
+      <div className="flex min-h-[48px] items-center gap-[12px] py-[12px]">
+        <span className="min-w-0 flex-1 text-[16px] font-semibold leading-[24px]">{b.explain.title}</span>
+        <span className="shrink text-right text-[14px] leading-[20px] text-app-text-secondary tabular-nums">{rupees(FINAL_BALANCE)}</span>
+        <AppIcon name="chevronRight" size={24} className="shrink-0 text-app-text-secondary" />
+      </div>
+      <p className="text-[14px] leading-[20px] text-app-text-secondary">
+        {b.explain.short
+          .replace('{{gross}}', rupees(GROSS_AMOUNT))
+          .replace('{{off}}', rupees(TOTAL_DEDUCTIONS))
+          .replace('{{paid}}', rupees(FINAL_BALANCE))}
+      </p>
+    </SmallCard>
+  );
+}
+
+/**
+ * `SixMonthsCard`: the title, the Kilos/Earnings switch on Kilos, the app's `BarChart` at
+ * 150px with a label under every bar, the average, and "See every month". The card's inner
+ * width is 384 - 2x16 - 2x12 = 328px.
+ */
+function SixMonthsCard({ t }: { t: Dictionary }) {
+  const b = t.bill;
+  const s = b.sixMonths;
+  const width = 328;
+  const height = 150;
+  const axis = 34;
+  const labels = 18;
+  const top = 1500;
+  const chart = height - labels - 10;
+  const slot = (width - axis) / SIX_MONTH_KGS.length;
+  const bar = slot * 0.6;
+  return (
+    <SmallCard>
+      <div className="flex flex-col gap-[12px]">
+        <p className="text-[16px] font-medium leading-[24px]">{s.title}</p>
+        <div className="flex rounded-[10px] bg-app-surface-variant p-[4px]">
+          <span className="flex-1 rounded-[6px] bg-app-surface py-[8px] text-center text-[14px] font-medium leading-[20px] text-app-primary shadow-[0_1px_3px_rgb(0_0_0/0.12)]">{s.kgs}</span>
+          <span className="flex-1 py-[8px] text-center text-[14px] font-medium leading-[20px] text-app-text-secondary">{s.earned}</span>
+        </div>
+        <svg width={width} height={height} aria-hidden="true" className="block">
+          {[0, 500, 1000, 1500].map((v) => {
+            const y = 10 + chart - (v / top) * chart;
+            return (
+              <g key={v}>
+                <line x1={axis} x2={width} y1={y} y2={y} stroke="var(--color-app-divider)" strokeWidth={1} />
+                <text x={axis - 6} y={y + 3} textAnchor="end" fontSize={10} fill="var(--color-app-text-secondary)">
+                  {v === 0 ? '0' : v >= 1000 ? `${v / 1000}k` : v}
+                </text>
+              </g>
+            );
+          })}
+          {SIX_MONTH_KGS.map((kg, i) => {
+            const h = (kg / top) * chart;
+            const x = axis + i * slot + (slot - bar) / 2;
+            return (
+              <g key={i}>
+                <rect x={x} y={10 + chart - h} width={bar} height={h} rx={2} fill="var(--color-app-primary)" />
+                <text x={x + bar / 2} y={height - 3} textAnchor="middle" fontSize={10} fill="var(--color-app-text-secondary)">
+                  {s.months[i]}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+        <p className="text-[14px] leading-[20px] text-app-text-secondary">
+          {s.average.replace('{{value}}', `${kilos(SIX_MONTH_AVERAGE)} ${b.kg}`)}
+        </p>
+        <p className="py-[6px] text-center text-[14px] font-semibold leading-[20px] text-app-primary">{s.seeAll}</p>
+      </div>
+    </SmallCard>
   );
 }
 

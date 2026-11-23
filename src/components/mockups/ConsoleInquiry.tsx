@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  ArrowUpCircle,
   ArrowUpRight,
   BellRing,
   Building2,
@@ -33,8 +34,11 @@ const BUTTON_SM =
  * `modules/inquiries/InquiryDetailScreen.tsx`: the conversation as a chat,
  * the supplier on the left and the office on the right in the brand colour,
  * the reply box under the last message with the office's common answers as
- * chips, and the side column with the supplier, who is handling it, and the
- * notes only the office reads.
+ * small pills, and the side column with the supplier card (when it came, who is
+ * handling it) and the notes only the office reads. Matched to the redesign of 24
+ * November 2026: who and how it came in the page header, how long it has waited by
+ * the status badge, Pass to the manager and Close unanswered in the conversation's
+ * header, away from Send.
  *
  * It is the same conversation the phone mockup shows from the supplier's side
  * (`InquiryThread.tsx`), read from the counter. Dates are the console's
@@ -62,11 +66,21 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
           <div className="min-w-0">
             <p className="mb-[4px] text-[14px] font-medium leading-[20px] text-app-text-secondary">{c.title}</p>
             <p className="text-[26px] font-semibold leading-[34px] tracking-tight">{th.subject}</p>
-            <p className="mt-[4px] text-[14px] leading-[20px] text-app-text-secondary">
-              {c.from.replace('{name}', t.bill.supplierName).replace('{code}', INQUIRY_THREAD.supplierCode)}
+            <p className="mt-[4px] flex flex-wrap items-center gap-x-[8px] text-[14px] leading-[20px] text-app-text-secondary">
+              <span>{c.from.replace('{name}', t.bill.supplierName).replace('{code}', INQUIRY_THREAD.supplierCode)}</span>
+              <span>·</span>
+              <span className="inline-flex items-center gap-[2px]">
+                <Smartphone className="size-[12px]" strokeWidth={2} />
+                {c.channelApp}
+              </span>
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap items-center gap-[8px]">
+            {/* 27 h is inside the inquiries' 48 h target, so not in the error colour. */}
+            <span className="inline-flex items-center gap-[2px] text-[12px] leading-[16px] text-app-text-secondary">
+              <Hourglass className="size-[12px]" strokeWidth={2} />
+              {c.waitingLabel} {formatAge(INQUIRY_THREAD.ageHours)}
+            </span>
             <span className="inline-flex items-center gap-[4px] whitespace-nowrap rounded-full bg-app-warning-muted px-[8px] py-[2px] text-[12px] font-medium leading-[16px] text-app-warning">
               <span className="size-[5.625px] shrink-0 rounded-full bg-current" />
               {c.statusOpen}
@@ -79,13 +93,20 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
           <ConsoleCard
             title={c.conversation}
             className="col-span-2 min-h-0"
-            bodyClassName="flex min-h-0 flex-1 flex-col gap-[16px]"
+            bodyClassName="flex min-h-0 flex-1 flex-col gap-[12px]"
+            actions={
+              <>
+                <span className={cn(BUTTON_SM, 'gap-[4px]')}>
+                  <ArrowUpCircle className="size-[16px]" strokeWidth={2} />
+                  {c.escalate}
+                </span>
+                <span className="inline-flex h-[33.75px] items-center gap-[4px] rounded-[10px] px-[12px] text-[14px] font-medium leading-[20px]">
+                  <X className="size-[16px]" strokeWidth={2} />
+                  {c.close}
+                </span>
+              </>
+            }
           >
-            <dl className="grid grid-cols-3 gap-[12px]">
-              <Fact icon={CalendarClock} label={c.receivedLabel} value={INQUIRY_THREAD.receivedAt} />
-              <Fact icon={Smartphone} label={c.channelLabel} value={c.channelApp} />
-              <Fact icon={Hourglass} label={c.waitingLabel} value={formatAge(INQUIRY_THREAD.ageHours)} />
-            </dl>
 
             <ol className="flex min-h-0 flex-1 flex-col justify-end gap-[4px] overflow-hidden rounded-[16px] bg-app-surface-variant/50 p-[12px]">
               {INQUIRY_THREAD.messages.map((m, i) => {
@@ -153,8 +174,9 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
               </li>
             </ol>
 
-            {/* ReplyComposer: DecisionNoteField, then Close / count / Send */}
-            <div className="flex flex-col gap-[8px] border-t border-app-divider pt-[16px]">
+            {/* ReplyComposer: DecisionNoteField (3 rows, compact pills), then one bar: the
+                wait tick on the left, the count and Send on the right. */}
+            <div className="flex flex-col gap-[8px]">
               <div className="flex flex-col gap-[4px]">
                 <span className="flex items-center gap-[2px] text-[14px] font-medium leading-[20px]">
                   {c.replyLabel}
@@ -162,30 +184,15 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                     <InfoDot />
                   </span>
                 </span>
-                <div className={cn('h-[102px]', TEXTAREA)}>
-                  {c.replyPlaceholder}
-                </div>
-                <div className="mt-[8px] flex flex-wrap items-center gap-[4px]">
-                  <span className="text-[12px] leading-[16px] text-app-text-secondary">{c.noteSuggestions}</span>
-                  {[c.suggestReceived, c.suggestCheckingLabel, c.suggestVisit, c.suggestCall, c.suggestSorted].map(
-                    (label) => (
-                      <span
-                        key={label}
-                        className={cn(BUTTON_SM, 'gap-[4px]')}
-                      >
-                        <Plus className="size-[12px]" strokeWidth={2.2} />
-                        {label}
-                      </span>
-                    ),
-                  )}
-                </div>
+                <div className={cn('h-[80px]', TEXTAREA)}>{c.replyPlaceholder}</div>
+                <Pills label={c.noteSuggestions} items={[c.suggestReceived, c.suggestCheckingLabel, c.suggestVisit, c.suggestCall, c.suggestSorted]} />
               </div>
-              <div className="flex items-center justify-between gap-[8px]">
-                <span className="inline-flex h-[41.25px] items-center gap-[8px] rounded-[10px] px-[16px] text-[16px] font-medium leading-[22px] tracking-[0.2px]">
-                  <X className="size-[16px]" strokeWidth={2} />
-                  {c.close}
+              <div className="flex flex-wrap items-center justify-between gap-[8px]">
+                <span className="inline-flex items-center gap-[4px] text-[14px] leading-[20px]">
+                  <span className="size-[15px] rounded-[4px] border border-app-border bg-app-surface" />
+                  {c.awaitSupplier}
                 </span>
-                <span className="flex items-center gap-[12px]">
+                <span className="ml-auto flex items-center gap-[12px] whitespace-nowrap">
                   <span className="text-[12px] leading-[16px] text-app-text-secondary">
                     {c.replyCount.replace('{count}', '0').replace('{min}', '20')}
                   </span>
@@ -200,6 +207,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
 
           {/* ── Side column ─────────────────────────────────────────────── */}
           <div className="flex min-h-0 flex-col gap-[16px] overflow-hidden">
+            {/* The supplier, when it came and who has it, in one card. */}
             <ConsoleCard title={c.supplier} bodyClassName="flex flex-col gap-[12px]">
               <div className="flex items-center gap-[12px]">
                 <span className="grid size-[41.25px] shrink-0 place-items-center rounded-full bg-app-primary-muted text-[16px] font-semibold text-app-primary">
@@ -212,7 +220,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                   </span>
                 </span>
               </div>
-              <div className="flex flex-col gap-[4px] text-[14px] font-medium leading-[20px] text-app-primary">
+              <div className="flex flex-wrap gap-x-[12px] gap-y-[4px] text-[14px] font-medium leading-[20px] text-app-primary">
                 <span className="inline-flex items-center gap-[4px]">
                   {c.supplierLink}
                   <ArrowUpRight className="size-[16px]" strokeWidth={2} />
@@ -222,17 +230,24 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
                   {c.history}
                 </span>
               </div>
-            </ConsoleCard>
-
-            <ConsoleCard title={c.assignTitle} bodyClassName="flex flex-col gap-[12px]">
-              <p className="flex items-center gap-[8px] text-[14px] leading-[20px]">
-                <UserCheck className="size-[16px] text-app-text-secondary" strokeWidth={2} />
-                {c.nobody}
-              </p>
-              <span className={cn(BUTTON_SM, 'justify-center gap-[4px]')}>
-                <UserCheck className="size-[16px]" strokeWidth={2} />
-                {c.take}
-              </span>
+              <div className="flex items-start gap-[8px] border-t border-app-divider pt-[12px] text-[14px] leading-[20px]">
+                <CalendarClock className="mt-[2px] size-[16px] shrink-0 text-app-text-secondary" strokeWidth={2} />
+                <span className="text-app-text-secondary">{c.receivedLabel}</span>
+                <span className="ml-auto text-right">{INQUIRY_THREAD.receivedAt}</span>
+              </div>
+              <div className="flex flex-col gap-[8px] border-t border-app-divider pt-[12px]">
+                <p className="text-[12px] font-medium leading-[16px] text-app-text-secondary">{c.assignTitle}</p>
+                <div className="flex items-center justify-between gap-[8px]">
+                  <p className="flex items-center gap-[8px] text-[14px] leading-[20px]">
+                    <UserCheck className="size-[16px] text-app-text-secondary" strokeWidth={2} />
+                    {c.nobody}
+                  </p>
+                  <span className={cn(BUTTON_SM, 'gap-[4px]')}>
+                    <UserCheck className="size-[16px]" strokeWidth={2} />
+                    {c.take}
+                  </span>
+                </div>
+              </div>
             </ConsoleCard>
 
             <ConsoleCard
@@ -247,6 +262,7 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
             >
               <p className="text-[14px] leading-[20px] text-app-text-secondary">{c.notesEmpty}</p>
               <div className={cn('h-[60px]', TEXTAREA)}>{c.notesPlaceholder}</div>
+              <Pills label={c.noteSuggestions} items={[...c.noteChips]} />
               {/* Add note: disabled until two characters are typed */}
               <span className={cn(BUTTON_SM, 'self-end text-[#98A2B3] shadow-none')}>{c.notesAdd}</span>
             </ConsoleCard>
@@ -258,13 +274,24 @@ export function ConsoleInquiry({ t, className }: { t: Dictionary; className?: st
   );
 }
 
-function Fact({ icon: Icon, label, value }: { icon: typeof CalendarClock; label: string; value: string }) {
+/**
+ * `SuggestionGrid compact`: the group label in caption, then small pills that wrap
+ * (min-h-7, rounded-full, a hairline border, caption medium, a plus before each).
+ */
+function Pills({ label, items }: { label: string; items: string[] }) {
   return (
-    <div className="flex items-start gap-[8px]">
-      <Icon className="mt-[2px] size-[16px] shrink-0 text-app-text-secondary" strokeWidth={2} />
-      <div className="min-w-0">
-        <dt className="text-[12px] leading-[16px] text-app-text-secondary">{label}</dt>
-        <dd className="text-[14px] leading-[20px]">{value}</dd>
+    <div className="mt-[8px] flex flex-col gap-[4px]">
+      <span className="text-[12px] leading-[16px] text-app-text-secondary">{label}</span>
+      <div className="flex flex-wrap gap-[4px]">
+        {items.map((item) => (
+          <span
+            key={item}
+            className="inline-flex min-h-[26.25px] items-center gap-[2px] rounded-full border border-app-border bg-app-surface px-[8px] text-[12px] font-medium leading-[16px]"
+          >
+            <Plus className="size-[12px]" strokeWidth={2.2} />
+            {item}
+          </span>
+        ))}
       </div>
     </div>
   );

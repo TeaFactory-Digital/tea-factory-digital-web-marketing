@@ -1,12 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { ArrowRight, CheckCircle2, Clock3 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ChevronDown, Clock3, MessageCircle } from 'lucide-react';
 import type { Dictionary } from '@/i18n';
 import { Button } from '@/components/ui/button';
 import { FieldError, Input, Label, Optional, Textarea } from '@/components/ui/field';
 import { motion } from '@/components/ui/motion';
 import { cn } from '@/lib/utils';
+import { whatsappLink } from '@/lib/site';
 
 type Errors = Partial<Record<string, string>>;
 
@@ -15,10 +16,12 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 /**
  * The demo request.
  *
- * Interest is multi-select rather than single: a factory evaluating the app
- * usually wants the console walked through as well, and the copy asks for "at
- * least one". Validation runs in the browser and again on the server, because
- * the browser's copy is a convenience and the server's is the real one.
+ * **The quick way first** (24 November 2026). A factory manager is likelier to send a
+ * WhatsApp message than fill a form, so WhatsApp sits on top, the message already typed in
+ * their language. The form asks for three things (name, factory, phone) and folds the rest
+ * (role, email, size, interest, message) behind "Add more details": nothing in there is
+ * needed to call them back. Validation runs in the browser and again on the server,
+ * because the browser's copy is a convenience and the server's is the real one.
  */
 export function DemoForm({ t }: { t: Dictionary }) {
   const f = t.demo.form;
@@ -46,12 +49,11 @@ export function DemoForm({ t }: { t: Dictionary }) {
     const values = Object.fromEntries(data.entries()) as Record<string, string>;
 
     const next: Errors = {};
-    for (const field of ['fullName', 'company', 'role', 'phone'] as const) {
+    for (const field of ['fullName', 'company', 'phone'] as const) {
       if (!values[field]?.trim()) next[field] = t.demo.validation.required;
     }
-    if (!values.email?.trim()) next.email = t.demo.validation.required;
-    else if (!EMAIL.test(values.email.trim())) next.email = t.demo.validation.email;
-    if (interest.length === 0) next.interest = t.demo.validation.interest;
+    // Optional, but when given it must be one we can answer.
+    if (values.email?.trim() && !EMAIL.test(values.email.trim())) next.email = t.demo.validation.email;
 
     setErrors(next);
     if (Object.keys(next).length > 0) {
@@ -90,6 +92,16 @@ export function DemoForm({ t }: { t: Dictionary }) {
         <p className="mx-auto mt-3 max-w-md text-[0.95rem] leading-relaxed text-char-500">
           {t.demo.success.body}
         </p>
+        <a
+          href={whatsappLink(t.demo.whatsapp.text)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-leaf-700 underline-offset-4 hover:underline"
+        >
+          <MessageCircle className="size-4" strokeWidth={2} />
+          {t.demo.success.whatsapp}
+        </a>
+        <br />
         <Button
           variant="outline"
           className="mt-7"
@@ -111,7 +123,27 @@ export function DemoForm({ t }: { t: Dictionary }) {
       noValidate
       className="rounded-4xl border border-white/60 bg-white/85 p-7 shadow-lift backdrop-blur-xl md:p-10"
     >
-      <div className="grid gap-5 sm:grid-cols-2">
+      {/* ---- WhatsApp first ---- */}
+      <div className="flex flex-col gap-4 rounded-3xl border border-leaf-200 bg-leaf-50/70 p-5 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-display text-base font-semibold text-forest-900">{t.demo.whatsapp.title}</p>
+          <p className="mt-1 text-sm text-char-500">{t.demo.whatsapp.body}</p>
+        </div>
+        <a
+          href={whatsappLink(t.demo.whatsapp.text)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-leaf-700 px-5 py-3 text-sm font-semibold text-white shadow-soft transition-colors hover:bg-forest-800"
+        >
+          <MessageCircle className="size-4" strokeWidth={2.2} />
+          {t.demo.whatsapp.button}
+        </a>
+      </div>
+
+      <p className="mt-7 mb-5 text-sm font-medium text-char-600">{t.demo.orForm}</p>
+
+      {/* ---- The three things needed to call back ---- */}
+      <div className="grid gap-5 sm:grid-cols-3">
         <Field id="fullName" label={f.fullName} error={errors.fullName} required>
           <Input id="fullName" name="fullName" autoComplete="name" aria-invalid={!!errors.fullName} />
         </Field>
@@ -120,73 +152,81 @@ export function DemoForm({ t }: { t: Dictionary }) {
           <Input id="company" name="company" autoComplete="organization" aria-invalid={!!errors.company} />
         </Field>
 
-        <Field id="role" label={f.role} error={errors.role} required>
-          <Input id="role" name="role" autoComplete="organization-title" aria-invalid={!!errors.role} />
-        </Field>
-
-        <Field id="email" label={f.email} error={errors.email} required>
-          <Input id="email" name="email" type="email" inputMode="email" autoComplete="email" aria-invalid={!!errors.email} />
-        </Field>
-
         <Field id="phone" label={f.phone} error={errors.phone} required>
           <Input id="phone" name="phone" type="tel" inputMode="tel" autoComplete="tel" aria-invalid={!!errors.phone} />
         </Field>
-
-        <div className="grid grid-cols-2 gap-5">
-          <Field id="suppliers" label={f.suppliers} optional={f.optional}>
-            <Input id="suppliers" name="suppliers" inputMode="numeric" />
-          </Field>
-          <Field id="factories" label={f.factories} optional={f.optional}>
-            <Input id="factories" name="factories" inputMode="numeric" />
-          </Field>
-        </div>
       </div>
 
-      {/* ---- Interest ---- */}
-      <fieldset className="mt-7">
-        <legend className="mb-3 font-display text-sm font-semibold text-char-800">
-          {f.interest}
-        </legend>
-        <div className="flex flex-wrap gap-2.5">
-          {options.map((option) => {
-            const active = interest.includes(option.key);
-            return (
-              <button
-                key={option.key}
-                type="button"
-                onClick={() => toggle(option.key)}
-                aria-pressed={active}
-                className={cn(
-                  'inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-all duration-200',
-                  active
-                    ? 'border-leaf-600 bg-leaf-100/70 text-forest-900'
-                    : 'border-cream-300 bg-cream-50 text-char-600 hover:border-char-300',
-                )}
-              >
-                <span
-                  className={cn(
-                    'grid size-4 place-items-center rounded-full border transition-colors',
-                    active ? 'border-leaf-600 bg-leaf-600' : 'border-char-300',
-                  )}
-                >
-                  {active ? <span className="size-1.5 rounded-full bg-white" /> : null}
-                </span>
-                {option.label}
-              </button>
-            );
-          })}
-        </div>
-        <FieldError>{errors.interest}</FieldError>
-      </fieldset>
+      {/* ---- Everything else, if they want to ---- */}
+      <details className="group mt-6 rounded-3xl border border-cream-300 bg-cream-50/60 open:bg-white/60" open={!!errors.email || undefined}>
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
+          <span>
+            <span className="block font-display text-sm font-semibold text-char-800">{t.demo.more}</span>
+            <span className="block text-xs text-char-500">{t.demo.moreHint}</span>
+          </span>
+          <ChevronDown className="size-4 shrink-0 text-char-500 transition-transform group-open:rotate-180" strokeWidth={2} />
+        </summary>
+        <div className="px-5 pb-5">
+          <div className="grid gap-5 sm:grid-cols-2">
+            <Field id="role" label={f.role} optional={f.optional}>
+              <Input id="role" name="role" autoComplete="organization-title" />
+            </Field>
+            <Field id="email" label={f.email} error={errors.email} optional={f.optional}>
+              <Input id="email" name="email" type="email" inputMode="email" autoComplete="email" aria-invalid={!!errors.email} />
+            </Field>
+            <Field id="suppliers" label={f.suppliers} optional={f.optional}>
+              <Input id="suppliers" name="suppliers" inputMode="numeric" />
+            </Field>
+            <Field id="factories" label={f.factories} optional={f.optional}>
+              <Input id="factories" name="factories" inputMode="numeric" />
+            </Field>
+          </div>
 
-      {/* ---- Message ---- */}
-      <div className="mt-7">
-        <Label htmlFor="message">
-          {f.message}
-          <Optional>{f.optional}</Optional>
-        </Label>
-        <Textarea id="message" name="message" placeholder={f.messagePlaceholder} />
-      </div>
+          <fieldset className="mt-6">
+            <legend className="mb-3 font-display text-sm font-semibold text-char-800">
+              {f.interest}
+              <Optional>{f.optional}</Optional>
+            </legend>
+            <div className="flex flex-wrap gap-2.5">
+              {options.map((option) => {
+                const active = interest.includes(option.key);
+                return (
+                  <button
+                    key={option.key}
+                    type="button"
+                    onClick={() => toggle(option.key)}
+                    aria-pressed={active}
+                    className={cn(
+                      'inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-medium transition-all duration-200',
+                      active
+                        ? 'border-leaf-600 bg-leaf-100/70 text-forest-900'
+                        : 'border-cream-300 bg-cream-50 text-char-600 hover:border-char-300',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'grid size-4 place-items-center rounded-full border transition-colors',
+                        active ? 'border-leaf-600 bg-leaf-600' : 'border-char-300',
+                      )}
+                    >
+                      {active ? <span className="size-1.5 rounded-full bg-white" /> : null}
+                    </span>
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <div className="mt-6">
+            <Label htmlFor="message">
+              {f.message}
+              <Optional>{f.optional}</Optional>
+            </Label>
+            <Textarea id="message" name="message" placeholder={f.messagePlaceholder} />
+          </div>
+        </div>
+      </details>
 
       {/* Hidden from people. A bot fills it, and the server drops the request. */}
       <div aria-hidden="true" className="absolute -left-[9999px] size-px overflow-hidden">

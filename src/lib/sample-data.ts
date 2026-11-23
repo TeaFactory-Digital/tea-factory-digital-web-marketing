@@ -48,6 +48,43 @@ export const COINS_CARRIED_FORWARD = round2(BALANCE_AMOUNT - Math.floor(BALANCE_
 export const FINAL_BALANCE = round2(BALANCE_AMOUNT - COINS_CARRIED_FORWARD); // 89,901
 export const SAVINGS_TO_DATE = 74300;
 
+/**
+ * June, the month before the July bill, for "Against June" and "Why it changed" on the
+ * Account tab (`BillChangeCard`, 24 November 2026). Consistent with July: June's coins
+ * carried forward (0.40) are July's coins brought forward, and June's final balance is
+ * `INCOME_SERIES`' June. The deductions differ by the advance (+1,500) and transport (+122).
+ */
+export const PREV_KG = 1290;
+export const PREV_TOTAL_RATE_PER_KG = 110.85;
+export const PREV_COINS_BROUGHT_FORWARD = 0.9;
+export const PREV_GROSS_AMOUNT = round2(PREV_KG * PREV_TOTAL_RATE_PER_KG + PREV_COINS_BROUGHT_FORWARD); // 142,997.40
+export const PREV_DEDUCTIONS: Record<string, number> = Object.fromEntries(
+  DEDUCTIONS.map((d) => [d.key, d.amount + (d.key === 'advance' ? 1500 : d.key === 'transport' ? 122 : 0)]),
+);
+export const PREV_TOTAL_DEDUCTIONS = Object.values(PREV_DEDUCTIONS).reduce((a, b) => a + b, 0); // 51,597
+export const PREV_BALANCE_AMOUNT = round2(PREV_GROSS_AMOUNT - PREV_TOTAL_DEDUCTIONS); // 91,400.40
+export const PREV_FINAL_BALANCE = Math.floor(PREV_BALANCE_AMOUNT); // 91,400
+
+/**
+ * Why July's pay moved from June, by the app's own split (`utils/billExplain.ts`,
+ * `explainChange`): the kilos at June's rate, the rate on July's kilos, the deductions
+ * (naming the line that moved most). The rest (coins) is under Rs. 100, so not shown.
+ */
+export const CHANGE = {
+  kgs: round2(KG_PER_MONTH - PREV_KG), // -45
+  gross: round2(GROSS_AMOUNT - PREV_GROSS_AMOUNT), // -3,121.25
+  paid: round2(FINAL_BALANCE - PREV_FINAL_BALANCE), // -1,499
+};
+export const WHY = [
+  { kind: 'kgs', effect: round2(CHANGE.kgs * PREV_TOTAL_RATE_PER_KG) }, // -4,988.25
+  { kind: 'rate', effect: round2((TOTAL_RATE_PER_KG - PREV_TOTAL_RATE_PER_KG) * KG_PER_MONTH) }, // +1,867.50
+  { kind: 'deductions', effect: round2(PREV_TOTAL_DEDUCTIONS - TOTAL_DEDUCTIONS) }, // +1,622
+].sort((a, b) => Math.abs(b.effect) - Math.abs(a.effect));
+
+/** Kilos for the last six months, February to July (`SixMonthsCard`). */
+export const SIX_MONTH_KGS = [1110, 1180, 1220, 1265, PREV_KG, KG_PER_MONTH];
+export const SIX_MONTH_AVERAGE = SIX_MONTH_KGS.reduce((a, b) => a + b, 0) / SIX_MONTH_KGS.length;
+
 /** Day 1–31. `null` is a day with no delivery. Sums to KG_PER_MONTH. */
 export const DAILY_SUPPLY: (number | null)[] = [
   48, 52, null, 48, 55, 44, null, 58, 47, 49,

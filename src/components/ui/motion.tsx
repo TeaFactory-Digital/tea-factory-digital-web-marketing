@@ -51,25 +51,22 @@ export function Reveal({
 }
 
 /** Words rise in sequence. Used once, on the hero headline. */
+/**
+ * A headline that rises in word by word, on load. CSS (`.word-in`, globals.css), not
+ * framer-motion (24 November 2026): it runs from the first paint, so a slow phone sees the
+ * headline before the page's JavaScript arrives. Reduced motion turns it off in the CSS.
+ */
 export function RevealWords({ text, className }: { text: string; className?: string }) {
-  const reduce = useReducedMotion();
   const words = text.split(' ');
-
-  if (reduce) return <span className={className}>{text}</span>;
 
   return (
     <span className={className}>
       {words.map((word, i) => (
         <React.Fragment key={`${word}-${i}`}>
           <span className="inline-block overflow-hidden align-bottom">
-            <motion.span
-              className="inline-block"
-              initial={{ y: '105%', opacity: 0 }}
-              animate={{ y: '0%', opacity: 1 }}
-              transition={{ duration: 0.86, delay: 0.08 + i * 0.055, ease: EASE }}
-            >
+            <span className="word-in inline-block" style={{ '--d': `${0.08 + i * 0.055}s` } as React.CSSProperties}>
               {word}
-            </motion.span>
+            </span>
           </span>
           {/*
             A real, breaking space between the word wrappers. This used to be a
